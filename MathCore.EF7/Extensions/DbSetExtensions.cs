@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace MathCore.EF7.Extensions
 {
+    /// <summary>Методы-расширения для <see cref="DbSet{TEntity}"/></summary>
     public static class DbSetExtensions
     {
-        #region IdentityInsert
+        #region public static IDisposable IdentityInsert<T>(this DbSet<T> Set)
 
         /// <summary>Объект, обеспечивающий автоматизацию обратного переключения при вызове метода <see cref="IDisposable"/>.<see cref="IDisposable.Dispose()"/></summary>
         /// <typeparam name="T">Тип элементов данных набора</typeparam>
@@ -26,13 +32,13 @@ namespace MathCore.EF7.Extensions
             /// <param name="Set">Набор данных контекста</param>
             public DbSetIdentityInsert(DbSet<T> Set)
             {
-                _Context = Set.GetContext();
+                _Context = Set.GetContext().ThrowIfHasChanges();
                 _TableName = Set.GetTableName();
-                _Context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[{0}] ON", _TableName);
+                _Context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT {0} ON", $"[dbo].[{_TableName}]");
             }
 
             /// <summary>Вызов данного метода осуществляет выполнение SQL-команды SET IDENTITY_INSERT [dbo].[TableName] OFF</summary>
-            public void Dispose() => _Context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[{0}] OFF", _TableName);
+            public void Dispose() => _Context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT {0} OFF", $"[dbo].[{_TableName}]");
         }
 
         /// <summary>Переключить режим таблицы для изменения значений первичных ключей</summary>
@@ -47,8 +53,7 @@ namespace MathCore.EF7.Extensions
         /// <typeparam name="T">Тип элементов данных набора</typeparam>
         /// <param name="Set">Набор данных контекста</param>
         /// <returns>Контекст БД, которому принадлежит набор данных</returns>
-        public static DbContext GetContext<T>(this DbSet<T> Set)
-            where T : class
+        public static DbContext GetContext<T>(this DbSet<T> Set) where T : class
         {
             var infrastructure = (IInfrastructure<IServiceProvider>)Set;
             var service_provider = infrastructure.Instance;
@@ -60,8 +65,7 @@ namespace MathCore.EF7.Extensions
         /// <typeparam name="T">Тип элементов данных набора</typeparam>
         /// <param name="Set">Набор данных контекста</param>
         /// <returns>Имя таблицы в БД с которой связан набор данных</returns>
-        public static string GetTableName<T>(this DbSet<T> Set)
-            where T : class
+        public static string GetTableName<T>(this DbSet<T> Set) where T : class
         {
             var context = Set.GetContext();
             var model = context.Model;
@@ -69,6 +73,50 @@ namespace MathCore.EF7.Extensions
             var entity_type = entity_types.First(type => type.ClrType == typeof(T));
             var table_name_annotation = entity_type.GetAnnotation("Relational:TableName");
             return table_name_annotation.Value.ToString();
+        }
+
+        #region public static void TruncateTable<T>(this DbSet<T> Set)
+
+        public static void TruncateTable<T>(this DbSet<T> Set) where T : class
+        {
+            var db = Set.GetContext().ThrowIfHasChanges().Database;
+
+            var table = Set.GetTableName();
+            db.ExecuteSqlRaw("TRUNCATE TABLE {0}", $"[dbo].[{table}]");
+        }
+
+        public static async Task<int> TruncateTableAsync<T>(this DbSet<T> Set, CancellationToken Cancel = default) where T : class
+        {
+            var db = Set.GetContext().ThrowIfHasChanges().Database;
+
+            var table = Set.GetTableName();
+            return await db
+               .ExecuteSqlRawAsync("TRUNCATE TABLE {0}", new[] { $"[dbo].[{table}]" }, Cancel)
+               .ConfigureAwait(false);
+        }
+
+        #endregion
+
+        public static void DeleteWhere<T>(this DbSet<T> Set, Expression<Func<T, bool>> filter) where T : class
+        {
+            var db = Set.GetContext().ThrowIfHasChanges().Database;
+
+            var sql = Set.Where(filter).ToString();
+            var from_sql = sql.Substring(sql.IndexOf("FROM", StringComparison.Ordinal));
+            var delete_sql = $"DELETE [Extent1] {from_sql}";
+
+            db.ExecuteSqlRaw(delete_sql);
+        }
+
+        public static async Task DeleteWhereasync<T>(this DbSet<T> Set, Expression<Func<T, bool>> filter, CancellationToken Cancel = default) where T : class
+        {
+            var db = Set.GetContext().ThrowIfHasChanges().Database;
+
+            var sql = Set.Where(filter).ToString();
+            var from_sql = sql.Substring(sql.IndexOf("FROM", StringComparison.Ordinal));
+            var delete_sql = $"DELETE [Extent1] {from_sql}";
+
+            await db.ExecuteSqlRawAsync(delete_sql, Cancel).ConfigureAwait(false);
         }
     }
 }
