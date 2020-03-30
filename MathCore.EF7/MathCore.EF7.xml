@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MathCore.EF7</name>
+    </assembly>
+    <members>
+        <member name="M:MathCore.EF7.Extensions.DbContextExtensions.ThrowIfHasChanges(Microsoft.EntityFrameworkCore.DbContext)">
+            <summary>Метод выполняет проверку наличия локальных незафиксированных в БД изменений</summary>
+            <param name="context">Проверяемый контекст БД</param>
+            <exception cref="T:System.InvalidOperationException">при наличии незафиксированных в БД изменений, хранимых в контексте</exception>
+        </member>
+        <member name="T:MathCore.EF7.Extensions.DbSetExtensions">
+            <summary>Методы-расширения для <see cref="T:Microsoft.EntityFrameworkCore.DbSet`1"/></summary>
+        </member>
+        <member name="T:MathCore.EF7.Extensions.DbSetExtensions.DbSetIdentityInsert`1">
+            <summary>Объект, обеспечивающий автоматизацию обратного переключения при вызове метода <see cref="T:System.IDisposable"/>.<see cref="M:System.IDisposable.Dispose"/></summary>
+            <typeparam name="T">Тип элементов данных набора</typeparam>
+        </member>
+        <member name="F:MathCore.EF7.Extensions.DbSetExtensions.DbSetIdentityInsert`1._TableName">
+            <summary>Имя таблицы, для которой осуществляется управление</summary>
+        </member>
+        <member name="F:MathCore.EF7.Extensions.DbSetExtensions.DbSetIdentityInsert`1._Context">
+            <summary>Контекст БД, осуществляющий связь с БД</summary>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbSetExtensions.DbSetIdentityInsert`1.#ctor(Microsoft.EntityFrameworkCore.DbSet{`0})">
+            <summary>
+            Инициализация нового экземпляра <see cref="T:MathCore.EF7.Extensions.DbSetExtensions.DbSetIdentityInsert`1"/>
+            При завершении работы конструктора в БД выполняется SQL-команда SET IDENTITY_INSERT [dbo].[TableName] ON
+            </summary>
+            <param name="Set">Набор данных контекста</param>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbSetExtensions.DbSetIdentityInsert`1.Dispose">
+            <summary>Вызов данного метода осуществляет выполнение SQL-команды SET IDENTITY_INSERT [dbo].[TableName] OFF</summary>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbSetExtensions.IdentityInsert``1(Microsoft.EntityFrameworkCore.DbSet{``0})">
+            <summary>Переключить режим таблицы для изменения значений первичных ключей</summary>
+            <typeparam name="T">Тип элементов данных набора</typeparam>
+            <param name="Set">Набор данных контекста</param>
+            <returns>Объект, обеспечивающий автоматизацию обратного переключения при вызове метода <see cref="T:System.IDisposable"/>.<see cref="M:System.IDisposable.Dispose"/></returns>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbSetExtensions.GetContext``1(Microsoft.EntityFrameworkCore.DbSet{``0})">
+            <summary>Получить экземпляр контекста БД из объекта набора данных</summary>
+            <typeparam name="T">Тип элементов данных набора</typeparam>
+            <param name="Set">Набор данных контекста</param>
+            <returns>Контекст БД, которому принадлежит набор данных</returns>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbSetExtensions.GetTableName``1(Microsoft.EntityFrameworkCore.DbSet{``0})">
+            <summary>Получить имя таблицы БД с которой связан набор данных</summary>
+            <typeparam name="T">Тип элементов данных набора</typeparam>
+            <param name="Set">Набор данных контекста</param>
+            <returns>Имя таблицы в БД с которой связан набор данных</returns>
+        </member>
+    </members>
+</doc>
