@@ -106,7 +106,7 @@ namespace MathCore.EF7.Extensions
             db.ExecuteSqlRaw(delete_sql);
         }
 
-        public static async Task DeleteWhereasync<T>(this DbSet<T> Set, Expression<Func<T, bool>> filter, CancellationToken Cancel = default) where T : class
+        public static async Task DeleteWhereAsync<T>(this DbSet<T> Set, Expression<Func<T, bool>> filter, CancellationToken Cancel = default) where T : class
         {
             var db = Set.GetContext().ThrowIfHasChanges().Database;
 
