@@ -16,7 +16,7 @@ namespace MathCore.EF7.Repositories.Base
     /// <typeparam name="TDb">Тип контекста базы данных</typeparam>
     public class DbRepository<TDb,T> : IRepository<T> where T : class, IEntity, new() where TDb:DbContext
     {
-        protected readonly TDb _db;
+        private readonly TDb _db;
         /// <summary> Логгер </summary>
         protected readonly ILogger<DbRepository<TDb, T>> _Logger;
         /// <summary> DbSet сущности </summary>
