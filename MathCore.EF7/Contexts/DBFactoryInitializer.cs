@@ -16,7 +16,7 @@ namespace MathCore.EF7.Contexts
     public class DBFactoryInitializer<TDb> : IDbInitializer, IDisposable where TDb :DbContext
     {
         private readonly TDb _db;
-        private readonly ILogger<DBInitializer<TDb>> _Logger;
+        protected readonly ILogger<DBInitializer<TDb>> _Logger;
 
         /// <inheritdoc/>
         public bool Recreate { get; set; }
