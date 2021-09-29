@@ -14,10 +14,10 @@ jobs:
       with:
         dotnet-version: 5.0.x
 
-      - name: Building
-        run: |
-          dotnet build MathCore.EF7/MathCore.EF7.csproj --nologo          
-          dotnet build Tests/MathCore.EF7.Tests/MathCore.EF7.Tests.csproj --nologo
-          
-      - name: Run Tests
-        run: dotnet test Tests/MathCore.EF7.Tests/MathCore.EF7.Tests.csproj --nologo
+    - name: Building
+      run: |
+        dotnet build MathCore.EF7/MathCore.EF7.csproj --nologo          
+        dotnet build Tests/MathCore.EF7.Tests/MathCore.EF7.Tests.csproj --nologo
+
+    - name: Run Tests
+      run: dotnet test Tests/MathCore.EF7.Tests/MathCore.EF7.Tests.csproj --nologo
