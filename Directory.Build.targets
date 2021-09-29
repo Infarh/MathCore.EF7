@@ -1,0 +1,47 @@
+﻿<Project>
+
+  <PropertyGroup>
+    <LangVersion>Latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>Shmachilin P.A., Platonenkov A.</Authors>
+    <Product>MathCore</Product>
+    <PackageProjectUrl>https://github.com/Infarh/MathCore.EF7</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Infarh/MathCore.EF7</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <SourceRevisionId>^build_date$([System.DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ss:fffZ"))</SourceRevisionId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright>Copyright © $([System.DateTime]::Today.ToString(yyyy)) shmachilin@gmail.com.</Copyright>
+  </PropertyGroup>
+
+  <!-- AssemblyInfo -->
+  <PropertyGroup>
+
+    <!--Для пакетов-->
+    <PackageIcon>icon.png</PackageIcon>
+
+    <!--Подпись сборки-->
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\MathCore.EF7.Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <!--Иконка пакетов-->
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)\Resources\icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <!--Копирование документации в выходной каталог-->
+  <ItemGroup>
+    <Content Include="$(MSBuildProjectName).xml">
+      <PackagePath></PackagePath>
+      <!--Полный путь к директории где файл-->
+      <Pack>True</Pack>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

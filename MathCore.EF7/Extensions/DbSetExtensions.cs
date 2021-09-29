@@ -74,7 +74,9 @@ namespace MathCore.EF7.Extensions
         }
 
         #region public static void TruncateTable<T>(this DbSet<T> Set)
-
+        /// <summary> Усечение таблицы </summary>
+        /// <typeparam name="T">тип сущности</typeparam>
+        /// <param name="Set">DbSet</param>
         public static void TruncateTable<T>(this DbSet<T> Set) where T : class
         {
             var db = Set.GetContext().ThrowIfHasChanges().Database;
@@ -83,6 +85,10 @@ namespace MathCore.EF7.Extensions
             db.ExecuteSqlRaw("TRUNCATE TABLE {0}", $"[dbo].[{table}]");
         }
 
+        /// <summary> Усечение таблицы </summary>
+        /// <typeparam name="T">тип сущности</typeparam>
+        /// <param name="Set">DbSet</param>
+        /// <param name="Cancel">Токен отмены</param>
         public static async Task<int> TruncateTableAsync<T>(this DbSet<T> Set, CancellationToken Cancel = default) where T : class
         {
             var db = Set.GetContext().ThrowIfHasChanges().Database;
@@ -94,7 +100,12 @@ namespace MathCore.EF7.Extensions
         }
 
         #endregion
-
+        /// <summary>
+        /// Удалить по фильтру
+        /// </summary>
+        /// <typeparam name="T">тип сущности</typeparam>
+        /// <param name="Set">Set базы данных</param>
+        /// <param name="filter">фильтр</param>
         public static void DeleteWhere<T>(this DbSet<T> Set, Expression<Func<T, bool>> filter) where T : class
         {
             var db = Set.GetContext().ThrowIfHasChanges().Database;
@@ -106,6 +117,13 @@ namespace MathCore.EF7.Extensions
             db.ExecuteSqlRaw(delete_sql);
         }
 
+        /// <summary>
+        /// Удалить по фильтру
+        /// </summary>
+        /// <typeparam name="T">тип сущности</typeparam>
+        /// <param name="Set">Set базы данных</param>
+        /// <param name="filter">фильтр</param>
+        /// <param name="Cancel">токен отмены операции</param>
         public static async Task DeleteWhereAsync<T>(this DbSet<T> Set, Expression<Func<T, bool>> filter, CancellationToken Cancel = default) where T : class
         {
             var db = Set.GetContext().ThrowIfHasChanges().Database;
