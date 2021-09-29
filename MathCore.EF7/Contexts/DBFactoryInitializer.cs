@@ -15,8 +15,8 @@ namespace MathCore.EF7.Contexts
     /// <typeparam name="TDb">тип контекста базы данных</typeparam>
     public class DBFactoryInitializer<TDb> : IDbInitializer, IDisposable where TDb :DbContext
     {
-        private readonly TDb _db;
-        private readonly ILogger<DBInitializer<TDb>> _Logger;
+        protected readonly TDb _db;
+        protected readonly ILogger<DBInitializer<TDb>> _Logger;
 
         /// <inheritdoc/>
         public bool Recreate { get; set; }
