@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MathCore.EF7.Clients</name>
+    </assembly>
+    <members>
+        <member name="T:MathCore.EF7.Clients.BaseClient">
+            <summary>
+            Базовый клиент с реализациями
+            </summary>
+        </member>
+        <member name="F:MathCore.EF7.Clients.BaseClient._Client">
+            <summary> Http клиент </summary>
+        </member>
+        <member name="P:MathCore.EF7.Clients.BaseClient.ServiceAddress">
+            <summary> адрес сервиса </summary>
+        </member>
+        <member name="M:MathCore.EF7.Clients.BaseClient.#ctor(Microsoft.Extensions.Configuration.IConfiguration,System.String)">
+            <summary>
+            Базовый конструктор
+            </summary>
+            <param name="configuration">конфигурация</param>
+            <param name="serviceAddress">адрес сервиса</param>
+        </member>
+        <member name="M:MathCore.EF7.Clients.BaseClient.GetAsync``1(System.String,System.Text.Json.JsonSerializerOptions,System.Threading.CancellationToken)">
+            <summary> Get </summary>
+            <typeparam name="T">Тип нужных данных</typeparam>
+            <param name="url">адрес</param>
+            <param name="JsonOptions">Настройки сериализации</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns></returns>
+        </member>
+        <member name="M:MathCore.EF7.Clients.BaseClient.PostAsync``1(System.String,``0,System.Threading.CancellationToken)">
+            <summary> Post </summary>
+            <typeparam name="T">Тип нужных данных</typeparam>
+            <param name="url">адрес</param>
+            <param name="item">данные</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns></returns>
+        </member>
+        <member name="M:MathCore.EF7.Clients.BaseClient.PutAsync``1(System.String,``0,System.Threading.CancellationToken)">
+            <summary> Put </summary>
+            <typeparam name="T">Тип нужных данных</typeparam>
+            <param name="url">адрес</param>
+            <param name="item">данные</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns></returns>
+        </member>
+        <member name="M:MathCore.EF7.Clients.BaseClient.DeleteAsync(System.String,System.Threading.CancellationToken)">
+            <summary> Delete </summary>
+            <param name="url">адрес</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+        </member>
+        <member name="T:MathCore.EF7.Clients.WebRepository`2">
+            <summary> Клиент к репозиторию </summary>
+            <typeparam name="T">тип сущности</typeparam>
+            <typeparam name="Tkey">тип идентификатора</typeparam>
+        </member>
+        <member name="F:MathCore.EF7.Clients.WebRepository`2._Client">
+            <summary> Клиент </summary>
+        </member>
+        <member name="F:MathCore.EF7.Clients.WebRepository`2._Logger">
+            <summary> логгер </summary>
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Clients.WebRepository{`0,`1}})">
+            <summary> Конструктор </summary>
+            <param name="client">клиент</param>
+            <param name="logger">логгер</param>
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.IsEmpty(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.ExistId(`1,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.Exist(`0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.GetCount(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.GetAll(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.Get(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.GetPage(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.GetById(System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.Add(`0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.AddRange(System.Collections.Generic.IEnumerable{`0},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.Update(`0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.UpdateById(`1,System.Action{`0},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.UpdateRange(System.Collections.Generic.IEnumerable{`0},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.Delete(`0,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.DeleteRange(System.Collections.Generic.IEnumerable{`0},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.DeleteById(`1,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.SaveChanges(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:MathCore.EF7.Clients.WebRepository`1">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`1.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Clients.WebRepository{`0,System.Int32}})">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>
