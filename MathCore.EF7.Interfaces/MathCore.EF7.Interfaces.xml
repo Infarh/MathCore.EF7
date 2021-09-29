@@ -300,7 +300,7 @@
             <param name="Cancel">Признак отмены асинхронной операции</param>
             <returns>Сущность из репозитория с обновленными данными</returns>
         </member>
-        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.UpdateAsync(`1,System.Action{`0},System.Threading.CancellationToken)">
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.UpdateById(`1,System.Action{`0},System.Threading.CancellationToken)">
             <summary>Обновление сущности в репозитории</summary>
             <param name="id">Идентификатор обновляемой сущности</param>
             <param name="ItemUpdated">Метод обновления информации в заданной сущности</param>
@@ -330,6 +330,11 @@
             <param name="id">Идентификатор сущности, которую надо удалить</param>
             <param name="Cancel">Признак отмены асинхронной операции</param>
             <returns>Удаленная из репозитория сущность</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.SaveChanges(System.Threading.CancellationToken)">
+            <summary> Сохранить изменения </summary>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>число изменений</returns>
         </member>
         <member name="T:MathCore.EF7.Interfaces.Repositories.IRepository`1">
             <summary>Репозиторий сущностей</summary>

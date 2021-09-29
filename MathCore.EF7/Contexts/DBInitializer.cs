@@ -10,7 +10,9 @@ namespace MathCore.EF7.Contexts
     /// <inheritdoc/>
     public class DBInitializer<TDb> : IDbInitializer where TDb:DbContext
     {
+        /// <summary> контекст базы данных </summary>
         protected readonly TDb _db;
+        /// <summary> Логгер </summary>
         protected readonly ILogger<DBInitializer<TDb>> _Logger;
 
         /// <inheritdoc/>

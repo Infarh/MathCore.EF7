@@ -8,6 +8,9 @@
             <summary> Базовая реализация фабрики инициализации БД </summary>
             <typeparam name="TDb">тип контекста базы данных</typeparam>
         </member>
+        <member name="F:MathCore.EF7.Contexts.DBFactoryInitializer`1._Logger">
+            <summary> Логгер </summary>
+        </member>
         <member name="P:MathCore.EF7.Contexts.DBFactoryInitializer`1.Recreate">
             <inheritdoc/>
         </member>
@@ -37,6 +40,12 @@
         </member>
         <member name="T:MathCore.EF7.Contexts.DBInitializer`1">
             <inheritdoc/>
+        </member>
+        <member name="F:MathCore.EF7.Contexts.DBInitializer`1._db">
+            <summary> контекст базы данных </summary>
+        </member>
+        <member name="F:MathCore.EF7.Contexts.DBInitializer`1._Logger">
+            <summary> Логгер </summary>
         </member>
         <member name="P:MathCore.EF7.Contexts.DBInitializer`1.Recreate">
             <inheritdoc/>
@@ -405,7 +414,7 @@
         <member name="M:MathCore.EF7.Repositories.Base.DbRepository`2.Update(`1,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`2.UpdateAsync(System.Int32,System.Action{`1},System.Threading.CancellationToken)">
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`2.UpdateById(System.Int32,System.Action{`1},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:MathCore.EF7.Repositories.Base.DbRepository`2.UpdateRange(System.Collections.Generic.IEnumerable{`1},System.Threading.CancellationToken)">
@@ -420,7 +429,7 @@
         <member name="M:MathCore.EF7.Repositories.Base.DbRepository`2.DeleteById(System.Int32,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`2.SaveChangesAsync(System.Threading.CancellationToken)">
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`2.SaveChanges(System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="T:MathCore.EF7.Repositories.DbGPSRepository`2">
@@ -624,7 +633,7 @@
         <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`2.Update(`1,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`2.UpdateAsync(System.Int32,System.Action{`1},System.Threading.CancellationToken)">
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`2.UpdateById(System.Int32,System.Action{`1},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`2.UpdateRange(System.Collections.Generic.IEnumerable{`1},System.Threading.CancellationToken)">
@@ -637,6 +646,9 @@
             <inheritdoc />
         </member>
         <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`2.DeleteById(System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`2.SaveChanges(System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="T:MathCore.EF7.Repositories.Page`1">
