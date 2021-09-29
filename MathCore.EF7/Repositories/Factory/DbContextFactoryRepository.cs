@@ -149,7 +149,7 @@ namespace MathCore.EF7.Repositories.Factory
         }
 
         /// <inheritdoc />
-        public async Task<T> UpdateAsync(int id, Action<T> ItemUpdated, CancellationToken Cancel = default)
+        public async Task<T> UpdateById(int id, Action<T> ItemUpdated, CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
 
@@ -205,5 +205,10 @@ namespace MathCore.EF7.Repositories.Factory
             return null;
 
         }
+
+        /// <inheritdoc />
+        public virtual Task<int> SaveChanges(CancellationToken Cancel = default) 
+            => throw new NotImplementedException("Недоступно для реализации в контексте фабрики");
+
     }
 }

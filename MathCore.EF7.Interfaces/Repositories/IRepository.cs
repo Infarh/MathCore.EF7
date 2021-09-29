@@ -86,7 +86,7 @@ namespace MathCore.EF7.Interfaces.Repositories
         /// <param name="ItemUpdated">Метод обновления информации в заданной сущности</param>
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
         /// <returns>Сущность из репозитория с обновленными данными</returns>
-        Task<T> UpdateAsync(TKey id, Action<T> ItemUpdated, CancellationToken Cancel = default);
+        Task<T> UpdateById(TKey id, Action<T> ItemUpdated, CancellationToken Cancel = default);
 
         /// <summary>Обновление перечисленных сущностей</summary>
         /// <param name="items">Перечисление сущностей, информацию из которых надо обновить в репозитории</param>
@@ -111,6 +111,11 @@ namespace MathCore.EF7.Interfaces.Repositories
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
         /// <returns>Удаленная из репозитория сущность</returns>
         Task<T> DeleteById(TKey id, CancellationToken Cancel = default);
+        /// <summary> Сохранить изменения </summary>
+        /// <param name="Cancel">Признак отмены асинхронной операции</param>
+        /// <returns>число изменений</returns>
+        Task<int> SaveChanges(CancellationToken Cancel = default);
+
     }
 
     /// <summary>Репозиторий сущностей</summary>

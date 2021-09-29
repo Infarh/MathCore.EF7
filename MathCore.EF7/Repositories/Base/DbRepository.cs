@@ -98,7 +98,7 @@ namespace MathCore.EF7.Repositories.Base
             _Logger.LogInformation("Добавление {0} в репозиторий...", item);
 
             _db.Entry(item).State = EntityState.Added;
-            if (AutoSaveChanges) await SaveChangesAsync(Cancel).ConfigureAwait(false);
+            if (AutoSaveChanges) await SaveChanges(Cancel).ConfigureAwait(false);
 
             _Logger.LogInformation("Добавление {0} в репозиторий выполнено с id: {1}", item, item.Id);
 
@@ -111,8 +111,14 @@ namespace MathCore.EF7.Repositories.Base
             if (items is null) throw new ArgumentNullException(nameof(items));
             _Logger.LogInformation("Добавление множества записей в репозиторий...");
             await _db.AddRangeAsync(items, Cancel).ConfigureAwait(false);
-            if (AutoSaveChanges) await SaveChangesAsync(Cancel).ConfigureAwait(false);
-            _Logger.LogInformation("Добавление множества записей в репозиторий выполнено");
+            if (AutoSaveChanges)
+            {
+                var count = await SaveChanges(Cancel).ConfigureAwait(false);
+                _Logger.LogInformation($"Добавление {count} записей в репозиторий выполнено");
+            }
+            else
+                _Logger.LogInformation("Добавление множества записей в репозиторий выполнено и ждет сохранения");
+
         }
 
         /// <inheritdoc />
@@ -123,27 +129,52 @@ namespace MathCore.EF7.Repositories.Base
 
 
             _db.Entry(item).State = EntityState.Modified;
-            if (AutoSaveChanges) await SaveChangesAsync(Cancel).ConfigureAwait(false);
+            if (AutoSaveChanges)
+            {
+                var count = await SaveChanges(Cancel).ConfigureAwait(false);
+                _Logger.LogInformation($"Обновление id: {item.Id} - {item} выполнено, внесено изменений {count}");
+            }
+            else
+                _Logger.LogInformation("Обновление id: {0} - {1} выполнено, ожидает сохранения", item.Id, item);
 
-            _Logger.LogInformation("Обновление id: {0} - {1} выполнено", item.Id, item);
             return item;
         }
 
         /// <inheritdoc />
-        public async Task<T> UpdateAsync(int id, Action<T> ItemUpdated, CancellationToken Cancel = default)
+        public async Task<T> UpdateById(int id, Action<T> ItemUpdated, CancellationToken Cancel = default)
         {
+            _Logger.LogInformation("Обновление id: {0}...", id);
             if (await GetById(id, Cancel).ConfigureAwait(false) is not { } item)
+            {
+                _Logger.LogInformation("Элемент с id: {0} не найден", id);
                 return default;
+            } 
             ItemUpdated(item);
-            if (AutoSaveChanges) await SaveChangesAsync(Cancel).ConfigureAwait(false);
+            if (AutoSaveChanges)
+            {
+                var count = await SaveChanges(Cancel).ConfigureAwait(false);
+                _Logger.LogInformation($"Обновление завершено, внесено изменений {count}");
+            }
+            else
+                _Logger.LogInformation($"Обновление завершено, ожидает сохранения");
+
             return item;
         }
 
         /// <inheritdoc />
         public async Task UpdateRange(IEnumerable<T> items, CancellationToken Cancel = default)
         {
+            if (items is null) throw new ArgumentNullException(nameof(items));
+            _Logger.LogInformation("Изменение множества записей в репозиторий...");
             _db.UpdateRange(items);
-            if (AutoSaveChanges) await SaveChangesAsync(Cancel).ConfigureAwait(false);
+            if (AutoSaveChanges)
+            {
+                var count = await SaveChanges(Cancel).ConfigureAwait(false);
+                _Logger.LogInformation($"Изменение записей произведено, внесено изменений - {count}");
+            }
+            else
+                _Logger.LogInformation($"Изменение записей произведено, ожидает сохранения");
+
         }
 
         /// <inheritdoc />
@@ -152,18 +183,30 @@ namespace MathCore.EF7.Repositories.Base
             if (item is null) throw new ArgumentNullException(nameof(item));
             _Logger.LogInformation("Удаление id: {0} - {1}...", item.Id, item);
 
-            _db.Entry(item).State = EntityState.Deleted;
-            if (AutoSaveChanges) await SaveChangesAsync(Cancel).ConfigureAwait(false);
+            _db.Remove(item);
+            if (AutoSaveChanges)
+            {
+                var count = await SaveChanges(Cancel).ConfigureAwait(false);
+                _Logger.LogInformation($"Удаление id: {item.Id} - {item} выполнено внесено изменений - {count}");
+            }
+            else
+                _Logger.LogInformation("Удаление id: {0} - {1} выполнено", item.Id, item);
 
-            _Logger.LogInformation("Удаление id: {0} - {1} выполнено", item.Id, item);
             return item;
         }
 
         /// <inheritdoc />
         public async Task DeleteRange(IEnumerable<T> items, CancellationToken Cancel = default)
         {
+            if (items is null) throw new ArgumentNullException(nameof(items));
             _db.RemoveRange(items);
-            if (AutoSaveChanges) await SaveChangesAsync(Cancel).ConfigureAwait(false);
+            if (AutoSaveChanges)
+            {
+                var count = await SaveChanges(Cancel).ConfigureAwait(false);
+                _Logger.LogInformation($"Удаление записей произведено, внесено изменений - {count}");
+            }
+            else
+                _Logger.LogInformation($"Удаление записей произведено, ожидает сохранения");
         }
 
         /// <inheritdoc />
@@ -175,14 +218,15 @@ namespace MathCore.EF7.Repositories.Base
             //       //.Select(i => new T { Id = i.Id})
             //       .FirstOrDefaultAsync(i => i.Id == id, Cancel)
             //       .ConfigureAwait(false);
-            if (item is not null) return await Delete(item, Cancel).ConfigureAwait(false);
+            if (item is not null)
+                return await Delete(item, Cancel).ConfigureAwait(false);
 
             _Logger.LogInformation("При удалении записи с id: {0} - запись не найдена", id);
             return null;
         }
 
         /// <inheritdoc />
-        public virtual async Task<int> SaveChangesAsync(CancellationToken Cancel = default)
+        public virtual async Task<int> SaveChanges(CancellationToken Cancel = default)
         {
             _Logger.LogInformation("Сохранение изменений в БД");
             var timer = Stopwatch.StartNew();
