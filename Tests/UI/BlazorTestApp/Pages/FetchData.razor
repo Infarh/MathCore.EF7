@@ -1,12 +1,14 @@
 ﻿@page "/fetchdata"
-@using TestCommon.Service
+@using MathCore.EF7.Clients
+@using Domain
+@using MathCore.EF7.Interfaces.Repositories
 @inject HttpClient Http
-@inject IStudentService StudService
+@inject IRepository<Student> StudService
 
 <h1>Students</h1>
 
-<p>This component demonstrates fetching data from the server with OData.</p>
-
+<p>This component demonstrates fetching data from the server </p>
+<p class="alert-danger">@Row</p>
 @if (students == null)
 {
     <p><em>Loading...</em></p>
@@ -25,7 +27,7 @@ else
             @foreach (var stud in students)
             {
                 <tr>
-                    <td>@stud.ID</td>
+                    <td>@stud.Id</td>
                     <td>@stud.Name</td>
                     <td>@stud.Age</td>
                 </tr>
@@ -41,6 +43,14 @@ else
     protected override async Task OnInitializedAsync()
     {
         @*students = await Http.GetFromJsonAsync<Student[]>("sample-data/weather.json");*@
-        students = await StudService.GetAllAsync();
+    try
+    {
+        students = await StudService.GetAll();
+        Row = null;
     }
+    catch (Exception e)
+    {
+        Row = e.Message;
+    }
+}
 }

@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using MathCore.EF7.Interfaces.Repositories;
 using Microsoft.Extensions.Configuration.Memory;
-using TestCommon;
-using TestCommon.Service;
+using MathCore.EF7.Clients;
 
 namespace BlazorServerWebApp.Client
 {
@@ -21,8 +21,8 @@ namespace BlazorServerWebApp.Client
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddScoped<IStudentService, StudentsClient>();
-            builder.Services.AddScoped<OdataClient>();
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(WebRepository<>))
+               .AddScoped(typeof(IRepository<,>), typeof(WebRepository<,>));
 
             var config = new Dictionary<string, string> { { "ClientAddress", "https://localhost:44369" } };
             builder.Configuration.Add(new MemoryConfigurationSource { InitialData = config });

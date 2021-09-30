@@ -2,7 +2,7 @@
 
 namespace Domain
 {
-    public class Student :Entity
+    public class Student : Entity
     {
         public string Name { get; set; }
         public int Age { get; set; }

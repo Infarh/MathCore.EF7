@@ -25,7 +25,7 @@ else
         @foreach (var stud in students)
         {
             <tr>
-                <td>@stud.ID</td>
+                <td>@stud.Id</td>
                 <td>@stud.Name</td>
                 <td>@stud.Age</td>
             </tr>
@@ -36,24 +36,12 @@ else
 
 @code{
     private IEnumerable<Student> students;
-
     async void OnBtnClick()
     {
         students = await client.GetFromJsonAsync<IEnumerable<Student>>("Student");
+        //var response = await client.GetAsync("Student");
+        //Response = response.StatusCode.ToString();
         StateHasChanged();
     }
 
-    
-    async void TestOData()
-    {
-@*        var accessToken = HttpContext.GetTokenAsync("access_token").Result;
-*@       
-@*        var client = new ODataClient(SetODataToken("https://localhost:44345/api", accessToken));
- 
-        var persons = await client.For<Student>()
-            .Expand(rr => rr.EmailAddress)
-            .Top(7).Skip(7)
-            .FindEntriesAsync();
-*@ 
-    }
 }

@@ -10,4 +10,10 @@
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\MathCore.EF7.Clients\MathCore.EF7.Clients.csproj" />
+    <ProjectReference Include="..\..\..\MathCore.EF7.Interfaces\MathCore.EF7.Interfaces.csproj" />
+    <ProjectReference Include="..\..\Domain\Domain.csproj" />
+  </ItemGroup>
+
 </Project>

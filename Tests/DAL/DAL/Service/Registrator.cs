@@ -11,11 +11,13 @@ namespace DAL.Service
     {
         public static IServiceCollection AddTestRepositories(this IServiceCollection services) =>
             services
-               .AddScoped(typeof(IRepository<>), typeof(Test_DbRepository<>));
+               .AddScoped(typeof(IRepository<>), typeof(Test_DbRepository<>))
+               .AddScoped(typeof(IRepository<,>), typeof(Test_DbRepository<,>));
 
         public static IServiceCollection AddTestRepositoryFactories(this IServiceCollection services) =>
             services
-               .AddScoped(typeof(IRepository<>), typeof(Test_DbContextFactoryRepository<>));
+               .AddScoped(typeof(IRepository<>), typeof(Test_DbContextFactoryRepository<>))
+               .AddScoped(typeof(IRepository<,>), typeof(Test_DbContextFactoryRepository<,>));
     }
     public static class ServicesExtensions
     {
