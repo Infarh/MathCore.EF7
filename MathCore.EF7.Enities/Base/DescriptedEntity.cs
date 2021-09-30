@@ -1,7 +1,7 @@
 ﻿using System;
 using MathCore.EF7.Interfaces.Entities;
 
-namespace MathCore.EF7.Entities
+namespace MathCore.EF7.Enities.Base
 {
     /// <summary>Сущность, снабженная комментарием</summary>
     /// <typeparam name="TKey">Тип первичного ключа</typeparam>

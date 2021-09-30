@@ -1,0 +1,46 @@
+﻿@page "/fetchdata"
+@using TestCommon.Service
+@inject HttpClient Http
+@inject IStudentService StudService
+
+<h1>Students</h1>
+
+<p>This component demonstrates fetching data from the server with OData.</p>
+
+@if (students == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stud in students)
+            {
+                <tr>
+                    <td>@stud.ID</td>
+                    <td>@stud.Name</td>
+                    <td>@stud.Age</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<Student> students;
+    string Row;
+
+    protected override async Task OnInitializedAsync()
+    {
+        @*students = await Http.GetFromJsonAsync<Student[]>("sample-data/weather.json");*@
+        students = await StudService.GetAllAsync();
+    }
+}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using MathCore.EF7.Interfaces.Entities;
 
-namespace MathCore.EF7.Entities
+namespace MathCore.EF7.Enities.Base
 {
     /// <summary>Сущность</summary>
     /// <typeparam name="TKey">Тип первичного ключа</typeparam>

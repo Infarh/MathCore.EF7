@@ -1,0 +1,59 @@
+﻿@page "/"
+@inject HttpClient client
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<button class="btn-dark" @onclick=OnBtnClick>Test server response</button>
+<SurveyPrompt Title="How is Blazor working for you?" />
+@if (students == null)
+{
+    <p><em>No data</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var stud in students)
+        {
+            <tr>
+                <td>@stud.ID</td>
+                <td>@stud.Name</td>
+                <td>@stud.Age</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code{
+    private IEnumerable<Student> students;
+
+    async void OnBtnClick()
+    {
+        students = await client.GetFromJsonAsync<IEnumerable<Student>>("Student");
+        StateHasChanged();
+    }
+
+    
+    async void TestOData()
+    {
+@*        var accessToken = HttpContext.GetTokenAsync("access_token").Result;
+*@       
+@*        var client = new ODataClient(SetODataToken("https://localhost:44345/api", accessToken));
+ 
+        var persons = await client.For<Student>()
+            .Expand(rr => rr.EmailAddress)
+            .Top(7).Skip(7)
+            .FindEntriesAsync();
+*@ 
+    }
+}
