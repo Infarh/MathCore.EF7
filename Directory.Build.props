@@ -15,11 +15,9 @@
     <!-- <EmbedAllSources>true</EmbedAllSources>-->
   </PropertyGroup>
 
-  <!--Генерация документации-->
   <PropertyGroup>
-    <Configurations>Debug;Release</Configurations>
-    <Platforms>AnyCPU</Platforms>
     <DocumentationFile>$(MSBuildProjectName).xml</DocumentationFile>
-  </PropertyGroup >
+  </PropertyGroup>
+
 
 </Project>

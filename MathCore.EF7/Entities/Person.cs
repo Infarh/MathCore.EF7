@@ -1,4 +1,5 @@
 ﻿using System;
+using MathCore.EF7.Enities.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace MathCore.EF7.Entities

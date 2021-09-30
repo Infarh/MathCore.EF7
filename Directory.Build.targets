@@ -35,7 +35,7 @@
   </ItemGroup>
 
   <!--Копирование документации в выходной каталог-->
-  <ItemGroup>
+  <ItemGroup >
     <Content Include="$(MSBuildProjectName).xml">
       <PackagePath></PackagePath>
       <!--Полный путь к директории где файл-->

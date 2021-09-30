@@ -18,11 +18,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.10" />
-    <!--<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.8" />-->
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MathCore.EF7.Enities\MathCore.EF7.Enities.csproj" />
     <ProjectReference Include="..\MathCore.EF7.Interfaces\MathCore.EF7.Interfaces.csproj" />
   </ItemGroup>
 
