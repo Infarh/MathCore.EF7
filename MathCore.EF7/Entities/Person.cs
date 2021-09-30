@@ -1,10 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace MathCore.EF7.Entities
 {
     /// <inheritdoc/>
     [Index(nameof(LastName), nameof(FirstName), nameof(Patronymic), IsUnique = true, Name = "NameIndex")]
-    public abstract class Person : DescriptedEntity
+    public abstract class Person : Person<int>
+    {
+
+    }
+
+    /// <summary> Сущность описывающая личность </summary>
+    /// <typeparam name="TKey">тип ключа сущности</typeparam>
+    [Index(nameof(LastName), nameof(FirstName), nameof(Patronymic), IsUnique = true, Name = "NameIndex")]
+    public abstract class Person<TKey> : DescriptedEntity<TKey> where TKey : IEquatable<TKey>
     {
         /// <summary>Фамилия</summary>
         public string LastName { get; set; }

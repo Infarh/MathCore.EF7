@@ -28,7 +28,7 @@ namespace MathCore.EF7.Entities
         protected NamedEntity(TKey Id, string Name) : base(Id) => this.Name = Name;
     }
 
-    /// <inheritdoc cref="NamedEntity{T}" />
+    /// <inheritdoc cref="NamedEntity{TKey}" />
     public abstract class NamedEntity : NamedEntity<int>, INamedEntity
     {
         /// <summary>Инициализация новой именованной сущности</summary>

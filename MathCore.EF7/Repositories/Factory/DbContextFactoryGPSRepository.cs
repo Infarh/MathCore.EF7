@@ -10,11 +10,29 @@ using Microsoft.Extensions.Logging;
 
 namespace MathCore.EF7.Repositories.Factory
 {
-    /// <inheritdoc cref="DbContextFactoryRepository{TDb,T}" />
-    public class DbContextFactoryGPSRepository<TDb,T> : DbContextFactoryRepository<TDb, T>, IGPSRepository<T> where T : class, IGPSEntity, new() where TDb:DbContext
+    /// <inheritdoc/>
+    public class DbContextFactoryGPSRepository<TContext, TGpsEntity> : DbContextFactoryRepository<TContext, TGpsEntity, int>
+        where TGpsEntity : class, IGPSEntity, new() where TContext : DbContext
+    {
+        /// <inheritdoc/>
+        public DbContextFactoryGPSRepository(
+            IDbContextFactory<TContext> ContextFactory,
+            ILogger<DbContextFactoryRepository<TContext, TGpsEntity, int>> Logger) : base(
+            ContextFactory,
+            Logger)
+        {
+        }
+    }
+
+    /// <inheritdoc cref="DbContextFactoryRepository{TContext, TGpsEntity, TKey}" />
+    public class DbContextFactoryGPSRepository<TContext, TGpsEntity, TKey>
+        : DbContextFactoryRepository<TContext, TGpsEntity, TKey>,
+          IGPSRepository<TGpsEntity, TKey>
+        where TGpsEntity : class, IGPSEntity<TKey>, new()
+        where TContext : DbContext
     {
         /// <inheritdoc />
-        public DbContextFactoryGPSRepository(IDbContextFactory<TDb> db, ILogger<DbContextFactoryGPSRepository<TDb, T>> Logger) : base(db, Logger) { }
+        public DbContextFactoryGPSRepository(IDbContextFactory<TContext> db, ILogger<DbContextFactoryGPSRepository<TContext, TGpsEntity, TKey>> Logger) : base(db, Logger) { }
 
         /// <inheritdoc />
         public async Task<bool> ExistInLocation(
@@ -24,8 +42,8 @@ namespace MathCore.EF7.Repositories.Factory
             CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
-            return await db.Set<T>()
-               .OrderByDistanceInRange(Latitude, Longitude, RangeInMeters)
+            return await db.Set<TGpsEntity>()
+               .OrderByDistanceInRange<TGpsEntity, TKey>(Latitude, Longitude, RangeInMeters)
                .AnyAsync(Cancel)
                .ConfigureAwait(false);
         }
@@ -38,27 +56,27 @@ namespace MathCore.EF7.Repositories.Factory
             CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
-            return await db.Set<T>()
-               .OrderByDistanceInRange(Latitude, Longitude, RangeInMeters)
+            return await db.Set<TGpsEntity>()
+               .OrderByDistanceInRange<TGpsEntity, TKey>(Latitude, Longitude, RangeInMeters)
                .CountAsync(Cancel)
                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<T>> GetAllByLocationInRange(
+        public async Task<IEnumerable<TGpsEntity>> GetAllByLocationInRange(
             double Latitude,
             double Longitude,
             double RangeInMeters,
             CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
-            return await GetDbQuery(db).OrderByDistanceInRange(Latitude, Longitude, RangeInMeters)
+            return await GetDbQuery(db).OrderByDistanceInRange<TGpsEntity, TKey>(Latitude, Longitude, RangeInMeters)
                .ToArrayAsync(Cancel)
                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<T>> GetAllByLocationInRange(
+        public async Task<IEnumerable<TGpsEntity>> GetAllByLocationInRange(
             double Latitude,
             double Longitude,
             double RangeInMeters,
@@ -68,7 +86,7 @@ namespace MathCore.EF7.Repositories.Factory
         {
             await using var db = ContextFactory.CreateDbContext();
             return await GetDbQuery(db)
-               .OrderByDistanceInRange(Latitude, Longitude, RangeInMeters)
+               .OrderByDistanceInRange<TGpsEntity, TKey>(Latitude, Longitude, RangeInMeters)
                .Skip(Skip)
                .Take(Take)
                .ToArrayAsync(Cancel)
@@ -76,20 +94,20 @@ namespace MathCore.EF7.Repositories.Factory
         }
 
         /// <inheritdoc />
-        public async Task<T> GetByLocation(
+        public async Task<TGpsEntity> GetByLocation(
             double Latitude,
             double Longitude,
             CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
             return await GetDbQuery(db)
-               .OrderByDistance(Latitude, Longitude)
+               .OrderByDistance<TGpsEntity, TKey>(Latitude, Longitude)
                .FirstAsync(Cancel)
                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<T> GetByLocationInRange(
+        public async Task<TGpsEntity> GetByLocationInRange(
             double Latitude,
             double Longitude,
             double RangeInMeters,
@@ -97,13 +115,13 @@ namespace MathCore.EF7.Repositories.Factory
         {
             await using var db = ContextFactory.CreateDbContext();
             return await GetDbQuery(db)
-               .OrderByDistance(Latitude, Longitude)
+               .OrderByDistance<TGpsEntity, TKey>(Latitude, Longitude)
                .FirstOrDefaultAsync(Cancel)
                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<IPage<T>> GetPageByLocationInRange(
+        public async Task<IPage<TGpsEntity>> GetPageByLocationInRange(
             double Latitude,
             double Longitude,
             double RangeInMeters,
@@ -111,28 +129,28 @@ namespace MathCore.EF7.Repositories.Factory
             int PageSize,
             CancellationToken Cancel = default)
         {
-            if (PageSize <= 0) return new Page<T>(Enumerable.Empty<T>(), PageSize, PageNumber, PageSize);
+            if (PageSize <= 0) return new Page<TGpsEntity>(Enumerable.Empty<TGpsEntity>(), PageSize, PageNumber, PageSize);
 
             await using var db = ContextFactory.CreateDbContext();
-            var query = GetDbQuery(db).OrderByDistanceInRange(Latitude, Longitude, RangeInMeters);
+            var query = GetDbQuery(db).OrderByDistanceInRange<TGpsEntity, TKey>(Latitude, Longitude, RangeInMeters);
             var total_count = await query.CountAsync(Cancel).ConfigureAwait(false);
-            if (total_count == 0) return new Page<T>(Enumerable.Empty<T>(), PageSize, PageNumber, PageSize);
+            if (total_count == 0) return new Page<TGpsEntity>(Enumerable.Empty<TGpsEntity>(), PageSize, PageNumber, PageSize);
 
             if (PageNumber > 0) query = query.Skip(PageNumber * PageSize);
             query = query.Take(PageSize);
             var items = await query.ToArrayAsync(Cancel).ConfigureAwait(false);
 
-            return new Page<T>(items, total_count, PageNumber, PageSize);
+            return new Page<TGpsEntity>(items, total_count, PageNumber, PageSize);
         }
 
         /// <inheritdoc />
-        public async Task<T> DeleteByLocation(double Latitude, double Longitude, CancellationToken Cancel = default) =>
+        public async Task<TGpsEntity> DeleteByLocation(double Latitude, double Longitude, CancellationToken Cancel = default) =>
             await GetByLocation(Latitude, Longitude, Cancel).ConfigureAwait(false) is { } item
                 ? await Delete(item, Cancel)
                 : default;
 
         /// <inheritdoc />
-        public async Task<T> DeleteByLocationInRange(
+        public async Task<TGpsEntity> DeleteByLocationInRange(
             double Latitude,
             double Longitude,
             double RangeInMeters,

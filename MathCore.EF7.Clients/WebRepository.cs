@@ -14,19 +14,19 @@ namespace MathCore.EF7.Clients
 {
 
     /// <summary> Клиент к репозиторию </summary>
-    /// <typeparam name="T">тип сущности</typeparam>
-    /// <typeparam name="Tkey">тип идентификатора</typeparam>
-    public class WebRepository<T, Tkey> : IRepository<T, Tkey> where T : IEntity<Tkey>
+    /// <typeparam name="TEntity">тип сущности</typeparam>
+    /// <typeparam name="TKey">тип идентификатора</typeparam>
+    public class WebRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : IEntity<TKey>
     {
         /// <summary> Клиент </summary>
         protected readonly HttpClient _Client;
         /// <summary> логгер </summary>
-        protected readonly ILogger<WebRepository<T, Tkey>> _Logger;
+        protected readonly ILogger<WebRepository<TEntity, TKey>> _Logger;
 
         /// <summary> Конструктор </summary>
         /// <param name="client">клиент</param>
         /// <param name="logger">логгер</param>
-        public WebRepository(HttpClient client, ILogger<WebRepository<T, Tkey>> logger)
+        public WebRepository(HttpClient client, ILogger<WebRepository<TEntity, TKey>> logger)
         {
             _Client = client;
             _Logger = logger;
@@ -42,25 +42,25 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public async Task<bool> IsEmpty(CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(IsEmpty)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(IsEmpty)}");
 
             var response = await _Client.GetAsync($"isempty", Cancel).ConfigureAwait(false);
             return response.StatusCode != HttpStatusCode.NotFound && response.IsSuccessStatusCode;
         }
 
         /// <inheritdoc />
-        public async Task<bool> ExistId(Tkey Id, CancellationToken Cancel = default)
+        public async Task<bool> ExistId(TKey Id, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(ExistId)} - {ToValueRow(Id)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(ExistId)} - {ToValueRow(Id)}");
 
             var response = await _Client.GetAsync($"exist/id/{Id}", Cancel).ConfigureAwait(false);
             return response.StatusCode != HttpStatusCode.NotFound && response.IsSuccessStatusCode;
         }
 
         /// <inheritdoc />
-        public async Task<bool> Exist(T item, CancellationToken Cancel = default)
+        public async Task<bool> Exist(TEntity item, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(Exist)} - {ToValueRow(item.Id)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(Exist)} - {ToValueRow(item.Id)}");
 
             var response = await _Client.PostAsJsonAsync($"exist", item, Cancel).ConfigureAwait(false);
             return response.StatusCode != HttpStatusCode.NotFound && response.IsSuccessStatusCode;
@@ -69,36 +69,36 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public async Task<int> GetCount(CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(GetCount)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(GetCount)}");
             return await _Client.GetFromJsonAsync<int>("count", Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<T>> GetAll(CancellationToken Cancel = default)
+        public async Task<IEnumerable<TEntity>> GetAll(CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(GetAll)}");
-            return await _Client.GetFromJsonAsync<IEnumerable<T>>("", Cancel).ConfigureAwait(false);
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(GetAll)}");
+            return await _Client.GetFromJsonAsync<IEnumerable<TEntity>>("", Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<T>> Get(int Skip, int Count, CancellationToken Cancel = default)
+        public async Task<IEnumerable<TEntity>> Get(int Skip, int Count, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(Get)} - {ToValueRow(Skip, Count)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(Get)} - {ToValueRow(Skip, Count)}");
 
-            return await _Client.GetFromJsonAsync<IEnumerable<T>>($"items[{Skip}:{Count}]", Cancel).ConfigureAwait(false);
+            return await _Client.GetFromJsonAsync<IEnumerable<TEntity>>($"items[{Skip}:{Count}]", Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<IPage<T>> GetPage(int PageNumber, int PageSize, CancellationToken Cancel = default)
+        public async Task<IPage<TEntity>> GetPage(int PageNumber, int PageSize, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(GetPage)} - {ToValueRow(PageNumber, PageSize)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(GetPage)} - {ToValueRow(PageNumber, PageSize)}");
 
             var response = await _Client.GetAsync($"page[{PageNumber}/{PageSize}]", Cancel).ConfigureAwait(false);
 
             if (response.StatusCode == HttpStatusCode.NotFound)
                 return new PageItems
                 {
-                    Items = Enumerable.Empty<T>(),
+                    Items = Enumerable.Empty<TEntity>(),
                     PageNumber = PageNumber,
                     PageSize = PageSize,
                     TotalCount = 0
@@ -110,11 +110,11 @@ namespace MathCore.EF7.Clients
                .ReadFromJsonAsync<PageItems>(cancellationToken: Cancel)
                .ConfigureAwait(false);
         }
-        private class PageItems : IPage<T>
+        private class PageItems : IPage<TEntity>
         {
             #region Implementation of IPage<out T>
 
-            public IEnumerable<T> Items { get; init; }
+            public IEnumerable<TEntity> Items { get; init; }
 
             public int TotalCount { get; init; }
 
@@ -126,75 +126,75 @@ namespace MathCore.EF7.Clients
         }
 
         /// <inheritdoc />
-        public async Task<T> GetById(int Id, CancellationToken Cancel = default)
+        public async Task<TEntity> GetById(TKey Id, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(GetById)} - {ToValueRow(Id)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(GetById)} - {ToValueRow(Id)}");
 
-            return await _Client.GetFromJsonAsync<T>($"{Id}", Cancel).ConfigureAwait(false);
+            return await _Client.GetFromJsonAsync<TEntity>($"{Id}", Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<T> Add(T item, CancellationToken Cancel = default)
+        public async Task<TEntity> Add(TEntity item, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(Add)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(Add)}");
 
             var response = await _Client.PostAsJsonAsync("", item, Cancel).ConfigureAwait(false);
             var result = await response
                .EnsureSuccessStatusCode()
                .Content
-               .ReadFromJsonAsync<T>(cancellationToken: Cancel)
+               .ReadFromJsonAsync<TEntity>(cancellationToken: Cancel)
                .ConfigureAwait(false);
             return result;
         }
 
         /// <inheritdoc />
-        public async Task AddRange(IEnumerable<T> items, CancellationToken Cancel = default)
+        public async Task AddRange(IEnumerable<TEntity> items, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(AddRange)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(AddRange)}");
             await _Client.PostAsJsonAsync("range", items, Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<T> Update(T item, CancellationToken Cancel = default)
+        public async Task<TEntity> Update(TEntity item, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(Update)} - {item.Id}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(Update)} - {item.Id}");
 
             var response = await _Client.PutAsJsonAsync("", item, Cancel).ConfigureAwait(false);
             var result = await response
                .EnsureSuccessStatusCode()
                .Content
-               .ReadFromJsonAsync<T>(cancellationToken: Cancel)
+               .ReadFromJsonAsync<TEntity>(cancellationToken: Cancel)
                .ConfigureAwait(false);
             return result;
 
         }
 
         /// <inheritdoc />
-        public async Task<T> UpdateById(Tkey id, Action<T> ItemUpdated, CancellationToken Cancel = default)
+        public async Task<TEntity> UpdateById(TKey id, Action<TEntity> ItemUpdated, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(UpdateById)} - {ToValueRow(id)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(UpdateById)} - {ToValueRow(id)}");
             var response = await _Client.PutAsJsonAsync($"id/{id}", ItemUpdated, Cancel).ConfigureAwait(false);
 
             var result = await response
                .EnsureSuccessStatusCode()
                .Content
-               .ReadFromJsonAsync<T>(cancellationToken: Cancel)
+               .ReadFromJsonAsync<TEntity>(cancellationToken: Cancel)
                .ConfigureAwait(false);
             return result;
         }
 
         /// <inheritdoc />
-        public async Task UpdateRange(IEnumerable<T> items, CancellationToken Cancel = default)
+        public async Task UpdateRange(IEnumerable<TEntity> items, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(UpdateRange)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(UpdateRange)}");
 
             await _Client.PutAsJsonAsync($"range", items, Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<T> Delete(T item, CancellationToken Cancel = default)
+        public async Task<TEntity> Delete(TEntity item, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(Delete)} - {ToValueRow(item.Id)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(Delete)} - {ToValueRow(item.Id)}");
 
             var request = new HttpRequestMessage(HttpMethod.Delete, "")
             {
@@ -208,15 +208,15 @@ namespace MathCore.EF7.Clients
             var result = await response
                .EnsureSuccessStatusCode()
                .Content
-               .ReadFromJsonAsync<T>(cancellationToken: Cancel)
+               .ReadFromJsonAsync<TEntity>(cancellationToken: Cancel)
                .ConfigureAwait(false);
             return result;
         }
 
         /// <inheritdoc />
-        public async Task DeleteRange(IEnumerable<T> items, CancellationToken Cancel = default)
+        public async Task DeleteRange(IEnumerable<TEntity> items, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(DeleteRange)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(DeleteRange)}");
 
             var request = new HttpRequestMessage(HttpMethod.Delete, "range")
             {
@@ -227,9 +227,9 @@ namespace MathCore.EF7.Clients
         }
 
         /// <inheritdoc />
-        public async Task<T> DeleteById(Tkey id, CancellationToken Cancel = default)
+        public async Task<TEntity> DeleteById(TKey id, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(DeleteById)} - {ToValueRow(id)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(DeleteById)} - {ToValueRow(id)}");
 
             var response = await _Client.DeleteAsync($"{id}", Cancel).ConfigureAwait(false);
             if (response.StatusCode == HttpStatusCode.NotFound)
@@ -238,7 +238,7 @@ namespace MathCore.EF7.Clients
             var result = await response
                .EnsureSuccessStatusCode()
                .Content
-               .ReadFromJsonAsync<T>(cancellationToken: Cancel)
+               .ReadFromJsonAsync<TEntity>(cancellationToken: Cancel)
                .ConfigureAwait(false);
             return result;
 
@@ -247,7 +247,7 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public async Task<int> SaveChanges(CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(SaveChanges)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(SaveChanges)}");
 
             return await _Client.GetFromJsonAsync<int>("save", Cancel).ConfigureAwait(false);
         }

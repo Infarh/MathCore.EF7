@@ -22,18 +22,18 @@ namespace MathCore.EF7.Controllers
 
     /// <summary> реализация контроллера для api </summary>
     /// <typeparam name="T">Тип сущности</typeparam>
-    /// <typeparam name="Tkey">тип ключа сущности</typeparam>
+    /// <typeparam name="TKey">тип ключа сущности</typeparam>
     [Route("api/[controller]")]
     [ApiController]
-    public class ControllerBaseActionResultApi<T, Tkey> : ControllerBase where T : IEntity<Tkey>
+    public class ControllerBaseActionResultApi<T, TKey> : ControllerBase where T : IEntity<TKey>
     {
         /// <summary> клиент репозитория </summary>
-        protected readonly IRepository<T, Tkey> _Repository;
+        protected readonly IRepository<T, TKey> _Repository;
         /// <summary> логгер </summary>
-        protected readonly ILogger<ControllerBaseActionResultApi<T, Tkey>> _Logger;
+        protected readonly ILogger<ControllerBaseActionResultApi<T, TKey>> _Logger;
 
         /// <inheritdoc/>
-        public ControllerBaseActionResultApi(IRepository<T, Tkey> repository, ILogger<ControllerBaseActionResultApi<T, Tkey>> logger)
+        public ControllerBaseActionResultApi(IRepository<T, TKey> repository, ILogger<ControllerBaseActionResultApi<T, TKey>> logger)
         {
             _Repository = repository;
             _Logger = logger;
@@ -56,7 +56,7 @@ namespace MathCore.EF7.Controllers
         [HttpGet("exist/{Id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(bool))]
-        public async Task<IActionResult> ExistId(Tkey Id, CancellationToken Cancel = default)
+        public async Task<IActionResult> ExistId(TKey Id, CancellationToken Cancel = default)
         {
             return await _Repository.ExistId(Id, Cancel) ? Ok(true) : NotFound(false);
         }
@@ -128,7 +128,7 @@ namespace MathCore.EF7.Controllers
         [HttpGet("{Id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetById(int Id, CancellationToken Cancel = default)
+        public async Task<IActionResult> GetById(TKey Id, CancellationToken Cancel = default)
         {
             return await _Repository.GetById(Id, Cancel) is { } item ? Ok(item) : NotFound();
         }
@@ -178,11 +178,11 @@ namespace MathCore.EF7.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateById(Tkey id, Action<T> ItemUpdated, CancellationToken Cancel = default)
+        public async Task<IActionResult> UpdateById(TKey id, Action<T> ItemUpdated, CancellationToken Cancel = default)
         {
             if (await _Repository.UpdateById(id, ItemUpdated, Cancel) is not { } result)
                 return NotFound();
-            return AcceptedAtAction(nameof(GetById), new { Id = result.Id });
+            return AcceptedAtAction(nameof(GetById), new { result.Id });
         }
         /// <summary>Обновление перечисленных сущностей</summary>
         /// <param name="items">Перечисление сущностей, информацию из которых надо обновить в репозитории</param>
@@ -227,7 +227,7 @@ namespace MathCore.EF7.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteById(Tkey id, CancellationToken Cancel = default)
+        public async Task<IActionResult> DeleteById(TKey id, CancellationToken Cancel = default)
         {
             if (await _Repository.DeleteById(id, Cancel) is not { } result)
                 return NotFound();

@@ -11,6 +11,6 @@ namespace MathCore.EF7.Entities
         public string Description { get; set; }
     }
 
-    /// <inheritdoc cref="NamedDescriptedEntity{T}" />
+    /// <inheritdoc cref="NamedDescriptedEntity{TKey}" />
     public abstract class NamedDescriptedEntity : NamedDescriptedEntity<int>, IDescriptedEntity { }
 }

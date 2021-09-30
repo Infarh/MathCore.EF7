@@ -56,7 +56,7 @@ namespace MathCore.EF7.Interfaces.Repositories
         /// <param name="Id">Идентификатор извлекаемой сущности</param>
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
         /// <returns>Сущность с указанным идентификатором в случае ее наличия и null, если сущность отсутствует</returns>
-        Task<T> GetById(int Id, CancellationToken Cancel = default);
+        Task<T> GetById(TKey Id, CancellationToken Cancel = default);
 
         /// <summary>Добавление сущности в репозиторий</summary>
         /// <param name="item">Добавляемая в репозиторий сущность</param>

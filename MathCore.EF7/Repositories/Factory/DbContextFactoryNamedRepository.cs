@@ -7,11 +7,25 @@ using Microsoft.Extensions.Logging;
 
 namespace MathCore.EF7.Repositories.Factory
 {
-    /// <inheritdoc cref="DbContextFactoryRepository{TDb,T}" />
-    public class DbContextFactoryNamedRepository<TDb, T> : DbContextFactoryRepository<TDb, T>, INamedRepository<T> where T : class, INamedEntity, new() where TDb:DbContext
+    /// <inheritdoc />
+    public class DbContextFactoryNamedRepository<TDbContext, TNamedEntity> : DbContextFactoryNamedRepository<TDbContext, TNamedEntity, int>
+        where TNamedEntity : class, INamedEntity, new() where TDbContext : DbContext
     {
         /// <inheritdoc />
-        public DbContextFactoryNamedRepository(IDbContextFactory<TDb> ContextFactory, ILogger<DbContextFactoryNamedRepository<TDb, T>> Logger) : base(ContextFactory, Logger) { }
+        public DbContextFactoryNamedRepository(IDbContextFactory<TDbContext> ContextFactory, ILogger<DbContextFactoryNamedRepository<TDbContext, TNamedEntity, int>> Logger) : base(ContextFactory, Logger)
+        {
+        }
+    }
+
+    /// <inheritdoc cref="DbContextFactoryRepository{TDbContext, TNamedEntity, TKey}" />
+    public class DbContextFactoryNamedRepository<TDbContext, TNamedEntity, TKey>
+        : DbContextFactoryRepository<TDbContext, TNamedEntity, TKey>,
+          INamedRepository<TNamedEntity, TKey>
+        where TNamedEntity : class, INamedEntity<TKey>, new()
+        where TDbContext : DbContext
+    {
+        /// <inheritdoc />
+        public DbContextFactoryNamedRepository(IDbContextFactory<TDbContext> ContextFactory, ILogger<DbContextFactoryNamedRepository<TDbContext, TNamedEntity, TKey>> Logger) : base(ContextFactory, Logger) { }
 
         /// <inheritdoc />
         public async Task<bool> ExistName(string Name, CancellationToken Cancel = default)
@@ -21,17 +35,17 @@ namespace MathCore.EF7.Repositories.Factory
         }
 
         /// <inheritdoc />
-        public async Task<T> GetByName(string Name, CancellationToken Cancel = default)
+        public async Task<TNamedEntity> GetByName(string Name, CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
             return await GetDbQuery(db).FirstOrDefaultAsync(item => item.Name == Name, Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<T> DeleteByName(string Name, CancellationToken Cancel = default)
+        public async Task<TNamedEntity> DeleteByName(string Name, CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
-            var item = await db.Set<T>()
+            var item = await db.Set<TNamedEntity>()
                //.Select(i => new T { Id = i.Id, Name = i.Name })
                .FirstOrDefaultAsync(i => i.Name == Name, Cancel)
                .ConfigureAwait(false);

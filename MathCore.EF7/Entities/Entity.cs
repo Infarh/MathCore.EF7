@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using MathCore.EF7.Interfaces.Entities;
 
 namespace MathCore.EF7.Entities

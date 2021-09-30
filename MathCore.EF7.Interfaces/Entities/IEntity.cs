@@ -1,4 +1,7 @@
-﻿namespace MathCore.EF7.Interfaces.Entities
+﻿using System;
+using System.Linq.Expressions;
+
+namespace MathCore.EF7.Interfaces.Entities
 {
     /// <summary>Сущность</summary>
     /// <typeparam name="TKey">Тип первичного ключа</typeparam>

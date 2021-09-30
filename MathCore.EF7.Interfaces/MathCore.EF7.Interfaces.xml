@@ -250,6 +250,7 @@
         <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.GetCount(System.Threading.CancellationToken)">
             <summary>Получить число хранимых сущностей</summary>
             <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>число сущностей в репозитории</returns>
         </member>
         <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.GetAll(System.Threading.CancellationToken)">
             <summary>Извлечь все сущности из репозитория</summary>
@@ -270,7 +271,7 @@
             <param name="Cancel">Признак отмены асинхронной операции</param>
             <returns>Страница с сущностями из репозитория</returns>
         </member>
-        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.GetById(System.Int32,System.Threading.CancellationToken)">
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.GetById(`1,System.Threading.CancellationToken)">
             <summary>Получить сущность по указанному идентификатору</summary>
             <param name="Id">Идентификатор извлекаемой сущности</param>
             <param name="Cancel">Признак отмены асинхронной операции</param>
