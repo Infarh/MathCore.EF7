@@ -18,7 +18,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution items", "_Solutio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathCore.EF7.Interfaces", "MathCore.EF7.Interfaces\MathCore.EF7.Interfaces.csproj", "{1D0ABC2F-8008-4F9D-82F4-72858DD02853}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathCore.EF7.Clients", "MathCore.EF7.Clients\MathCore.EF7.Clients.csproj", "{33689D67-712A-49B3-8C65-9974296EFC65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathCore.EF7.Clients", "MathCore.EF7.Clients\MathCore.EF7.Clients.csproj", "{33689D67-712A-49B3-8C65-9974296EFC65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathCore.EF7.Controllers", "MathCore.EF7.Controllers\MathCore.EF7.Controllers.csproj", "{C1A0137E-F5D0-47BF-BA46-10F2CEB0170A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +44,10 @@ Global
 		{33689D67-712A-49B3-8C65-9974296EFC65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33689D67-712A-49B3-8C65-9974296EFC65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33689D67-712A-49B3-8C65-9974296EFC65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1A0137E-F5D0-47BF-BA46-10F2CEB0170A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1A0137E-F5D0-47BF-BA46-10F2CEB0170A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1A0137E-F5D0-47BF-BA46-10F2CEB0170A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1A0137E-F5D0-47BF-BA46-10F2CEB0170A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
