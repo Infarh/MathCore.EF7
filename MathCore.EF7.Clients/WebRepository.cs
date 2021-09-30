@@ -44,7 +44,7 @@ namespace MathCore.EF7.Clients
         {
             _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(IsEmpty)}");
 
-            var response = await _Client.GetAsync($"IsEmpty", Cancel).ConfigureAwait(false);
+            var response = await _Client.GetAsync($"isempty", Cancel).ConfigureAwait(false);
             return response.StatusCode != HttpStatusCode.NotFound && response.IsSuccessStatusCode;
         }
 

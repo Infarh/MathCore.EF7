@@ -30,6 +30,7 @@ namespace MathCore.EF7.Interfaces.Repositories
 
         /// <summary>Получить число хранимых сущностей</summary>
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
+        /// <returns>число сущностей в репозитории</returns>
         Task<int> GetCount(CancellationToken Cancel = default);
 
         /// <summary>Извлечь все сущности из репозитория</summary>
