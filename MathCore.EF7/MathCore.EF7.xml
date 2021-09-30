@@ -572,5 +572,14 @@
             <summary> Реализация интерфейса постраничных данных </summary>
             <typeparam name="T">Тип данных</typeparam>
         </member>
+        <member name="P:MathCore.EF7.Repositories.Page`1.TotalPagesCount">
+            <summary>Полное число страниц в выдаче</summary>
+        </member>
+        <member name="P:MathCore.EF7.Repositories.Page`1.HasPrevPage">
+            <summary>Существует ли предыдущая страница</summary>
+        </member>
+        <member name="P:MathCore.EF7.Repositories.Page`1.HasNextPage">
+            <summary>Существует ли следующая страница</summary>
+        </member>
     </members>
 </doc>

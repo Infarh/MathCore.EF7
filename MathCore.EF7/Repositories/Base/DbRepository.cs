@@ -48,7 +48,11 @@ namespace MathCore.EF7.Repositories.Base
         }
 
         /// <inheritdoc />
-        public Task<bool> IsEmpty(CancellationToken Cancel = default) => Set.AnyAsync(Cancel);
+        public async Task<bool> IsEmpty(CancellationToken Cancel = default)
+        {
+            var result = await Set.AnyAsync(Cancel);
+            return !result;
+        }
 
         /// <inheritdoc />
         public async Task<bool> ExistId(TKey Id, CancellationToken Cancel = default) =>
@@ -58,6 +62,8 @@ namespace MathCore.EF7.Repositories.Base
         public async Task<bool> Exist(TEntity item, CancellationToken Cancel = default)
         {
             if (item is null) throw new ArgumentNullException(nameof(item));
+
+            //ToDo доделать логику проверки по остальным полям сущности
 
             return await Set.AnyAsync(EntityExtension.GetId<TEntity,TKey>(item.Id), Cancel).ConfigureAwait(false);
         }
@@ -106,9 +112,14 @@ namespace MathCore.EF7.Repositories.Base
         public async Task<TEntity> Add(TEntity item, CancellationToken Cancel = default)
         {
             if (item is null) throw new ArgumentNullException(nameof(item));
-            _Logger.LogInformation("Добавление {0} в репозиторий...", item);
 
-            _db.Entry(item).State = EntityState.Added;
+            _Logger.LogInformation("Добавление {0} в репозиторий...", item);
+            if (await ExistId(item.Id, Cancel))
+            {
+                _Logger.LogInformation($"Элемент с id={item.Id} уже существует в базе");
+                return null;
+            }
+            _db.Add(item);
             if (AutoSaveChanges) await SaveChanges(Cancel).ConfigureAwait(false);
 
             _Logger.LogInformation("Добавление {0} в репозиторий выполнено с id: {1}", item, item.Id);

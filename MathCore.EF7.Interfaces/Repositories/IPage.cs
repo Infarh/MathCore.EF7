@@ -23,9 +23,9 @@ namespace MathCore.EF7.Interfaces.Repositories
         int TotalPagesCount => (int) Math.Ceiling((double) TotalCount / PageSize);
 
         /// <summary>Существует ли предыдущая страница</summary>
-        bool HasPrevPage => PageNumber >= 0;
+        bool HasPrevPage => PageNumber > 0;
 
         /// <summary>Существует ли следующая страница</summary>
-        bool HasNextPage => PageNumber < TotalPagesCount;
+        bool HasNextPage => PageNumber < TotalPagesCount - 1;//отсчёт от 0 страницы
     }
 }

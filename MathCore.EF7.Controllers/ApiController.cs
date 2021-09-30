@@ -12,10 +12,10 @@ using Microsoft.Extensions.Logging;
 namespace MathCore.EF7.Controllers
 {
     /// <inheritdoc/>
-    public class ApiController<T> : ControllerBaseActionResultApi<T, int> where T:IEntity<int>
+    public abstract class ApiController<T> : ApiController<T, int> where T : IEntity<int>
     {
         /// <inheritdoc/>
-        public ApiController(IRepository<T, int> repository, ILogger<ControllerBaseActionResultApi<T, int>> logger) : base(repository, logger)
+        protected ApiController(IRepository<T, int> repository, ILogger<ApiController<T, int>> logger) : base(repository, logger)
         {
         }
     }
@@ -25,15 +25,15 @@ namespace MathCore.EF7.Controllers
     /// <typeparam name="TKey">тип ключа сущности</typeparam>
     [Route("api/[controller]")]
     [ApiController]
-    public class ControllerBaseActionResultApi<T, TKey> : ControllerBase where T : IEntity<TKey>
+    public abstract class ApiController<T, TKey> : ControllerBase where T : IEntity<TKey>
     {
         /// <summary> клиент репозитория </summary>
         protected readonly IRepository<T, TKey> _Repository;
         /// <summary> логгер </summary>
-        protected readonly ILogger<ControllerBaseActionResultApi<T, TKey>> _Logger;
+        protected readonly ILogger<ApiController<T, TKey>> _Logger;
 
         /// <inheritdoc/>
-        public ControllerBaseActionResultApi(IRepository<T, TKey> repository, ILogger<ControllerBaseActionResultApi<T, TKey>> logger)
+        protected ApiController(IRepository<T, TKey> repository, ILogger<ApiController<T, TKey>> logger)
         {
             _Repository = repository;
             _Logger = logger;
@@ -65,7 +65,7 @@ namespace MathCore.EF7.Controllers
         /// <param name="item">Проверяемая сущность</param>
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
         /// <returns>Истина, если указанная сущность существует в репозитории</returns>
-        [HttpGet("exist")]
+        //[HttpGet("exist")] //ToDo проверить реализацию (ошибка передаваемых данных в строке запроса) Unsupported Media Type
         [HttpPost("exist")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(bool))]
@@ -98,7 +98,7 @@ namespace MathCore.EF7.Controllers
         /// <param name="Count">Число извлекаемых из репозитория сущностей</param>
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
         /// <returns>Перечисление полученных из репозитория сущностей</returns>
-        [HttpGet("items[[{Skip:int}:{Count:int}]]")]
+        [HttpGet("items[[{Skip:int};{Count:int}]]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public virtual async Task<ActionResult<IEnumerable<T>>> Get(int Skip, int Count, CancellationToken Cancel = default)
         {
@@ -110,7 +110,7 @@ namespace MathCore.EF7.Controllers
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
         /// <returns>Страница с сущностями из репозитория</returns>
         [HttpGet("page/{PageNumber:int}/{PageSize:int}")]
-        [HttpGet("page[[{PageNumber:int}:{PageSize:int}]]")]
+        [HttpGet("page[[{PageNumber:int};{PageSize:int}]]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public virtual async Task<ActionResult<IPage<T>>> GetPage(int PageNumber, int PageSize, CancellationToken Cancel = default)
@@ -139,10 +139,13 @@ namespace MathCore.EF7.Controllers
         /// <returns>Добавленная в репозиторий сущность</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public virtual async Task<IActionResult> Add(T item, CancellationToken Cancel = default)
         {
             var result = await _Repository.Add(item, Cancel);
-            return CreatedAtAction(nameof(GetById), new { result.Id });
+            if (result is null)
+                return Conflict($"Conflicted: element with id={item.Id} is already exist");
+            return CreatedAtAction(nameof(GetById), new { result.Id }, result);
         }
 
         /// <summary>Добавление перечисленных сущностей в репозиторий</summary>
@@ -167,7 +170,7 @@ namespace MathCore.EF7.Controllers
         {
             if (await _Repository.Update(item, Cancel) is not { } result)
                 return NotFound();
-            return AcceptedAtAction(nameof(GetById), new { result.Id });
+            return AcceptedAtAction(nameof(GetById), new { result.Id }, result);
         }
 
         /// <summary>Обновление сущности в репозитории</summary>
@@ -182,7 +185,7 @@ namespace MathCore.EF7.Controllers
         {
             if (await _Repository.UpdateById(id, ItemUpdated, Cancel) is not { } result)
                 return NotFound();
-            return AcceptedAtAction(nameof(GetById), new { result.Id });
+            return AcceptedAtAction(nameof(GetById), new { result.Id }, result);
         }
         /// <summary>Обновление перечисленных сущностей</summary>
         /// <param name="items">Перечисление сущностей, информацию из которых надо обновить в репозитории</param>

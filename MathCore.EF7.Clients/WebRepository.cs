@@ -24,7 +24,7 @@ namespace MathCore.EF7.Clients
         /// <summary> Конструктор - адрес клиента api/TEntity</summary>
         /// <param name="configuration">Конфигурация</param>
         /// <param name="logger">логгер</param>
-        public WebRepository(IConfiguration configuration, ILogger<WebRepository<TEntity, TKey>> logger) : base(configuration, $"api/{nameof(TEntity)}")
+        public WebRepository(IConfiguration configuration, ILogger<WebRepository<TEntity, TKey>> logger) : base(configuration, $"api/{typeof(TEntity).Name}")
         {
             _Logger = logger;
         }
@@ -279,15 +279,15 @@ namespace MathCore.EF7.Clients
     }
 
     /// <inheritdoc />
-    public class WebRepository<T> : WebRepository<T, int> where T : IEntity<int>
+    public class WebRepository<TEntity> : WebRepository<TEntity, int>, IRepository<TEntity> where TEntity : IEntity<int>
     {
         /// <inheritdoc />
-        public WebRepository(IConfiguration configuration, ILogger<WebRepository<T, int>> logger) : base(configuration, logger)
+        public WebRepository(IConfiguration configuration, ILogger<WebRepository<TEntity, int>> logger) : base(configuration, logger)
         {
         }
 
         /// <inheritdoc />
-        public WebRepository(IConfiguration configuration, ILogger<WebRepository<T, int>> logger, string serviceAddress) : base(configuration, logger, serviceAddress)
+        public WebRepository(IConfiguration configuration, ILogger<WebRepository<TEntity, int>> logger, string serviceAddress) : base(configuration, logger, serviceAddress)
         {
         }
     }
