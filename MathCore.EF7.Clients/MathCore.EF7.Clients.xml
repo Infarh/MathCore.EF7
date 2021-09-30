@@ -53,8 +53,8 @@
         </member>
         <member name="T:MathCore.EF7.Clients.WebRepository`2">
             <summary> Клиент к репозиторию </summary>
-            <typeparam name="T">тип сущности</typeparam>
-            <typeparam name="Tkey">тип идентификатора</typeparam>
+            <typeparam name="TEntity">тип сущности</typeparam>
+            <typeparam name="TKey">тип идентификатора</typeparam>
         </member>
         <member name="F:MathCore.EF7.Clients.WebRepository`2._Client">
             <summary> Клиент </summary>
@@ -88,7 +88,7 @@
         <member name="M:MathCore.EF7.Clients.WebRepository`2.GetPage(System.Int32,System.Int32,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:MathCore.EF7.Clients.WebRepository`2.GetById(System.Int32,System.Threading.CancellationToken)">
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.GetById(`1,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:MathCore.EF7.Clients.WebRepository`2.Add(`0,System.Threading.CancellationToken)">
