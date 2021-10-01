@@ -1,6 +1,6 @@
 using System;
 
-namespace ApiServer
+namespace Domain
 {
     public class WeatherForecast
     {
