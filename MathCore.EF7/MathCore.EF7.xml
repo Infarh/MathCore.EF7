@@ -301,6 +301,9 @@
         <member name="P:MathCore.EF7.Repositories.Base.DbRepository`3.Items">
             <summary> все элементы DbSet с возможность настройки (фильтрация выборка и прочее) </summary>
         </member>
+        <member name="P:MathCore.EF7.Repositories.Base.DbRepository`3.OrderedEntities">
+            <summary> Упорядоченные сущности </summary>
+        </member>
         <member name="P:MathCore.EF7.Repositories.Base.DbRepository`3.AutoSaveChanges">
             <summary> Флаг необходимости сохранять изменения в базе данных после каждого запроса </summary>
         </member>

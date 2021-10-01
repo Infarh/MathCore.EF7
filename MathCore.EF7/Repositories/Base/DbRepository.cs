@@ -34,6 +34,12 @@ namespace MathCore.EF7.Repositories.Base
         protected DbSet<TEntity> Set { get; }
         /// <summary> все элементы DbSet с возможность настройки (фильтрация выборка и прочее) </summary>
         protected virtual IQueryable<TEntity> Items => Set;
+        /// <summary> Упорядоченные сущности </summary>
+        protected IQueryable<TEntity> OrderedEntities => Items switch
+        {
+            IOrderedQueryable<TEntity> ordereq_query => ordereq_query,
+            { } q => q.OrderBy(i => i.Id)
+        };
         /// <summary> Флаг необходимости сохранять изменения в базе данных после каждого запроса </summary>
         public bool AutoSaveChanges { get; set; } = true;
 
@@ -79,11 +85,7 @@ namespace MathCore.EF7.Repositories.Base
         {
             if (Count <= 0) return Enumerable.Empty<TEntity>();
 
-            IQueryable<TEntity> query = Items switch
-            {
-                IOrderedQueryable<TEntity> ordereq_query => ordereq_query,
-                { } q => q.OrderBy(i => i.Id)
-            };
+            IQueryable<TEntity> query = OrderedEntities;
             if (Skip > 0) query = query.Skip(Skip);
 
             return await query.Take(Count).ToArrayAsync(Cancel);
@@ -94,11 +96,7 @@ namespace MathCore.EF7.Repositories.Base
         {
             if (PageSize <= 0) return new Page<TEntity>(Enumerable.Empty<TEntity>(), PageSize, PageNumber, PageSize);
 
-            IQueryable<TEntity> query = Items switch
-            {
-                IOrderedQueryable<TEntity> ordereq_query => ordereq_query,
-                { } q => q.OrderBy(i => i.Id)
-            };
+            IQueryable<TEntity> query = OrderedEntities;
             var total_count = await query.CountAsync(Cancel).ConfigureAwait(false);
             if (total_count == 0) return new Page<TEntity>(Enumerable.Empty<TEntity>(), PageSize, PageNumber, PageSize);
 
