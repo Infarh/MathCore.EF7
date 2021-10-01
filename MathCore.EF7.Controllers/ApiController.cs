@@ -98,7 +98,7 @@ namespace MathCore.EF7.Controllers
         /// <param name="Count">Число извлекаемых из репозитория сущностей</param>
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
         /// <returns>Перечисление полученных из репозитория сущностей</returns>
-        [HttpGet("items[[{Skip:int};{Count:int}]]")]
+        [HttpGet("items[[{Skip:int}/{Count:int}]]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public virtual async Task<ActionResult<IEnumerable<T>>> Get(int Skip, int Count, CancellationToken Cancel = default)
         {
@@ -110,7 +110,7 @@ namespace MathCore.EF7.Controllers
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
         /// <returns>Страница с сущностями из репозитория</returns>
         [HttpGet("page/{PageNumber:int}/{PageSize:int}")]
-        [HttpGet("page[[{PageNumber:int};{PageSize:int}]]")]
+        [HttpGet("page[[{PageNumber:int}/{PageSize:int}]]")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public virtual async Task<ActionResult<IPage<T>>> GetPage(int PageNumber, int PageSize, CancellationToken Cancel = default)
