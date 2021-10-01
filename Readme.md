@@ -31,7 +31,7 @@ Your_DbContextFactoryRepository - реализация фабрики репоз
 Возможности репозитория:
 <details>	
   <br />
-  <summary><b>⚙️ Конечные точки</b></summary>
+  <summary><b>🔥 Конечные точки</b></summary>
   	<ul>
       <li>Task<bool> <b>IsEmpty</b>(CancellationToken Cancel = default)</li>
 	    <li>Task<bool> <b>ExistId</b>(TKey Id, CancellationToken Cancel = default)</li>
@@ -74,7 +74,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env, TestCont
 Возможности клиента:
 <details>	
   <br />
-  <summary><b>⚙️ Конечные точки</b></summary>
+  <summary><b>🔥 Конечные точки</b></summary>
   	<ul>
       <details> <summary>Get </summary>
       <ul>
@@ -121,7 +121,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env, TestCont
 Конечные точки идентичны точкам WebRepository.
 <details>	
   <br />
-  <summary><b>⚙️ Конечные точки</b></summary>
+  <summary><b>🔥 Конечные точки</b></summary>
   	<ul>
       <details> <summary>Get </summary>
       <ul>
