@@ -44,7 +44,7 @@ namespace ApiServer
             var db_type = Configuration["Database"];
             switch (db_type)
             {
-                default: throw new NotSupportedException($"Тип подключения БД {db_type} не поддерживается");
+                default: throw new NotSupportedException($"РўРёРї РїРѕРґРєР»СЋС‡РµРЅРёСЏ Р‘Р” {db_type} РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚СЃСЏ");
 
                 case "SqlServer":
                     services.AddTestDbContextSqlServer(Configuration.GetConnectionString(db_type));
