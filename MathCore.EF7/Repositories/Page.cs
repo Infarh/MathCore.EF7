@@ -9,7 +9,7 @@ namespace MathCore.EF7.Repositories
     internal record Page<T>(IEnumerable<T> Items, int TotalCount, int PageNumber, int PageSize) : IPage<T>
     {
         /// <summary>Полное число страниц в выдаче</summary>
-        public int TotalPagesCount => (int)Math.Ceiling((double)TotalCount / PageSize);
+        public int TotalPagesCount => PageSize <= 0 ? TotalCount : (int)Math.Ceiling((double)TotalCount / PageSize);
 
         /// <summary>Существует ли предыдущая страница</summary>
         public bool HasPrevPage => PageNumber > 0;
