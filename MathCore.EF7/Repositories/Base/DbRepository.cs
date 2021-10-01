@@ -79,7 +79,11 @@ namespace MathCore.EF7.Repositories.Base
         {
             if (Count <= 0) return Enumerable.Empty<TEntity>();
 
-            var query = Items;
+            IQueryable<TEntity> query = Items switch
+            {
+                IOrderedQueryable<TEntity> ordereq_query => ordereq_query,
+                { } q => q.OrderBy(i => i.Id)
+            };
             if (Skip > 0) query = query.Skip(Skip);
 
             return await query.Take(Count).ToArrayAsync(Cancel);
@@ -90,7 +94,11 @@ namespace MathCore.EF7.Repositories.Base
         {
             if (PageSize <= 0) return new Page<TEntity>(Enumerable.Empty<TEntity>(), PageSize, PageNumber, PageSize);
 
-            var query = Items;
+            IQueryable<TEntity> query = Items switch
+            {
+                IOrderedQueryable<TEntity> ordereq_query => ordereq_query,
+                { } q => q.OrderBy(i => i.Id)
+            };
             var total_count = await query.CountAsync(Cancel).ConfigureAwait(false);
             if (total_count == 0) return new Page<TEntity>(Enumerable.Empty<TEntity>(), PageSize, PageNumber, PageSize);
 
