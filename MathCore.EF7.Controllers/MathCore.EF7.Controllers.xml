@@ -51,7 +51,7 @@
             <param name="Cancel">Признак отмены асинхронной операции</param>
             <returns>Перечисление всех сущностей репозитория</returns>
         </member>
-        <member name="M:MathCore.EF7.Controllers.ApiController`2.Get(System.Int32,System.Int32,System.Threading.CancellationToken)">
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.Get(System.Int32,System.Int32)">
             <summary>Получить набор сущностей из репозитория в указанном количестве, предварительно пропустив некоторое количество</summary>
             <param name="Skip">Число предварительно пропускаемых сущностей</param>
             <param name="Count">Число извлекаемых из репозитория сущностей</param>
