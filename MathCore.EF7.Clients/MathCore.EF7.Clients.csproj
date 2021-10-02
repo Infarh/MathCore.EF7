@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net5.0</TargetFrameworks>
+    <RootNamespace>MathCore.EF7.Clients</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Version>0.0.0</Version>
+    <PackageReleaseNotes>Старт проекта</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Description>Реализация клиентов MathCore.EF7</Description>
+    <PackageTags>Clients; API; EF; EF7; Entity Framework; Entity Framework Core; Entity Framework 7; Extensions</PackageTags>
+  </PropertyGroup>
+
+    <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+    <!--<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MathCore.EF7.Interfaces\MathCore.EF7.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

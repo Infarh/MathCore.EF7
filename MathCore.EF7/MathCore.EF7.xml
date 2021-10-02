@@ -1,0 +1,588 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MathCore.EF7</name>
+    </assembly>
+    <members>
+        <member name="T:MathCore.EF7.Contexts.DBFactoryInitializer`1">
+            <summary> Базовая реализация фабрики инициализации БД </summary>
+            <typeparam name="TContext">тип контекста базы данных</typeparam>
+        </member>
+        <member name="F:MathCore.EF7.Contexts.DBFactoryInitializer`1._Logger">
+            <summary> Логгер </summary>
+        </member>
+        <member name="P:MathCore.EF7.Contexts.DBFactoryInitializer`1.Recreate">
+            <inheritdoc/>
+        </member>
+        <member name="M:MathCore.EF7.Contexts.DBFactoryInitializer`1.#ctor(Microsoft.EntityFrameworkCore.IDbContextFactory{`0},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Contexts.DBInitializer{`0}})">
+            <summary> инициализация фабрики </summary>
+            <param name="db">контекст базы данных</param>
+            <param name="Logger">логгер</param>
+        </member>
+        <member name="M:MathCore.EF7.Contexts.DBFactoryInitializer`1.Delete">
+            <inheritdoc/>
+        </member>
+        <member name="M:MathCore.EF7.Contexts.DBFactoryInitializer`1.DeleteAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:MathCore.EF7.Contexts.DBFactoryInitializer`1.Initialize">
+            <inheritdoc/>
+        </member>
+        <member name="M:MathCore.EF7.Contexts.DBFactoryInitializer`1.InitializeAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:MathCore.EF7.Contexts.DBFactoryInitializer`1.Dispose(System.Boolean)">
+            <summary> Освобождение контекста </summary>
+            <param name="disposing">необходимость освобождения контекста</param>
+        </member>
+        <member name="M:MathCore.EF7.Contexts.DBFactoryInitializer`1.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="T:MathCore.EF7.Contexts.DBInitializer`1">
+            <inheritdoc/>
+        </member>
+        <member name="F:MathCore.EF7.Contexts.DBInitializer`1._db">
+            <summary> контекст базы данных </summary>
+        </member>
+        <member name="F:MathCore.EF7.Contexts.DBInitializer`1._Logger">
+            <summary> Логгер </summary>
+        </member>
+        <member name="P:MathCore.EF7.Contexts.DBInitializer`1.Recreate">
+            <inheritdoc/>
+        </member>
+        <member name="M:MathCore.EF7.Contexts.DBInitializer`1.#ctor(`0,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Contexts.DBInitializer{`0}})">
+            <summary> Инициализирует работу с базой данных </summary>
+            <param name="db">контекст базы данных</param>
+            <param name="Logger">логгер</param>
+        </member>
+        <member name="M:MathCore.EF7.Contexts.DBInitializer`1.Delete">
+            <inheritdoc/>
+        </member>
+        <member name="M:MathCore.EF7.Contexts.DBInitializer`1.DeleteAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:MathCore.EF7.Contexts.DBInitializer`1.Initialize">
+            <inheritdoc/>
+        </member>
+        <member name="M:MathCore.EF7.Contexts.DBInitializer`1.InitializeAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:MathCore.EF7.Entities.Person">
+            <inheritdoc/>
+        </member>
+        <member name="T:MathCore.EF7.Entities.Person`1">
+            <summary> Сущность описывающая личность </summary>
+            <typeparam name="TKey">тип ключа сущности</typeparam>
+        </member>
+        <member name="P:MathCore.EF7.Entities.Person`1.LastName">
+            <summary>Фамилия</summary>
+        </member>
+        <member name="P:MathCore.EF7.Entities.Person`1.FirstName">
+            <summary>Имя</summary>
+        </member>
+        <member name="P:MathCore.EF7.Entities.Person`1.Patronymic">
+            <summary>Отчество</summary>
+        </member>
+        <member name="M:MathCore.EF7.Entities.Person`1.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:MathCore.EF7.Entities.Person`1.#ctor(System.String,System.String,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:MathCore.EF7.Entities.Person`1.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:MathCore.EF7.Extensions.DbContextExtensions">
+            <summary> Расширения для контекста </summary>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbContextExtensions.ThrowIfHasChanges(Microsoft.EntityFrameworkCore.DbContext)">
+            <summary>Метод выполняет проверку наличия локальных незафиксированных в БД изменений</summary>
+            <param name="context">Проверяемый контекст БД</param>
+            <exception cref="T:System.InvalidOperationException">при наличии незафиксированных в БД изменений, хранимых в контексте</exception>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbContextExtensions.GetTableNames(Microsoft.EntityFrameworkCore.DbContext)">
+            <summary>
+            Получить имена таблиц
+            </summary>
+            <param name="context">контекст базы данных</param>
+            <returns>перечисление имен таблиц в базе данных</returns>
+        </member>
+        <member name="T:MathCore.EF7.Extensions.DbSetExtensions">
+            <summary>Методы-расширения для <see cref="T:Microsoft.EntityFrameworkCore.DbSet`1"/></summary>
+        </member>
+        <member name="T:MathCore.EF7.Extensions.DbSetExtensions.DbSetIdentityInsert`1">
+            <summary>Объект, обеспечивающий автоматизацию обратного переключения при вызове метода <see cref="T:System.IDisposable"/>.<see cref="M:System.IDisposable.Dispose"/></summary>
+            <typeparam name="T">Тип элементов данных набора</typeparam>
+        </member>
+        <member name="F:MathCore.EF7.Extensions.DbSetExtensions.DbSetIdentityInsert`1._TableName">
+            <summary>Имя таблицы, для которой осуществляется управление</summary>
+        </member>
+        <member name="F:MathCore.EF7.Extensions.DbSetExtensions.DbSetIdentityInsert`1._Context">
+            <summary>Контекст БД, осуществляющий связь с БД</summary>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbSetExtensions.DbSetIdentityInsert`1.#ctor(Microsoft.EntityFrameworkCore.DbSet{`0})">
+            <summary>
+            Инициализация нового экземпляра <see cref="T:MathCore.EF7.Extensions.DbSetExtensions.DbSetIdentityInsert`1"/>
+            При завершении работы конструктора в БД выполняется SQL-команда SET IDENTITY_INSERT [dbo].[TableName] ON
+            </summary>
+            <param name="Set">Набор данных контекста</param>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbSetExtensions.DbSetIdentityInsert`1.Dispose">
+            <summary>Вызов данного метода осуществляет выполнение SQL-команды SET IDENTITY_INSERT [dbo].[TableName] OFF</summary>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbSetExtensions.IdentityInsert``1(Microsoft.EntityFrameworkCore.DbSet{``0})">
+            <summary>Переключить режим таблицы для изменения значений первичных ключей</summary>
+            <typeparam name="T">Тип элементов данных набора</typeparam>
+            <param name="Set">Набор данных контекста</param>
+            <returns>Объект, обеспечивающий автоматизацию обратного переключения при вызове метода <see cref="T:System.IDisposable"/>.<see cref="M:System.IDisposable.Dispose"/></returns>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbSetExtensions.GetContext``1(Microsoft.EntityFrameworkCore.DbSet{``0})">
+            <summary>Получить экземпляр контекста БД из объекта набора данных</summary>
+            <typeparam name="T">Тип элементов данных набора</typeparam>
+            <param name="Set">Набор данных контекста</param>
+            <returns>Контекст БД, которому принадлежит набор данных</returns>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbSetExtensions.GetTableName``1(Microsoft.EntityFrameworkCore.DbSet{``0})">
+            <summary>Получить имя таблицы БД с которой связан набор данных</summary>
+            <typeparam name="T">Тип элементов данных набора</typeparam>
+            <param name="Set">Набор данных контекста</param>
+            <returns>Имя таблицы в БД с которой связан набор данных</returns>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbSetExtensions.TruncateTable``1(Microsoft.EntityFrameworkCore.DbSet{``0})">
+            <summary> Усечение таблицы </summary>
+            <typeparam name="T">тип сущности</typeparam>
+            <param name="Set">DbSet</param>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbSetExtensions.TruncateTableAsync``1(Microsoft.EntityFrameworkCore.DbSet{``0},System.Threading.CancellationToken)">
+            <summary> Усечение таблицы </summary>
+            <typeparam name="T">тип сущности</typeparam>
+            <param name="Set">DbSet</param>
+            <param name="Cancel">Токен отмены</param>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbSetExtensions.DeleteWhere``1(Microsoft.EntityFrameworkCore.DbSet{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            Удалить по фильтру
+            </summary>
+            <typeparam name="T">тип сущности</typeparam>
+            <param name="Set">Set базы данных</param>
+            <param name="filter">фильтр</param>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.DbSetExtensions.DeleteWhereAsync``1(Microsoft.EntityFrameworkCore.DbSet{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Threading.CancellationToken)">
+            <summary>
+            Удалить по фильтру
+            </summary>
+            <typeparam name="T">тип сущности</typeparam>
+            <param name="Set">Set базы данных</param>
+            <param name="filter">фильтр</param>
+            <param name="Cancel">токен отмены операции</param>
+        </member>
+        <member name="T:MathCore.EF7.Extensions.EntityExtension">
+            <summary>
+            Расширение для сравнения сущностей
+            </summary>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.EntityExtension.GetId``2(``1)">
+            <summary> сравнение сущностей по id </summary>
+            <param name="id">id</param>
+            <typeparam name="TEntity">Тип сущности</typeparam>
+            <typeparam name="TKey">тип ключа для сравнения</typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:MathCore.EF7.Extensions.GPSEntityExtensions">
+            <summary>Методы-расширения для сущностей с геопозиционированием</summary>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.GPSEntityExtensions.OrderByDistanceInRange``2(System.Linq.IQueryable{``0},System.Double,System.Double,System.Double)">
+            <summary>Упорядочить по удалению от указанной точки и выбрать лишь те элементы, что попадают в указанный радиус</summary>
+            <typeparam name="TGpsEntity">Тип элементов</typeparam>
+            <typeparam name="TKey">Тип ключа сущности</typeparam>
+            <param name="query">Исходный запрос</param>
+            <param name="Latitude">Широта опорной точки</param>
+            <param name="Longitude">Долгота опорной точки</param>
+            <param name="Range">Ограничивающий радиус в метрах</param>
+            <returns>Запрос элементов вокруг указанной точки в заданном радиусе</returns>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.GPSEntityExtensions.OrderByDistance``2(System.Linq.IQueryable{``0},System.Double,System.Double)">
+            <summary>Отсортировать по увеличению дальности от указанной точки</summary>
+            <typeparam name="T">Тип элемента, имеющего географические координаты</typeparam>
+            <typeparam name="Tkey">Тип ключа сущности</typeparam>
+            <param name="query">Запрос</param>
+            <param name="Latitude">Широта указанной точки</param>
+            <param name="Longitude">Долгота указанной точки</param>
+            <returns>Запрос, содержащий последовательность элементов, упорядоченную по удалению от указанной точки</returns>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.GPSEntityExtensions.Closest``2(System.Linq.IQueryable{``0},System.Double,System.Double)">
+            <summary>Получить ближайший объект к указанной точке</summary>
+            <typeparam name="T">Тип элемента, имеющего географические координаты</typeparam>
+            <typeparam name="Tkey">Тип ключа сущности</typeparam>
+            <param name="query">Запрос</param>
+            <param name="Latitude">Широта указанной точки</param>
+            <param name="Longitude">Долгота указанной точки</param>
+            <returns>Первый ближайший элемент к указанной точке</returns>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.GPSEntityExtensions.ClosestOrDefault``2(System.Linq.IQueryable{``0},System.Double,System.Double)">
+            <summary>Получить ближайший объект к указанной точке</summary>
+            <typeparam name="T">Тип элемента, имеющего географические координаты</typeparam>
+            <typeparam name="Tkey">Тип ключа сущности</typeparam>
+            <param name="query">Запрос</param>
+            <param name="Latitude">Широта указанной точки</param>
+            <param name="Longitude">Долгота указанной точки</param>
+            <returns>Первый ближайший элемент к указанной точке</returns>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.GPSEntityExtensions.OrderByDistance``2(System.Collections.Generic.IEnumerable{``0},System.Double,System.Double)">
+            <summary>Отсортировать по увеличению дальности от указанной точки</summary>
+            <typeparam name="T">Тип элемента, имеющего географические координаты</typeparam>
+            <typeparam name="Tkey">Тип ключа сущности</typeparam>
+            <param name="items">Последовательность элементов</param>
+            <param name="Latitude">Широта указанной точки</param>
+            <param name="Longitude">Долгота указанной точки</param>
+            <returns>Последовательность элементов, содержащий последовательность элементов, упорядоченную по удалению от указанной точки</returns>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.GPSEntityExtensions.Closest``2(System.Collections.Generic.IEnumerable{``0},System.Double,System.Double)">
+            <summary>Получить ближайший объект к указанной точке</summary>
+            <typeparam name="T">Тип элемента, имеющего географические координаты</typeparam>
+            <typeparam name="Tkey">Тип ключа сущности</typeparam>
+            <param name="items">Последовательность элементов</param>
+            <param name="Latitude">Широта указанной точки</param>
+            <param name="Longitude">Долгота указанной точки</param>
+            <returns>Первый ближайший элемент к указанной точке</returns>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.GPSEntityExtensions.ClosestOrDefault``2(System.Collections.Generic.IEnumerable{``0},System.Double,System.Double)">
+            <summary>Получить ближайший объект к указанной точке</summary>
+            <typeparam name="T">Тип элемента, имеющего географические координаты</typeparam>
+            <typeparam name="Tkey">Тип ключа сущности</typeparam>
+            <param name="items">Последовательность элементов</param>
+            <param name="Latitude">Широта указанной точки</param>
+            <param name="Longitude">Долгота указанной точки</param>
+            <returns>Первый ближайший элемент к указанной точке</returns>
+        </member>
+        <member name="T:MathCore.EF7.Extensions.QueryableExtensions">
+            <summary>Класс методов-расширений для интерфейса <see cref="T:System.Linq.IQueryable`1"/></summary>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.QueryableExtensions.ToSql``1(System.Linq.IQueryable{``0})">
+            <summary>Получить текст SQL-запроса</summary>
+            <typeparam name="T">Тип элементов результата запроса</typeparam>
+            <param name="query">Объект запроса, из которого требуется получить текст SQL</param>
+            <returns>Текст SQL, формируемый на основе запроса</returns>
+            <remarks>
+            Решение взято отсюда: stackoverflow.com/a/51583047 <see url="https://stackoverflow.com/a/51583047"/>
+            </remarks>
+        </member>
+        <member name="T:MathCore.EF7.Extensions.RepositoryExtensions">
+            <summary> Расширение для репозиториев </summary>
+        </member>
+        <member name="M:MathCore.EF7.Extensions.RepositoryExtensions.EnumPages``2(MathCore.EF7.Interfaces.Repositories.IRepository{``0,``1},System.Int32,System.Threading.CancellationToken)">
+            <summary>Перечисление всех страниц сущностей репозитория</summary>
+            <typeparam name="TEntity">Тип сущности репозитория</typeparam>
+            <typeparam name="TKey">Тип первичного ключа сущности репозитория</typeparam>
+            <param name="repository">Репозиторий, перечисление страниц которого надо выполнить</param>
+            <param name="PageSize">Размер страницы</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Последовательное перечисление страниц сущностей репозитория</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">Если размер страницы меньше, либо равен 0</exception>
+        </member>
+        <member name="T:MathCore.EF7.Repositories.Base.DbRepository`2">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`2.#ctor(`0,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.Base.DbRepository{`0,`1,System.Int32}})">
+            <inheritdoc />
+        </member>
+        <member name="T:MathCore.EF7.Repositories.Base.DbRepository`3">
+            <summary>Репозиторий сущностей, работающий с контекстом БД</summary>
+            <typeparam name="TEntity">Тип контролируемых сущностей</typeparam>
+            <typeparam name="TContext">Тип контекста базы данных</typeparam>
+            <typeparam name="TKey">тип ключа сущности</typeparam>
+        </member>
+        <member name="F:MathCore.EF7.Repositories.Base.DbRepository`3._Logger">
+            <summary> Логгер </summary>
+        </member>
+        <member name="P:MathCore.EF7.Repositories.Base.DbRepository`3.Set">
+            <summary> DbSet сущности </summary>
+        </member>
+        <member name="P:MathCore.EF7.Repositories.Base.DbRepository`3.Items">
+            <summary> все элементы DbSet с возможность настройки (фильтрация выборка и прочее) </summary>
+        </member>
+        <member name="P:MathCore.EF7.Repositories.Base.DbRepository`3.OrderedEntities">
+            <summary> Упорядоченные сущности </summary>
+        </member>
+        <member name="P:MathCore.EF7.Repositories.Base.DbRepository`3.AutoSaveChanges">
+            <summary> Флаг необходимости сохранять изменения в базе данных после каждого запроса </summary>
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.#ctor(`0,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.Base.DbRepository{`0,`1,`2}})">
+            <summary> конструктор </summary>
+            <param name="db">контекст базы данных</param>
+            <param name="Logger">логгер</param>
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.IsEmpty(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.ExistId(`2,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.Exist(`1,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.GetCount(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.GetAll(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.Get(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.GetPage(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.GetById(`2,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.Add(`1,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.AddRange(System.Collections.Generic.IEnumerable{`1},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.Update(`1,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.UpdateById(`2,System.Action{`1},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.UpdateRange(System.Collections.Generic.IEnumerable{`1},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.Delete(`1,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.DeleteRange(System.Collections.Generic.IEnumerable{`1},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.DeleteById(`2,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.SaveChanges(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:MathCore.EF7.Repositories.DbGPSRepository`2">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbGPSRepository`2.#ctor(`0,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.DbGPSRepository{`0,`1,System.Int32}})">
+            <inheritdoc />
+        </member>
+        <member name="T:MathCore.EF7.Repositories.DbGPSRepository`3">
+            <summary>Репозиторий географических данных</summary>
+            <typeparam name="TGpsEntity">Тип сущности репозитория</typeparam>
+            <typeparam name="TContext">Тип контекста базы данных</typeparam>
+            <typeparam name="TKey">Тип ключа сущности</typeparam>
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbGPSRepository`3.#ctor(`0,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.DbGPSRepository{`0,`1,`2}})">
+            <summary>Инициализация нового экземпляра <see cref="T:MathCore.EF7.Repositories.DbGPSRepository`3"/></summary>
+            <param name="db">Контекст БД</param>
+            <param name="Logger">Логгер</param>
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbGPSRepository`3.ExistInLocation(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbGPSRepository`3.GetCountInLocation(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbGPSRepository`3.GetAllByLocationInRange(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbGPSRepository`3.GetAllByLocationInRange(System.Double,System.Double,System.Double,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbGPSRepository`3.GetByLocation(System.Double,System.Double,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbGPSRepository`3.GetByLocationInRange(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbGPSRepository`3.GetPageByLocationInRange(System.Double,System.Double,System.Double,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbGPSRepository`3.DeleteByLocation(System.Double,System.Double,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbGPSRepository`3.DeleteByLocationInRange(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:MathCore.EF7.Repositories.DbNamedRepository`2">
+            <inheritdoc cref="T:MathCore.EF7.Repositories.DbNamedRepository`2" />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbNamedRepository`2.#ctor(`0,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.DbNamedRepository{`0,`1,System.Int32}})">
+            <inheritdoc />
+        </member>
+        <member name="T:MathCore.EF7.Repositories.DbNamedRepository`3">
+            <inheritdoc cref="T:MathCore.EF7.Repositories.Base.DbRepository`3" />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbNamedRepository`3.#ctor(`0,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.DbNamedRepository{`0,`1,`2}})">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbNamedRepository`3.ExistName(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbNamedRepository`3.GetByName(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.DbNamedRepository`3.DeleteByName(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`2">
+            <inheritdoc/>
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`2.#ctor(Microsoft.EntityFrameworkCore.IDbContextFactory{`0},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.Factory.DbContextFactoryRepository{`0,`1,System.Int32}})">
+            <inheritdoc/>
+        </member>
+        <member name="T:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`3">
+            <inheritdoc cref="T:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3" />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`3.#ctor(Microsoft.EntityFrameworkCore.IDbContextFactory{`0},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository{`0,`1,`2}})">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`3.ExistInLocation(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`3.GetCountInLocation(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`3.GetAllByLocationInRange(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`3.GetAllByLocationInRange(System.Double,System.Double,System.Double,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`3.GetByLocation(System.Double,System.Double,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`3.GetByLocationInRange(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`3.GetPageByLocationInRange(System.Double,System.Double,System.Double,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`3.DeleteByLocation(System.Double,System.Double,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`3.DeleteByLocationInRange(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:MathCore.EF7.Repositories.Factory.DbContextFactoryNamedRepository`2">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryNamedRepository`2.#ctor(Microsoft.EntityFrameworkCore.IDbContextFactory{`0},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.Factory.DbContextFactoryNamedRepository{`0,`1,System.Int32}})">
+            <inheritdoc />
+        </member>
+        <member name="T:MathCore.EF7.Repositories.Factory.DbContextFactoryNamedRepository`3">
+            <inheritdoc cref="T:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3" />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryNamedRepository`3.#ctor(Microsoft.EntityFrameworkCore.IDbContextFactory{`0},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.Factory.DbContextFactoryNamedRepository{`0,`1,`2}})">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryNamedRepository`3.ExistName(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryNamedRepository`3.GetByName(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryNamedRepository`3.DeleteByName(System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`2">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`2.#ctor(Microsoft.EntityFrameworkCore.IDbContextFactory{`0},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.Factory.DbContextFactoryRepository{`0,`1,System.Int32}})">
+            <inheritdoc />
+        </member>
+        <member name="T:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3">
+            <summary> Фабрика контекста репозиториев сущностей </summary>
+            <typeparam name="TContext">тип контекста базы данных</typeparam>
+            <typeparam name="TEntity">тип сущности</typeparam>
+            <typeparam name="TKey">тип ключа сущностей</typeparam>
+        </member>
+        <member name="P:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.ContextFactory">
+            <summary> Контекст фабрики </summary>
+        </member>
+        <member name="F:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3._Logger">
+            <summary> логгер </summary>
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.#ctor(Microsoft.EntityFrameworkCore.IDbContextFactory{`0},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.Factory.DbContextFactoryRepository{`0,`1,`2}})">
+            <summary> Конструктор </summary>
+            <param name="ContextFactory">контекст</param>
+            <param name="Logger">логгер</param>
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.GetDbQuery(Microsoft.EntityFrameworkCore.DbContext)">
+            <summary> пучить DBSet </summary>
+            <param name="db">контекст базы данных</param>
+            <returns></returns>
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.IsEmpty(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.ExistId(`2,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.Exist(`1,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.GetCount(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.GetAll(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.Get(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.GetPage(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.GetById(`2,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.Add(`1,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.AddRange(System.Collections.Generic.IEnumerable{`1},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.Update(`1,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.UpdateById(`2,System.Action{`1},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.UpdateRange(System.Collections.Generic.IEnumerable{`1},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.Delete(`1,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.DeleteRange(System.Collections.Generic.IEnumerable{`1},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.DeleteById(`2,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.SaveChanges(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="T:MathCore.EF7.Repositories.Page`1">
+            <summary> Реализация интерфейса постраничных данных </summary>
+            <typeparam name="T">Тип данных</typeparam>
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Page`1.#ctor(System.Collections.Generic.IEnumerable{`0},System.Int32,System.Int32,System.Int32)">
+            <summary> Реализация интерфейса постраничных данных </summary>
+            <typeparam name="T">Тип данных</typeparam>
+        </member>
+        <member name="P:MathCore.EF7.Repositories.Page`1.TotalPagesCount">
+            <summary>Полное число страниц в выдаче</summary>
+        </member>
+        <member name="P:MathCore.EF7.Repositories.Page`1.HasPrevPage">
+            <summary>Существует ли предыдущая страница</summary>
+        </member>
+        <member name="P:MathCore.EF7.Repositories.Page`1.HasNextPage">
+            <summary>Существует ли следующая страница</summary>
+        </member>
+    </members>
+</doc>

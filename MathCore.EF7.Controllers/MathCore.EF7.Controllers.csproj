@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net5.0</TargetFrameworks>
-    <RootNamespace>MathCore.EF7</RootNamespace>
+    <RootNamespace>MathCore.EF7.Controllers</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -12,16 +12,15 @@
 
   <PropertyGroup>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Description>Библиотека расширений для Entity Framework Core</Description>
-    <PackageTags>Database; EF; EF7; Entity Framework; Entity Framework Core; Entity Framework 7; Extensions</PackageTags>
+    <Description>Реализация контроллеров MathCore.EF7</Description>
+    <PackageTags>Controllers; API; EF; EF7; Entity Framework; Entity Framework Core; Entity Framework 7; Extensions</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MathCore.EF7.Enities\MathCore.EF7.Enities.csproj" />
     <ProjectReference Include="..\MathCore.EF7.Interfaces\MathCore.EF7.Interfaces.csproj" />
   </ItemGroup>
 

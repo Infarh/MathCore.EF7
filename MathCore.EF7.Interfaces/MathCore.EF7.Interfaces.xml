@@ -1,0 +1,437 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MathCore.EF7.Interfaces</name>
+    </assembly>
+    <members>
+        <member name="T:MathCore.EF7.Interfaces.Context.IDbInitializer">
+            <summary> Описывает инициализацию и удаление базы данных </summary>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Context.IDbInitializer.Recreate">
+            <summary> Необходимость пересоздать базу данных после удаления</summary>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Context.IDbInitializer.Delete">
+            <summary> Удаление базы данных </summary>
+            <returns>успех операции удаления</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Context.IDbInitializer.DeleteAsync(System.Threading.CancellationToken)">
+            <summary> Удаление базы данных </summary>
+            <returns>успех операции удаления</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Context.IDbInitializer.Initialize">
+            <summary> Инициализировать базу данных </summary>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Context.IDbInitializer.InitializeAsync(System.Threading.CancellationToken)">
+            <summary> Инициализировать базу данных </summary>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Entities.IDescriptedEntity`1">
+            <summary>Сущность, обладающая описанием</summary>
+            <typeparam name="TKey">Тип первичного ключа</typeparam>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Entities.IDescriptedEntity`1.Description">
+            <summary>Описание</summary>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Entities.IDescriptedEntity">
+            <summary>Сущность, обладающая описанием</summary>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Entities.IEntity`1">
+            <summary>Сущность</summary>
+            <typeparam name="TKey">Тип первичного ключа</typeparam>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Entities.IEntity`1.Id">
+            <summary>Идентификатор</summary>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Entities.IEntity">
+            <summary>Сущность</summary>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Entities.IGPSEntity`1">
+            <summary>Сущность, обеспечивающая возможность позиционирования</summary>
+            <typeparam name="TKey">Тип первичного ключа</typeparam>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Entities.IGPSEntity`1.Latitude">
+            <summary>Широта</summary>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Entities.IGPSEntity`1.Longitude">
+            <summary>Долгота</summary>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Entities.IGPSEntity">
+            <summary>Сущность, обеспечивающая возможность позиционирования</summary>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Entities.INamedEntity`1">
+            <summary>Именованная сущность</summary>
+            <typeparam name="TKey">Тип первичного ключа</typeparam>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Entities.INamedEntity`1.Name">
+            <summary>Имя</summary>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Entities.INamedEntity">
+            <summary>Именованная сущность</summary>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Entities.IPerson`1">
+            <summary>Персона</summary>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Entities.IPerson`1.LastName">
+            <summary>Фамилия</summary>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Entities.IPerson`1.FirstName">
+            <summary>Имя</summary>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Entities.IPerson`1.Patronymic">
+            <summary>Отчество</summary>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Entities.ITimedEntity`1">
+            <summary>Сущность, определенная во времени</summary>
+            <typeparam name="TKey">Тип первичного ключа</typeparam>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Entities.ITimedEntity`1.Time">
+            <summary>Время</summary>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Entities.ITimedEntity">
+            <summary>Сущность, определенная во времени</summary>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Repositories.IGPSRepository`2">
+            <summary>Репозиторий сущностей с определенным географическим положением</summary>
+            <typeparam name="T">Тип сущности с определенным географическим положением</typeparam>
+            <typeparam name="TKey">Тип первичного ключа сущности</typeparam>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IGPSRepository`2.ExistInLocation(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <summary>Проверка существования сущности по заданным координатам в ограниченном радиусе поиска</summary>
+            <param name="Latitude">Широта</param>
+            <param name="Longitude">Долгота</param>
+            <param name="RangeInMeters">Максимальное расстояние (радиус) поиска в метрах</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Истина, если в заданном радиусе поиска есть сущность</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IGPSRepository`2.GetCountInLocation(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <summary>Получить число сущностей в заданном радиусе поиска</summary>
+            <param name="Latitude">Широта</param>
+            <param name="Longitude">Долгота</param>
+            <param name="RangeInMeters">Максимальное расстояние (радиус) поиска в метрах</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Число сущностей, попадающих в заданный радиус поиска</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IGPSRepository`2.GetAllByLocationInRange(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <summary>Получить все сущности в указанном радиусе поиска</summary>
+            <param name="Latitude">Широта</param>
+            <param name="Longitude">Долгота</param>
+            <param name="RangeInMeters">Максимальное расстояние (радиус) поиска в метрах</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Все сущности, попадающие в указанный радиус поиска</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IGPSRepository`2.GetAllByLocationInRange(System.Double,System.Double,System.Double,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>Получить все сущности в указанном радиусе поиска</summary>
+            <param name="Latitude">Широта</param>
+            <param name="Longitude">Долгота</param>
+            <param name="RangeInMeters">Максимальное расстояние (радиус) поиска в метрах</param>
+            <param name="Skip">Число сущностей, пропускаемых в начале выборки</param>
+            <param name="Take">Число сущностей, извлекаемых из выборки</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Сущности, попадающие в указанный радиус поиска</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IGPSRepository`2.GetByLocation(System.Double,System.Double,System.Threading.CancellationToken)">
+            <summary>Получить ближайшую сущность для указанных координат</summary>
+            <param name="Latitude">Широта</param>
+            <param name="Longitude">Долгота</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Ближайшая к указанным координатам сущность</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IGPSRepository`2.GetByLocationInRange(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <summary>Получить ближайшую сущность для указанных координат на заданном максимальном удалении</summary>
+            <param name="Latitude">Широта</param>
+            <param name="Longitude">Долгота</param>
+            <param name="RangeInMeters">Максимальное расстояние (радиус) поиска в метрах</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Ближайшая к указанным координатам сущность в случае ее наличия</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IGPSRepository`2.GetPageByLocationInRange(System.Double,System.Double,System.Double,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>Получить страницу с сущностями из репозитория в заданном радиусе поиска</summary>
+            <param name="Latitude">Широта</param>
+            <param name="Longitude">Долгота</param>
+            <param name="RangeInMeters">Максимальное расстояние (радиус) поиска в метрах</param>
+            <param name="PageNumber">Номер страницы начиная с нуля</param>
+            <param name="PageSize">Размер страницы</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Страница с сущностями из репозитория в заданном радиусе поиска</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IGPSRepository`2.DeleteByLocation(System.Double,System.Double,System.Threading.CancellationToken)">
+            <summary>Удаление сущности, ближайшей к точке с указанными координатами</summary>
+            <param name="Latitude">Широта</param>
+            <param name="Longitude">Долгота</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Удаленная из репозитория сущность, ближайшая к указанным координатам</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IGPSRepository`2.DeleteByLocationInRange(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
+            <summary>Удаление сущности, ближайшей к точке с указанными координатами с ограничением радиуса поиска</summary>
+            <param name="Latitude">Широта</param>
+            <param name="Longitude">Долгота</param>
+            <param name="RangeInMeters">Максимальное расстояние (радиус) поиска в метрах</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Удаленная из репозитория сущность, ближайшая к указанным координатам в случае ее наличия</returns>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Repositories.IGPSRepository`1">
+            <summary>Репозиторий сущностей с определенным географическим положением</summary>
+            <typeparam name="T">Тип сущности с определенным географическим положением</typeparam>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Repositories.INamedRepository`2">
+            <summary>Репозиторий именованных сущностей</summary>
+            <typeparam name="T">Тип сущности</typeparam>
+            <typeparam name="TKey">Тип первичного ключа сущности</typeparam>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.INamedRepository`2.ExistName(System.String,System.Threading.CancellationToken)">
+            <summary>Проверка - существует ли в репозитории сущность с указанным именем</summary>
+            <param name="Name">Имя сущности</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Истина, если сущность с указанными именем существует в репозитории</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.INamedRepository`2.GetByName(System.String,System.Threading.CancellationToken)">
+            <summary>Получить сущность по указанному имени</summary>
+            <param name="Name">Имя сущности, которую требуется получить из репозитория</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Сущность с указанным именем в случае ее наличия, и null, если сущности с заданным именем в репозитории нет</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.INamedRepository`2.DeleteByName(System.String,System.Threading.CancellationToken)">
+            <summary>Удаление сущности с указанным именем из репозитория</summary>
+            <param name="Name">Имя удаляемой сущности</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Удаленная из репозитория сущность в случае ее наличия и null, если такой сущности в репозитории не было</returns>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Repositories.INamedRepository`1">
+            <summary>Репозиторий именованных сущностей</summary>
+            <typeparam name="T">Тип сущности</typeparam>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Repositories.IPage`1">
+            <summary>Страница элементов</summary>
+            <typeparam name="T">Тип элемента на странице</typeparam>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Repositories.IPage`1.Items">
+            <summary>Элементы страницы</summary>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Repositories.IPage`1.TotalCount">
+            <summary>Полное количество элементов на всех страницах</summary>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Repositories.IPage`1.PageNumber">
+            <summary>Номер текущей страницы</summary>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Repositories.IPage`1.PageSize">
+            <summary>Размер страницы - число элементов в <see cref="P:MathCore.EF7.Interfaces.Repositories.IPage`1.Items"/></summary>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Repositories.IPage`1.TotalPagesCount">
+            <summary>Полное число страниц в выдаче</summary>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Repositories.IPage`1.HasPrevPage">
+            <summary>Существует ли предыдущая страница</summary>
+        </member>
+        <member name="P:MathCore.EF7.Interfaces.Repositories.IPage`1.HasNextPage">
+            <summary>Существует ли следующая страница</summary>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Repositories.IRepository`2">
+            <summary>Репозиторий сущностей</summary>
+            <typeparam name="T">Тип сущности, хранимой в репозитории</typeparam>
+            <typeparam name="TKey">Тип первичного ключа</typeparam>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.IsEmpty(System.Threading.CancellationToken)">
+            <summary>Проверка репозитория на пустоту</summary>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Истина, если в репозитории нет ни одной сущности</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.ExistId(`1,System.Threading.CancellationToken)">
+            <summary>Существует ли сущность с указанным идентификатором</summary>
+            <param name="Id">Проверяемый идентификатор сущности</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Истина, если сущность с указанным идентификатором существует в репозитории</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.Exist(`0,System.Threading.CancellationToken)">
+            <summary>Существует ли в репозитории указанная сущность</summary>
+            <param name="item">Проверяемая сущность</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Истина, если указанная сущность существует в репозитории</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.GetCount(System.Threading.CancellationToken)">
+            <summary>Получить число хранимых сущностей</summary>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>число сущностей в репозитории</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.GetAll(System.Threading.CancellationToken)">
+            <summary>Извлечь все сущности из репозитория</summary>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Перечисление всех сущностей репозитория</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.Get(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>Получить набор сущностей из репозитория в указанном количестве, предварительно пропустив некоторое количество</summary>
+            <param name="Skip">Число предварительно пропускаемых сущностей</param>
+            <param name="Count">Число извлекаемых из репозитория сущностей</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Перечисление полученных из репозитория сущностей</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.GetPage(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>Получить страницу с сущностями из репозитория</summary>
+            <param name="PageNumber">Номер страницы начиная с нуля</param>
+            <param name="PageSize">Размер страницы</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Страница с сущностями из репозитория</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.GetById(`1,System.Threading.CancellationToken)">
+            <summary>Получить сущность по указанному идентификатору</summary>
+            <param name="Id">Идентификатор извлекаемой сущности</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Сущность с указанным идентификатором в случае ее наличия и null, если сущность отсутствует</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.Add(`0,System.Threading.CancellationToken)">
+            <summary>Добавление сущности в репозиторий</summary>
+            <param name="item">Добавляемая в репозиторий сущность</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Добавленная в репозиторий сущность</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.AddRange(System.Collections.Generic.IEnumerable{`0},System.Threading.CancellationToken)">
+            <summary>Добавление перечисленных сущностей в репозиторий</summary>
+            <param name="items">Перечисление добавляемых в репозиторий сущностей</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Задача, завершающаяся при завершении операции добавления сущностей</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.AddAsync(System.Func{`0},System.Threading.CancellationToken)">
+            <summary>Добавление сущности в репозиторий с помощью фабричного метода</summary>
+            <param name="ItemFactory">Метод, формирующий добавляемую в репозиторий сущность</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Добавленная в репозиторий сущность</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.Update(`0,System.Threading.CancellationToken)">
+            <summary>Обновление сущности в репозитории</summary>
+            <param name="item">Сущность, хранящая в себе информацию, которую надо обновить в репозитории</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Сущность из репозитория с обновленными данными</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.UpdateById(`1,System.Action{`0},System.Threading.CancellationToken)">
+            <summary>Обновление сущности в репозитории</summary>
+            <param name="id">Идентификатор обновляемой сущности</param>
+            <param name="ItemUpdated">Метод обновления информации в заданной сущности</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Сущность из репозитория с обновленными данными</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.UpdateRange(System.Collections.Generic.IEnumerable{`0},System.Threading.CancellationToken)">
+            <summary>Обновление перечисленных сущностей</summary>
+            <param name="items">Перечисление сущностей, информацию из которых надо обновить в репозитории</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Задача, завершаемая при завершении операции обновления сущностей</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.Delete(`0,System.Threading.CancellationToken)">
+            <summary>Удаление сущности из репозитория</summary>
+            <param name="item">Удаляемая из репозитория сущность</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Удаленная из репозитория сущность</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.DeleteRange(System.Collections.Generic.IEnumerable{`0},System.Threading.CancellationToken)">
+            <summary>Удаление перечисления сущностей из репозитория</summary>
+            <param name="items">Перечисление удаляемых сущностей</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Задача, завершаемая при завершении операции удаления сущностей</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.DeleteById(`1,System.Threading.CancellationToken)">
+            <summary>Удаление сущности по заданному идентификатору</summary>
+            <param name="id">Идентификатор сущности, которую надо удалить</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Удаленная из репозитория сущность</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.SaveChanges(System.Threading.CancellationToken)">
+            <summary> Сохранить изменения </summary>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>число изменений</returns>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Repositories.IRepository`1">
+            <summary>Репозиторий сущностей</summary>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Repositories.ITimedRepository`2">
+            <summary>Репозиторий сущностей, обладающих указанием времени</summary>
+            <typeparam name="T">Тип сущностей</typeparam>
+            <typeparam name="TKey">Тип первичного ключа сущности</typeparam>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.ITimedRepository`2.ExistGreaterThenTime(System.DateTimeOffset,System.Threading.CancellationToken)">
+            <summary>Проверка на существование сущностей, время которых больше, чем указанное</summary>
+            <param name="ReferenceTime">Заданная временная отметка</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Истина, если в репозитории существуют сущности, время которых больше, чем указанное</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.ITimedRepository`2.GetCountGreaterThenTime(System.DateTimeOffset,System.Threading.CancellationToken)">
+            <summary>Получить число сущностей, время которых больше, чем указанное</summary>
+            <param name="ReferenceTime">Заданная временная отметка</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Число сущностей, время которых больше, Чем указанное</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.ITimedRepository`2.GetAllGreaterThenTime(System.DateTimeOffset,System.Threading.CancellationToken)">
+            <summary>Получить сущности из репозитория, время которых больше, чем указанное</summary>
+            <param name="ReferenceTime">Заданная временная отметка</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Все сущности, время которых больше, чем указанное</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.ITimedRepository`2.GetGreaterThenTime(System.DateTimeOffset,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>Получить заданное число сущностей из репозитория, время которых больше, чем указанное</summary>
+            <param name="ReferenceTime">Заданная временная отметка</param>
+            <param name="Skip">Пропускаемое количество сущностей в начале выборки</param>
+            <param name="Count">Извлекаемое число сущностей</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Все сущности, время которых больше, чем указанное</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.ITimedRepository`2.GetPageGreaterThenTime(System.DateTimeOffset,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>Получить страницу с сущностями, время которых больше, чем указанное</summary>
+            <param name="ReferenceTime">Заданная временная отметка</param>
+            <param name="PageIndex">Индекс запрашиваемой страницы (начиная с 0)</param>
+            <param name="PageSize">Размер страницы</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Страница с сущностями, время которых больше, чем указанное</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.ITimedRepository`2.ExistLessThenTime(System.DateTimeOffset,System.Threading.CancellationToken)">
+            <summary>Проверка на существование сущностей, время которых меньше, чем указанное</summary>
+            <param name="ReferenceTime">Заданная временная отметка</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Истина, если в репозитории существуют сущности, время которых меньше, чем указанное</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.ITimedRepository`2.GetCountLessThenTime(System.DateTimeOffset,System.Threading.CancellationToken)">
+            <summary>Получить число сущностей, время которых меньше, чем указанное</summary>
+            <param name="ReferenceTime">Заданная временная отметка</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Число сущностей, время которых меньше, Чем указанное</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.ITimedRepository`2.GetAllLessThenTime(System.DateTimeOffset,System.Threading.CancellationToken)">
+            <summary>Получить сущности из репозитория, время которых меньше, чем указанное</summary>
+            <param name="ReferenceTime">Заданная временная отметка</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Все сущности, время которых меньше, чем указанное</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.ITimedRepository`2.GetLessThenTime(System.DateTimeOffset,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>Получить заданное число сущностей из репозитория, время которых меньше, чем указанное</summary>
+            <param name="ReferenceTime">Заданная временная отметка</param>
+            <param name="Skip">Пропускаемое количество сущностей в начале выборки</param>
+            <param name="Count">Извлекаемое число сущностей</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Все сущности, время которых меньше, чем указанное</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.ITimedRepository`2.GetPageLessThenTime(System.DateTimeOffset,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>Получить страницу с сущностями, время которых меньше, чем указанное</summary>
+            <param name="ReferenceTime">Заданная временная отметка</param>
+            <param name="PageIndex">Индекс запрашиваемой страницы (начиная с 0)</param>
+            <param name="PageSize">Размер страницы</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Страница с сущностями, время которых меньше, чем указанное</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.ITimedRepository`2.GetAllInTimeInterval(System.DateTimeOffset,System.DateTimeOffset,System.Threading.CancellationToken)">
+            <summary>Получение всех сущностей, время которых находится в заданном интервале</summary>
+            <param name="StartTime">Время начала интервала поиска</param>
+            <param name="EndTime">Время конца интервала поиска</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Перечисление всех сущностей, время которых попадает в указанный интервал</returns>
+        </member>
+        <member name="M:MathCore.EF7.Interfaces.Repositories.ITimedRepository`2.GetInTimeInterval(System.DateTimeOffset,System.DateTimeOffset,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>Получить страницу с сущностями, время которых попадает в указанный интервал</summary>
+            <param name="StartTime">Время начала интервала поиска</param>
+            <param name="EndTime">Время конца интервала поиска</param>
+            <param name="PageIndex">Индекс запрашиваемой страницы (начиная с 0)</param>
+            <param name="PageSize">Размер страницы</param>
+            <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>Страница с сущностями, время которых попадает в указанный интервал</returns>
+        </member>
+        <member name="T:MathCore.EF7.Interfaces.Repositories.ITimedRepository`1">
+            <summary>Репозиторий сущностей, обладающих указанием времени</summary>
+            <typeparam name="T">Тип сущностей</typeparam>
+        </member>
+    </members>
+</doc>
