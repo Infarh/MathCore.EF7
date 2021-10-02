@@ -1,4 +1,4 @@
-name: Publish NuGet.org
+name: NuGet package
 
 on:
   push:
@@ -7,28 +7,34 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
-    name: Update package
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@master
-
-      - name: Use .NET 3.1.200
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 3.1.200
-
-      - name: Building
-        run: |
-          dotnet build MathCore.EF7/MathCore.EF7.csproj --nologo
-          dotnet build Tests/MathCore.EF7.Tests/MathCore.EF7.Tests.csproj --nologo
-          
-      - name: Testing
-        run: dotnet test Tests/MathCore.EF7.Tests/MathCore.EF7.Tests.csproj --nologo
-
-      - name: Packing
-        run: dotnet pack MathCore.EF7/MathCore.EF7.csproj -c Release -v m
-         
-      - name: Publishing
-        run: dotnet nuget push MathCore.EF7/bin/Release/*.nupkg -k ${{ secrets.NuGetApiKey }} --skip-duplicate -s https://api.nuget.org/v3/index.json
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore
+      
+    - name: Test
+      run: dotnet test --no-build -v m
+      
+    - name: Packing
+      run: dotnet pack -c Release 
+      
+    - name: Publish GitHub
+      run: |
+        dotnet nuget push "**/*.nupkg" --skip-duplicate --source https://nuget.pkg.github.com/Infarh/index.json -k ${{secrets.GITHUB_TOKEN}}
+        dotnet nuget push "**/*.snupkg" --skip-duplicate --source https://nuget.pkg.github.com/Infarh/index.json -k ${{secrets.GITHUB_TOKEN}}
+      
+    - name: Publish NuGet
+      run: |
+        dotnet nuget push "**/*.nupkg" --skip-duplicate -s https://api.nuget.org/v3/index.json -k ${{ secrets.NuGetApiKey }} 
+        dotnet nuget push "**/*.snupkg" --skip-duplicate -s https://api.nuget.org/v3/index.json -k ${{ secrets.NuGetApiKey }}

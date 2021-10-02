@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net5.0</TargetFrameworks>
+    <RootNamespace>MathCore.EF7.Controllers</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Version>0.0.0</Version>
+    <PackageReleaseNotes>Старт проекта</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Description>Реализация контроллеров MathCore.EF7</Description>
+    <PackageTags>Controllers; API; EF; EF7; Entity Framework; Entity Framework Core; Entity Framework 7; Extensions</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MathCore.EF7.Interfaces\MathCore.EF7.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

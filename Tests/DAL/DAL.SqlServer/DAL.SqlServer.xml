@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DAL.SqlServer</name>
+    </assembly>
+    <members>
+        <member name="T:DAL.SqlServer.Registrator">
+            <summary>Регистратор сервисов слоя данных для SQL-сервера</summary>
+        </member>
+        <member name="M:DAL.SqlServer.Registrator.AddTestDbContextSqlServer(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)">
+            <summary>Добавить контекст данных в контейнер сервисов для подключения к SQL-серверу</summary>
+            <param name="services">Коллекция сервисов</param>
+            <param name="ConnectionString">Строка подключения к серверу</param>
+            <returns>Коллекция сервисов</returns>
+        </member>
+        <member name="M:DAL.SqlServer.Registrator.AddTestDbContextFactorySqlServer(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)">
+            <summary>Добавить фабрику контекста данных в контейнер сервисов для подключения к SQL-серверу</summary>
+            <param name="services">Коллекция сервисов</param>
+            <param name="ConnectionString">Строка подключения к серверу</param>
+            <returns>Коллекция сервисов</returns>
+        </member>
+    </members>
+</doc>
