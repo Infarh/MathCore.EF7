@@ -162,19 +162,6 @@ namespace MathCore.EF7.Controllers
             return AcceptedAtAction(nameof(GetById), new { result.Id }, result);
         }
 
-        /// <summary>Обновление сущности в репозитории</summary>
-        /// <param name="id">Идентификатор обновляемой сущности</param>
-        /// <param name="ItemUpdated">Метод обновления информации в заданной сущности</param>
-        /// <returns>Сущность из репозитория с обновленными данными</returns>
-        [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status202Accepted)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public virtual async Task<IActionResult> UpdateById(TKey id, Action<T> ItemUpdated)
-        {
-            if (await _Repository.UpdateById(id, ItemUpdated) is not { } result)
-                return NotFound();
-            return AcceptedAtAction(nameof(GetById), new { result.Id }, result);
-        }
         /// <summary>Обновление перечисленных сущностей</summary>
         /// <param name="items">Перечисление сущностей, информацию из которых надо обновить в репозитории</param>
         /// <returns>Задача, завершаемая при завершении операции обновления сущностей</returns>

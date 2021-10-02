@@ -281,7 +281,7 @@
             <exception cref="T:System.ArgumentOutOfRangeException">Если размер страницы меньше, либо равен 0</exception>
         </member>
         <member name="T:MathCore.EF7.Repositories.Base.DbRepository`2">
-            <inheritdoc />
+            <inheritdoc cref="T:MathCore.EF7.Repositories.Base.DbRepository`3"/>
         </member>
         <member name="M:MathCore.EF7.Repositories.Base.DbRepository`2.#ctor(`0,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.Base.DbRepository{`0,`1,System.Int32}})">
             <inheritdoc />
@@ -306,6 +306,9 @@
         </member>
         <member name="P:MathCore.EF7.Repositories.Base.DbRepository`3.AutoSaveChanges">
             <summary> Флаг необходимости сохранять изменения в базе данных после каждого запроса </summary>
+        </member>
+        <member name="P:MathCore.EF7.Repositories.Base.DbRepository`3.NoTracked">
+            <summary> Отслеживать выдаваемые объекты в контексте БД </summary>
         </member>
         <member name="M:MathCore.EF7.Repositories.Base.DbRepository`3.#ctor(`0,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.Base.DbRepository{`0,`1,`2}})">
             <summary> конструктор </summary>
@@ -364,7 +367,7 @@
             <inheritdoc />
         </member>
         <member name="T:MathCore.EF7.Repositories.DbGPSRepository`2">
-            <inheritdoc />
+            <inheritdoc cref="T:MathCore.EF7.Repositories.DbGPSRepository`3" />
         </member>
         <member name="M:MathCore.EF7.Repositories.DbGPSRepository`2.#ctor(`0,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.DbGPSRepository{`0,`1,System.Int32}})">
             <inheritdoc />
@@ -431,7 +434,7 @@
         <member name="T:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`2">
             <inheritdoc/>
         </member>
-        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`2.#ctor(Microsoft.EntityFrameworkCore.IDbContextFactory{`0},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.Factory.DbContextFactoryRepository{`0,`1,System.Int32}})">
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`2.#ctor(Microsoft.EntityFrameworkCore.IDbContextFactory{`0},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository{`0,`1,System.Int32}})">
             <inheritdoc/>
         </member>
         <member name="T:MathCore.EF7.Repositories.Factory.DbContextFactoryGPSRepository`3">
@@ -468,7 +471,7 @@
             <inheritdoc />
         </member>
         <member name="T:MathCore.EF7.Repositories.Factory.DbContextFactoryNamedRepository`2">
-            <inheritdoc />
+            <inheritdoc cref="T:MathCore.EF7.Repositories.Factory.DbContextFactoryNamedRepository`3" />
         </member>
         <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryNamedRepository`2.#ctor(Microsoft.EntityFrameworkCore.IDbContextFactory{`0},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.Factory.DbContextFactoryNamedRepository{`0,`1,System.Int32}})">
             <inheritdoc />
@@ -489,7 +492,7 @@
             <inheritdoc />
         </member>
         <member name="T:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`2">
-            <inheritdoc />
+            <inheritdoc cref="T:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3" />
         </member>
         <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`2.#ctor(Microsoft.EntityFrameworkCore.IDbContextFactory{`0},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.Factory.DbContextFactoryRepository{`0,`1,System.Int32}})">
             <inheritdoc />
@@ -506,6 +509,9 @@
         <member name="F:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3._Logger">
             <summary> логгер </summary>
         </member>
+        <member name="P:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.NoTracked">
+            <summary> Отслеживать выдаваемые объекты в контексте БД </summary>
+        </member>
         <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.#ctor(Microsoft.EntityFrameworkCore.IDbContextFactory{`0},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Repositories.Factory.DbContextFactoryRepository{`0,`1,`2}})">
             <summary> Конструктор </summary>
             <param name="ContextFactory">контекст</param>
@@ -515,6 +521,9 @@
             <summary> пучить DBSet </summary>
             <param name="db">контекст базы данных</param>
             <returns></returns>
+        </member>
+        <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.GetOrderedDbQuery(Microsoft.EntityFrameworkCore.DbContext)">
+            <summary> Упорядоченные сущности </summary>
         </member>
         <member name="M:MathCore.EF7.Repositories.Factory.DbContextFactoryRepository`3.IsEmpty(System.Threading.CancellationToken)">
             <inheritdoc />

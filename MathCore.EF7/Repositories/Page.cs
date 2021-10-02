@@ -16,6 +16,5 @@ namespace MathCore.EF7.Repositories
 
         /// <summary>Существует ли следующая страница</summary>
         public bool HasNextPage => PageNumber < TotalPagesCount - 1;//отсчёт от 0 страницы
-
     }
 }

@@ -11,8 +11,8 @@ using Microsoft.Extensions.Logging;
 
 namespace MathCore.EF7.Repositories
 {
-    /// <inheritdoc />
-    public class DbGPSRepository<TContext, TGpsEntity> : DbGPSRepository<TContext, TGpsEntity, int>
+    /// <inheritdoc cref="DbGPSRepository{TContext, TGpsEntity, TKey}" />
+    public class DbGPSRepository<TContext, TGpsEntity> : DbGPSRepository<TContext, TGpsEntity, int>, IGPSRepository<TGpsEntity>
         where TGpsEntity : class, IGPSEntity, new() where TContext : DbContext
     {
         /// <inheritdoc />
