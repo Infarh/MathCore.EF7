@@ -96,6 +96,21 @@
         <member name="M:MathCore.EF7.Clients.WebRepository`2.GetPage(System.Int32,System.Int32,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="T:MathCore.EF7.Clients.WebRepository`2.PageItems">
+            <summary> Реализация интерфейса постраничных данных </summary>
+        </member>
+        <member name="M:MathCore.EF7.Clients.WebRepository`2.PageItems.#ctor(System.Collections.Generic.IEnumerable{`0},System.Int32,System.Int32,System.Int32)">
+            <summary> Реализация интерфейса постраничных данных </summary>
+        </member>
+        <member name="P:MathCore.EF7.Clients.WebRepository`2.PageItems.TotalPagesCount">
+            <summary>Полное число страниц в выдаче</summary>
+        </member>
+        <member name="P:MathCore.EF7.Clients.WebRepository`2.PageItems.HasPrevPage">
+            <summary>Существует ли предыдущая страница</summary>
+        </member>
+        <member name="P:MathCore.EF7.Clients.WebRepository`2.PageItems.HasNextPage">
+            <summary>Существует ли следующая страница</summary>
+        </member>
         <member name="M:MathCore.EF7.Clients.WebRepository`2.GetById(`1,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
@@ -106,9 +121,6 @@
             <inheritdoc />
         </member>
         <member name="M:MathCore.EF7.Clients.WebRepository`2.Update(`0,System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:MathCore.EF7.Clients.WebRepository`2.UpdateById(`1,System.Action{`0},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:MathCore.EF7.Clients.WebRepository`2.UpdateRange(System.Collections.Generic.IEnumerable{`0},System.Threading.CancellationToken)">
@@ -127,7 +139,7 @@
             <inheritdoc />
         </member>
         <member name="T:MathCore.EF7.Clients.WebRepository`1">
-            <inheritdoc />
+            <inheritdoc cref="T:MathCore.EF7.Clients.WebRepository`2" />
         </member>
         <member name="M:MathCore.EF7.Clients.WebRepository`1.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Clients.WebRepository{`0,System.Int32}})">
             <inheritdoc />

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace MathCore.EF7.Repositories
 {
     /// <inheritdoc cref="DbNamedRepository{TContext,TKey}" />
-    public class DbNamedRepository<TContext, TNamedEntity> : DbNamedRepository<TContext, TNamedEntity, int>
+    public class DbNamedRepository<TContext, TNamedEntity> : DbNamedRepository<TContext, TNamedEntity, int>, INamedRepository<TNamedEntity>
         where TNamedEntity : class, INamedEntity, new()
         where TContext : DbContext
     {

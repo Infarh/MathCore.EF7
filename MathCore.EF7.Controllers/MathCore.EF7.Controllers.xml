@@ -78,12 +78,6 @@
             <param name="item">Сущность, хранящая в себе информацию, которую надо обновить в репозитории</param>
             <returns>Сущность из репозитория с обновленными данными</returns>
         </member>
-        <member name="M:MathCore.EF7.Controllers.ApiController`2.UpdateById(`1,System.Action{`0})">
-            <summary>Обновление сущности в репозитории</summary>
-            <param name="id">Идентификатор обновляемой сущности</param>
-            <param name="ItemUpdated">Метод обновления информации в заданной сущности</param>
-            <returns>Сущность из репозитория с обновленными данными</returns>
-        </member>
         <member name="M:MathCore.EF7.Controllers.ApiController`2.UpdateRange(System.Collections.Generic.IEnumerable{`0})">
             <summary>Обновление перечисленных сущностей</summary>
             <param name="items">Перечисление сущностей, информацию из которых надо обновить в репозитории</param>

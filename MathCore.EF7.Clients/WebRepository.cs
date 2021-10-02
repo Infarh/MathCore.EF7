@@ -39,7 +39,7 @@ namespace MathCore.EF7.Clients
         }
 
 
-        private const string BaseLogRow = "Запрос к репозиторию";
+        private static readonly string BaseLogRow = $"Запрос к репозиторию { typeof(TEntity).Name}";
 
         private static string ToValueRow<Tvalue>(params Tvalue[] values) =>
             values is not null && values.Length > 0 ? string.Join(", ", values.Select(v => $"{nameof(v)}={v}")) : string.Empty;
@@ -49,7 +49,7 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public virtual async Task<bool> IsEmpty(CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(IsEmpty)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(IsEmpty)}");
 
             var response = await GetAsync<bool>($"{ServiceAddress}/isempty", Cancel).ConfigureAwait(false);
             //var response = await _Client.GetAsync($"{ServiceAddress}/isempty", Cancel).ConfigureAwait(false);
@@ -59,7 +59,7 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public virtual async Task<bool> ExistId(TKey Id, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(ExistId)} - {ToValueRow(Id)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(ExistId)} - {ToValueRow(Id)}");
 
             var response = await GetAsync<bool>($"{ServiceAddress}/exist/id/{Id}", Cancel).ConfigureAwait(false);
             //var response = await _Client.GetAsync($"{ServiceAddress}/exist/id/{Id}", Cancel).ConfigureAwait(false);
@@ -69,7 +69,7 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public virtual async Task<bool> Exist(TEntity item, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(Exist)} - {ToValueRow(item.Id)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(Exist)} - {ToValueRow(item.Id)}");
 
             var response = await PostAsync($"{ServiceAddress}/exist", item, Cancel).ConfigureAwait(false);
             //var response = await _Client.PostAsJsonAsync($"{ServiceAddress}/exist", item, Cancel).ConfigureAwait(false);
@@ -79,7 +79,7 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public virtual async Task<int> GetCount(CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(GetCount)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(GetCount)}");
             return await GetAsync<int>($"{ServiceAddress}/count", Cancel).ConfigureAwait(false);
             //return await _Client.GetFromJsonAsync<int>($"{ServiceAddress}/count", Cancel).ConfigureAwait(false);
         }
@@ -87,7 +87,7 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(GetAll)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(GetAll)}");
             return await GetAsync<IEnumerable<TEntity>>($"{ServiceAddress}", Cancel).ConfigureAwait(false);
             //return await _Client.GetFromJsonAsync<IEnumerable<TEntity>>($"{ServiceAddress}", Cancel).ConfigureAwait(false);
         }
@@ -95,7 +95,7 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public virtual async Task<IEnumerable<TEntity>> Get(int Skip, int Count, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(Get)} - {ToValueRow(Skip, Count)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(Get)} - {ToValueRow(Skip, Count)}");
 
             return await GetAsync<IEnumerable<TEntity>>($"{ServiceAddress}/items[{Skip}:{Count}]", Cancel).ConfigureAwait(false);
             //return await _Client.GetFromJsonAsync<IEnumerable<TEntity>>($"{ServiceAddress}/items[{Skip}:{Count}]", Cancel).ConfigureAwait(false);
@@ -104,41 +104,31 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public virtual async Task<IPage<TEntity>> GetPage(int PageNumber, int PageSize, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(GetPage)} - {ToValueRow(PageNumber, PageSize)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(GetPage)} - {ToValueRow(PageNumber, PageSize)}");
 
             var response = await GetAsync<PageItems>($"{ServiceAddress}/page[{PageNumber}/{PageSize}]", Cancel).ConfigureAwait(false);
             //var response = await _Client.GetAsync($"{ServiceAddress}/page[{PageNumber}/{PageSize}]", Cancel).ConfigureAwait(false);
 
             if (response is null)
-                return new PageItems
-                {
-                    Items = Enumerable.Empty<TEntity>(),
-                    PageNumber = PageNumber,
-                    PageSize = PageSize,
-                    TotalCount = 0
-                };
+                return new PageItems(Enumerable.Empty<TEntity>(), PageNumber, PageSize, 0); 
 
             return response;
         }
-        private class PageItems : IPage<TEntity>
+        /// <summary> Реализация интерфейса постраничных данных </summary>
+        private record PageItems(IEnumerable<TEntity> Items, int TotalCount, int PageNumber, int PageSize) : IPage<TEntity>
         {
-            #region Implementation of IPage<out T>
-
-            public IEnumerable<TEntity> Items { get; init; }
-
-            public int TotalCount { get; init; }
-
-            public int PageNumber { get; init; }
-
-            public int PageSize { get; init; }
-
-            #endregion
+            /// <summary>Полное число страниц в выдаче</summary>
+            public int TotalPagesCount => PageSize <= 0 ? TotalCount : (int)Math.Ceiling((double)TotalCount / PageSize);
+            /// <summary>Существует ли предыдущая страница</summary>
+            public bool HasPrevPage => PageNumber > 0;
+            /// <summary>Существует ли следующая страница</summary>
+            public bool HasNextPage => PageNumber < TotalPagesCount - 1;//отсчёт от 0 страницы
         }
 
         /// <inheritdoc />
         public virtual async Task<TEntity> GetById(TKey Id, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(GetById)} - {ToValueRow(Id)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(GetById)} - {ToValueRow(Id)}");
 
             return await GetAsync<TEntity>($"{ServiceAddress}/{Id}", Cancel).ConfigureAwait(false);
             //return await _Client.GetFromJsonAsync<TEntity>($"{ServiceAddress}/{Id}", Cancel).ConfigureAwait(false);
@@ -147,7 +137,7 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public virtual async Task<TEntity> Add(TEntity item, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(Add)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(Add)}");
 
             var response = await PostAsync($"{ServiceAddress}", item, Cancel).ConfigureAwait(false);
             //var response = await _Client.PostAsJsonAsync($"{ServiceAddress}", item, Cancel).ConfigureAwait(false);
@@ -162,7 +152,7 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public virtual async Task AddRange(IEnumerable<TEntity> items, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(AddRange)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(AddRange)}");
             await PostAsync($"{ServiceAddress}/range", items, Cancel).ConfigureAwait(false);
             //await _Client.PostAsJsonAsync($"{ServiceAddress}/range", items, Cancel).ConfigureAwait(false);
         }
@@ -170,7 +160,7 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public virtual async Task<TEntity> Update(TEntity item, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(Update)} - {item.Id}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(Update)} - {item.Id}");
 
             var response = await PutAsync($"{ServiceAddress}", item, Cancel).ConfigureAwait(false);
 
@@ -186,25 +176,9 @@ namespace MathCore.EF7.Clients
         }
 
         /// <inheritdoc />
-        public virtual async Task<TEntity> UpdateById(TKey id, Action<TEntity> ItemUpdated, CancellationToken Cancel = default)
-        {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(UpdateById)} - {ToValueRow(id)}");
-
-            //ToDo проверить работу
-            var response = await _Client.PutAsJsonAsync($"{ServiceAddress}/id/{id}", ItemUpdated, Cancel).ConfigureAwait(false);
-
-            var result = await response
-               .EnsureSuccessStatusCode()
-               .Content
-               .ReadFromJsonAsync<TEntity>(cancellationToken: Cancel)
-               .ConfigureAwait(false);
-            return result;
-        }
-
-        /// <inheritdoc />
         public virtual async Task UpdateRange(IEnumerable<TEntity> items, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(UpdateRange)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(UpdateRange)}");
 
             await PutAsync($"{ServiceAddress}/range", items, Cancel).ConfigureAwait(false);
             //await _Client.PutAsJsonAsync($"{ServiceAddress}/range", items, Cancel).ConfigureAwait(false);
@@ -213,7 +187,7 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public virtual async Task<TEntity> Delete(TEntity item, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(Delete)} - {ToValueRow(item.Id)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(Delete)} - {ToValueRow(item.Id)}");
 
             var response = await DeleteAsync(ServiceAddress, item, Cancel).ConfigureAwait(false);
             //var request = new HttpRequestMessage(HttpMethod.Delete, $"{ServiceAddress}")
@@ -236,7 +210,7 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public virtual async Task DeleteRange(IEnumerable<TEntity> items, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(DeleteRange)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(DeleteRange)}");
 
             await DeleteAsync(ServiceAddress, items, Cancel).ConfigureAwait(false);
 
@@ -251,7 +225,7 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public virtual async Task<TEntity> DeleteById(TKey id, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(DeleteById)} - {ToValueRow(id)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(DeleteById)} - {ToValueRow(id)}");
 
             var response = await DeleteAsync($"{ServiceAddress}/{id}", Cancel).ConfigureAwait(false);
             //var response = await _Client.DeleteAsync($"{ServiceAddress}/{id}", Cancel).ConfigureAwait(false);
@@ -269,7 +243,7 @@ namespace MathCore.EF7.Clients
         /// <inheritdoc />
         public virtual async Task<int> SaveChanges(CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(TEntity)} {nameof(SaveChanges)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(SaveChanges)}");
 
             return await GetAsync<int>($"{ServiceAddress}/save", Cancel).ConfigureAwait(false);
             //return await _Client.GetFromJsonAsync<int>($"{ServiceAddress}/save", Cancel).ConfigureAwait(false);
@@ -278,7 +252,7 @@ namespace MathCore.EF7.Clients
         #endregion
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc cref="WebRepository{TEntity, TKey}" />
     public class WebRepository<TEntity> : WebRepository<TEntity, int>, IRepository<TEntity> where TEntity : IEntity<int>
     {
         /// <inheritdoc />

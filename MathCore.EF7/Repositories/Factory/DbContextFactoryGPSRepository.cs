@@ -11,13 +11,13 @@ using Microsoft.Extensions.Logging;
 namespace MathCore.EF7.Repositories.Factory
 {
     /// <inheritdoc/>
-    public class DbContextFactoryGPSRepository<TContext, TGpsEntity> : DbContextFactoryRepository<TContext, TGpsEntity, int>
+    public class DbContextFactoryGPSRepository<TContext, TGpsEntity> : DbContextFactoryGPSRepository<TContext, TGpsEntity, int>, IGPSRepository<TGpsEntity>
         where TGpsEntity : class, IGPSEntity, new() where TContext : DbContext
     {
         /// <inheritdoc/>
         public DbContextFactoryGPSRepository(
             IDbContextFactory<TContext> ContextFactory,
-            ILogger<DbContextFactoryRepository<TContext, TGpsEntity, int>> Logger) : base(
+            ILogger<DbContextFactoryGPSRepository<TContext, TGpsEntity, int>> Logger) : base(
             ContextFactory,
             Logger)
         {

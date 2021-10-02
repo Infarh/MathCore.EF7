@@ -14,8 +14,11 @@ namespace MathCore.EF7.Interfaces.Repositories
         /// <summary>Проверка репозитория на пустоту</summary>
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
         /// <returns>Истина, если в репозитории нет ни одной сущности</returns>
-        Task<bool> IsEmpty(CancellationToken Cancel = default);
-
+        async Task<bool> IsEmpty(CancellationToken Cancel = default)
+        {
+            var count = await GetCount(Cancel).ConfigureAwait(false);
+            return count > 0;
+        }
         /// <summary>Существует ли сущность с указанным идентификатором</summary>
         /// <param name="Id">Проверяемый идентификатор сущности</param>
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
@@ -87,7 +90,14 @@ namespace MathCore.EF7.Interfaces.Repositories
         /// <param name="ItemUpdated">Метод обновления информации в заданной сущности</param>
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
         /// <returns>Сущность из репозитория с обновленными данными</returns>
-        Task<T> UpdateById(TKey id, Action<T> ItemUpdated, CancellationToken Cancel = default);
+        async Task<T> UpdateById(TKey id, Action<T> ItemUpdated, CancellationToken Cancel = default)
+        {
+            if (await GetById(id, Cancel).ConfigureAwait(false) is not { } item)
+                return default;
+            ItemUpdated(item);
+            await Update(item, Cancel).ConfigureAwait(false);
+            return item;
+        }
 
         /// <summary>Обновление перечисленных сущностей</summary>
         /// <param name="items">Перечисление сущностей, информацию из которых надо обновить в репозитории</param>

@@ -11,8 +11,8 @@ using Microsoft.Extensions.Logging;
 
 namespace MathCore.EF7.Repositories.Factory
 {
-    /// <inheritdoc />
-    public class DbContextFactoryRepository<TContext, TEntity> : DbContextFactoryRepository<TContext, TEntity, int>
+    /// <inheritdoc cref="DbContextFactoryRepository{TContext, TEntity, TKey}" />
+    public class DbContextFactoryRepository<TContext, TEntity> : DbContextFactoryRepository<TContext, TEntity, int>, IRepository<TEntity>
         where TEntity : class, IEntity, new()
         where TContext : DbContext
     {
@@ -34,6 +34,8 @@ namespace MathCore.EF7.Repositories.Factory
         protected IDbContextFactory<TContext> ContextFactory { get; }
         /// <summary> логгер </summary>
         protected readonly ILogger<DbContextFactoryRepository<TContext, TEntity, TKey>> _Logger;
+        /// <summary> Отслеживать выдаваемые объекты в контексте БД </summary>
+        public bool NoTracked { get; set; } = true;
 
         /// <summary> Конструктор </summary>
         /// <param name="ContextFactory">контекст</param>
@@ -46,24 +48,34 @@ namespace MathCore.EF7.Repositories.Factory
         /// <summary> пучить DBSet </summary>
         /// <param name="db">контекст базы данных</param>
         /// <returns></returns>
-        protected virtual IQueryable<TEntity> GetDbQuery(DbContext db) => db.Set<TEntity>();
+        protected virtual IQueryable<TEntity> GetDbQuery(DbContext db) => NoTracked
+            ? db.Set<TEntity>().AsNoTracking()
+            : db.Set<TEntity>();
+
+        /// <summary> Упорядоченные сущности </summary>
+        protected IQueryable<TEntity> GetOrderedDbQuery(DbContext db) =>
+            GetDbQuery(db) switch
+            {
+                IOrderedQueryable<TEntity> ordereq_query => ordereq_query,
+                { } q => q.OrderBy(i => i.Id)
+            };
 
         /// <inheritdoc />
-        public async Task<bool> IsEmpty(CancellationToken Cancel = default)
+        public virtual async Task<bool> IsEmpty(CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
             return await db.Set<TEntity>().AnyAsync(Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<bool> ExistId(TKey Id, CancellationToken Cancel = default)
+        public virtual async Task<bool> ExistId(TKey Id, CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
             return await GetDbQuery(db).AnyAsync(EntityExtension.GetId<TEntity,TKey>(Id), Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<bool> Exist(TEntity item, CancellationToken Cancel = default)
+        public virtual async Task<bool> Exist(TEntity item, CancellationToken Cancel = default)
         {
             if (item is null) throw new ArgumentNullException(nameof(item));
 
@@ -72,37 +84,37 @@ namespace MathCore.EF7.Repositories.Factory
         }
 
         /// <inheritdoc />
-        public async Task<int> GetCount(CancellationToken Cancel = default)
+        public virtual async Task<int> GetCount(CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
             return await GetDbQuery(db).CountAsync(Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<TEntity>> GetAll(CancellationToken Cancel = default)
+        public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
             return await GetDbQuery(db).ToArrayAsync(Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<TEntity>> Get(int Skip, int Count, CancellationToken Cancel = default)
+        public virtual async Task<IEnumerable<TEntity>> Get(int Skip, int Count, CancellationToken Cancel = default)
         {
             if (Count <= 0) return Enumerable.Empty<TEntity>();
 
             await using var db = ContextFactory.CreateDbContext();
-            var query = Skip <= 0 ? GetDbQuery(db) : GetDbQuery(db).Skip(Skip);
+            var query = Skip <= 0 ? GetOrderedDbQuery(db) : GetOrderedDbQuery(db).Skip(Skip);
             return await query.Take(Count).ToArrayAsync(Cancel);
         }
 
         /// <inheritdoc />
-        public async Task<IPage<TEntity>> GetPage(int PageNumber, int PageSize, CancellationToken Cancel = default)
+        public virtual async Task<IPage<TEntity>> GetPage(int PageNumber, int PageSize, CancellationToken Cancel = default)
         {
             if (PageSize <= 0) return new Page<TEntity>(Enumerable.Empty<TEntity>(), PageSize, PageNumber, PageSize);
 
             await using var db = ContextFactory.CreateDbContext();
 
-            IQueryable<TEntity> query = GetDbQuery(db);
+            IQueryable<TEntity> query = GetOrderedDbQuery(db);
             var total_count = await query.CountAsync(Cancel).ConfigureAwait(false);
             if (total_count == 0) return new Page<TEntity>(Enumerable.Empty<TEntity>(), PageSize, PageNumber, PageSize);
 
@@ -114,7 +126,7 @@ namespace MathCore.EF7.Repositories.Factory
         }
 
         /// <inheritdoc />
-        public async Task<TEntity> GetById(TKey Id, CancellationToken Cancel = default)
+        public virtual async Task<TEntity> GetById(TKey Id, CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
             return GetDbQuery(db) switch
@@ -126,7 +138,7 @@ namespace MathCore.EF7.Repositories.Factory
         }
 
         /// <inheritdoc />
-        public async Task<TEntity> Add(TEntity item, CancellationToken Cancel = default)
+        public virtual async Task<TEntity> Add(TEntity item, CancellationToken Cancel = default)
         {
             if (item is null) throw new ArgumentNullException(nameof(item));
 
@@ -142,7 +154,7 @@ namespace MathCore.EF7.Repositories.Factory
         }
 
         /// <inheritdoc />
-        public async Task AddRange(IEnumerable<TEntity> items, CancellationToken Cancel = default)
+        public virtual async Task AddRange(IEnumerable<TEntity> items, CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
             await db.AddRangeAsync(items, Cancel).ConfigureAwait(false);
@@ -150,33 +162,36 @@ namespace MathCore.EF7.Repositories.Factory
         }
 
         /// <inheritdoc />
-        public async Task<TEntity> Update(TEntity item, CancellationToken Cancel = default)
+        public virtual async Task<TEntity> Update(TEntity item, CancellationToken Cancel = default)
         {
             if (item is null) throw new ArgumentNullException(nameof(item));
 
             await using var db = ContextFactory.CreateDbContext();
-
-            db.Entry(item).State = EntityState.Modified;
-            await db.SaveChangesAsync(Cancel).ConfigureAwait(false);
+            await Update(db, item, Cancel).ConfigureAwait(false);
 
             _Logger.LogInformation("Обновление id: {0} - {1} выполнено", item.Id, item);
             return item;
         }
 
+        private static Task Update(TContext db, TEntity item, CancellationToken Cancell)
+        {
+            db.Entry(item).State = EntityState.Modified;
+            return db.SaveChangesAsync(Cancell);
+        }
         /// <inheritdoc />
-        public async Task<TEntity> UpdateById(TKey id, Action<TEntity> ItemUpdated, CancellationToken Cancel = default)
+        public virtual async Task<TEntity> UpdateById(TKey id, Action<TEntity> ItemUpdated, CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
 
             if (await GetById(id, Cancel).ConfigureAwait(false) is not { } item)
                 return default;
             ItemUpdated(item);
-            await db.SaveChangesAsync(Cancel).ConfigureAwait(false);
+            await Update(db, item, Cancel).ConfigureAwait(false);
             return item;
         }
 
         /// <inheritdoc />
-        public async Task UpdateRange(IEnumerable<TEntity> items, CancellationToken Cancel = default)
+        public virtual async Task UpdateRange(IEnumerable<TEntity> items, CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
             db.UpdateRange(items);
@@ -184,7 +199,7 @@ namespace MathCore.EF7.Repositories.Factory
         }
 
         /// <inheritdoc />
-        public async Task<TEntity> Delete(TEntity item, CancellationToken Cancel = default)
+        public virtual async Task<TEntity> Delete(TEntity item, CancellationToken Cancel = default)
         {
             if (item is null) throw new ArgumentNullException(nameof(item));
 
@@ -198,7 +213,7 @@ namespace MathCore.EF7.Repositories.Factory
         }
 
         /// <inheritdoc />
-        public async Task DeleteRange(IEnumerable<TEntity> items, CancellationToken Cancel = default)
+        public virtual async Task DeleteRange(IEnumerable<TEntity> items, CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
             db.RemoveRange(items);
@@ -207,7 +222,7 @@ namespace MathCore.EF7.Repositories.Factory
 
 
         /// <inheritdoc />
-        public async Task<TEntity> DeleteById(TKey id, CancellationToken Cancel = default)
+        public virtual async Task<TEntity> DeleteById(TKey id, CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
             var item = await db.Set<TEntity>().FindAsync(new object[] { id }, Cancel).ConfigureAwait(false);

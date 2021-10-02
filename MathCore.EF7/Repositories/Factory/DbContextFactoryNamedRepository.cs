@@ -7,8 +7,8 @@ using Microsoft.Extensions.Logging;
 
 namespace MathCore.EF7.Repositories.Factory
 {
-    /// <inheritdoc />
-    public class DbContextFactoryNamedRepository<TDbContext, TNamedEntity> : DbContextFactoryNamedRepository<TDbContext, TNamedEntity, int>
+    /// <inheritdoc cref="DbContextFactoryNamedRepository{TDbContext, TNamedEntity, TKey}" />
+    public class DbContextFactoryNamedRepository<TDbContext, TNamedEntity> : DbContextFactoryNamedRepository<TDbContext, TNamedEntity, int>, INamedRepository<TNamedEntity>
         where TNamedEntity : class, INamedEntity, new() where TDbContext : DbContext
     {
         /// <inheritdoc />
@@ -28,7 +28,7 @@ namespace MathCore.EF7.Repositories.Factory
         public DbContextFactoryNamedRepository(IDbContextFactory<TDbContext> ContextFactory, ILogger<DbContextFactoryNamedRepository<TDbContext, TNamedEntity, TKey>> Logger) : base(ContextFactory, Logger) { }
 
         /// <inheritdoc />
-        public async Task<bool> ExistName(string Name, CancellationToken Cancel = default)
+        public virtual async Task<bool> ExistName(string Name, CancellationToken Cancel = default)
         {
             await using var db = ContextFactory.CreateDbContext();
             return await GetDbQuery(db).AnyAsync(item => item.Name == Name, Cancel).ConfigureAwait(false);

@@ -92,7 +92,7 @@
         </member>
         <member name="T:MathCore.EF7.Interfaces.Repositories.IGPSRepository`2">
             <summary>Репозиторий сущностей с определенным географическим положением</summary>
-            <typeparam name="T">Тип сущности с определенным географическим положением</typeparam>
+            <typeparam name="TGpsEntity">Тип сущности с определенным географическим положением</typeparam>
             <typeparam name="TKey">Тип первичного ключа сущности</typeparam>
         </member>
         <member name="M:MathCore.EF7.Interfaces.Repositories.IGPSRepository`2.ExistInLocation(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
@@ -171,7 +171,7 @@
         </member>
         <member name="T:MathCore.EF7.Interfaces.Repositories.IGPSRepository`1">
             <summary>Репозиторий сущностей с определенным географическим положением</summary>
-            <typeparam name="T">Тип сущности с определенным географическим положением</typeparam>
+            <typeparam name="TGpsEntity">Тип сущности с определенным географическим положением</typeparam>
         </member>
         <member name="T:MathCore.EF7.Interfaces.Repositories.INamedRepository`2">
             <summary>Репозиторий именованных сущностей</summary>
