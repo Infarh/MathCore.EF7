@@ -97,7 +97,7 @@ namespace MathCore.EF7.Clients
         {
             _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(Get)} - {ToValueRow(Skip, Count)}");
 
-            return await GetAsync<IEnumerable<TEntity>>($"{ServiceAddress}/items[{Skip}:{Count}]", Cancel).ConfigureAwait(false);
+            return await GetAsync<IEnumerable<TEntity>>($"{ServiceAddress}/items[{Skip}/{Count}]", Cancel).ConfigureAwait(false);
             //return await _Client.GetFromJsonAsync<IEnumerable<TEntity>>($"{ServiceAddress}/items[{Skip}:{Count}]", Cancel).ConfigureAwait(false);
         }
 
