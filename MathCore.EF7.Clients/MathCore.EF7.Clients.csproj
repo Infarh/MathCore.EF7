@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.0.0.2</Version>
-    <PackageReleaseNotes>Старт проекта</PackageReleaseNotes>
+    <Version>0.0.0.3</Version>
+    <PackageReleaseNotes>исправление ошибки адреса клиента take[skip/count]</PackageReleaseNotes>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 
