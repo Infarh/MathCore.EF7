@@ -79,10 +79,9 @@ namespace MathCore.EF7.Clients
         protected async Task<HttpResponseMessage> DeleteAsync(string url, CancellationToken Cancel = default) => await _Client.DeleteAsync(url, Cancel);
 
         /// <summary> Удаление элемента (ов) </summary>
-        /// <param name="url"> адрес</param>
         /// <param name="item"> данные </param>
         /// <param name="Cancel">Признак отмены асинхронной операции</param>
-        protected async Task<HttpResponseMessage> DeleteAsync<TContent>(string url, TContent item, CancellationToken Cancel = default)
+        protected async Task<HttpResponseMessage> DeleteAsync<TContent>(TContent item, CancellationToken Cancel = default)
         {
             var request = new HttpRequestMessage(HttpMethod.Delete, $"{ServiceAddress}")
             {

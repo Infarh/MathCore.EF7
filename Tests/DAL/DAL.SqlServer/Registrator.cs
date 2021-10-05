@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DAL.Context;
+﻿using DAL.Context;
 using MathCore.EF7.Contexts;
 using MathCore.EF7.Interfaces.Context;
 using Microsoft.EntityFrameworkCore;

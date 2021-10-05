@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using MathCore.EF7.Interfaces.Entities;
 using MathCore.EF7.Interfaces.Repositories;
