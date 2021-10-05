@@ -15,13 +15,9 @@
     <!-- <EmbedAllSources>true</EmbedAllSources>-->
   </PropertyGroup>
 
-  <PropertyGroup>
-    <DocumentationFile>$(MSBuildProjectName).xml</DocumentationFile>
-  </PropertyGroup>
-
+  <!--поумолчанию не упаковывается в нугет, переопределить в нужном проекте-->
   <PropertyGroup>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
 
 </Project>

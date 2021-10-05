@@ -34,8 +34,20 @@
     </None>
   </ItemGroup>
 
-  <!--Копирование документации в выходной каталог-->
-  <ItemGroup >
+  <!--Настройка игнорирования ошибок отсутствия документации для всех проектов которые не пакуются с нугет-->
+  <PropertyGroup Condition="'$(IsPackable)'=='false'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <!--Генерация документации только для пакетов идущих как нугет и только в конфигурации релиз-->
+  <PropertyGroup Condition="'$(IsPackable)' =='true' AND '$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <!--'$(Configuration)|$(Platform)'=='Release|AnyCPU'-->
+    <DocumentationFile>$(MSBuildProjectName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <!--Копирование документации в выходной каталог только для пакетов идущих как нугет и только в конфигурации релиз-->
+  <ItemGroup Condition="'$(IsPackable)'=='true' AND '$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <!--'$(Configuration)|$(Platform)'=='Release|AnyCPU'-->
     <Content Include="$(MSBuildProjectName).xml">
       <PackagePath></PackagePath>
       <!--Полный путь к директории где файл-->

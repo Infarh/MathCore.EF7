@@ -141,10 +141,10 @@
         <member name="T:MathCore.EF7.Clients.WebRepository`1">
             <inheritdoc cref="T:MathCore.EF7.Clients.WebRepository`2" />
         </member>
-        <member name="M:MathCore.EF7.Clients.WebRepository`1.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Clients.WebRepository{`0,System.Int32}})">
+        <member name="M:MathCore.EF7.Clients.WebRepository`1.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Clients.WebRepository{`0}})">
             <inheritdoc />
         </member>
-        <member name="M:MathCore.EF7.Clients.WebRepository`1.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Clients.WebRepository{`0,System.Int32}},System.String)">
+        <member name="M:MathCore.EF7.Clients.WebRepository`1.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Clients.WebRepository{`0}},System.String)">
             <inheritdoc />
         </member>
     </members>

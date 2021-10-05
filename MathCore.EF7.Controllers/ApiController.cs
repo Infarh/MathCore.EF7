@@ -15,7 +15,7 @@ namespace MathCore.EF7.Controllers
     public abstract class ApiController<T> : ApiController<T, int> where T : IEntity<int>
     {
         /// <inheritdoc/>
-        protected ApiController(IRepository<T, int> repository, ILogger<ApiController<T, int>> logger) : base(repository, logger)
+        protected ApiController(IRepository<T> repository, ILogger<ApiController<T>> logger) : base(repository, logger)
         {
         }
     }
