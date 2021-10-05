@@ -18,12 +18,14 @@ public static IServiceCollection AddTestRepositoryFactories(this IServiceCollect
 	   .AddScoped(typeof(IRepository<,>), typeof(Your_DbContextFactoryRepository<,>));
 ```
 где:
+
 Your_DbRepository - реализация репозитория, унаследованная от базового класса DbRepository
 Your_DbContextFactoryRepository - реализация фабрики репозитория, унаследованная от базового класса DbContextFactoryRepository
 
 [пример реализации](https://github.com/Infarh/MathCore.EF7/blob/dev/Tests/DAL/DAL/Repositories/Test_DbRepository.cs)
 
 Вызов репозитория происходит при запросе экземпляра интерфейса `IRepository<Student>`, где Student - некий класс `унаследованный от Entity`, в данном контексте у сущности id представляет тип `int32`
+
 При необходимости выбрать другой тип ключа сущность должна быть унаследована от `Entity<Tkey>`, где Tkey - тип ключа (например `Guid`), в этом случае обращение к репозиторию происходит при запросе `IRepository<Student,Guid>`
 
 Вызов фабрики происходит сжожим способом.
@@ -57,9 +59,11 @@ Your_DbContextFactoryRepository - реализация фабрики репоз
 ### Context
 Упростить инициализацию экземпляра БД при старте приложения поможет [`DBInitializer<TContext>`](https://github.com/Infarh/MathCore.EF7/blob/devs/MathCore.EF7/Contexts/DBInitializer.cs)
 или аналогично [`DBFactoryInitializer<TContext>`](https://github.com/Infarh/MathCore.EF7/blob/dev/MathCore.EF7/Contexts/DBFactoryInitializer.cs)
+	
 [пример реализации](https://github.com/Infarh/MathCore.EF7/blob/dev/Tests/DAL/DAL/TestContextInitializer.cs)
 
 подключаем сервис `services.AddTransient<TestContextInitializer>();`
+	
 Вызываем сервис 
 ```C#
 public void Configure(IApplicationBuilder app, IWebHostEnvironment env, TestContextInitializer context)
@@ -71,6 +75,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env, TestCont
 ### Clients
 
 Для взаимодействия с клиентом реализован `WebRepository<TEntity, TKey>`
+	
 Возможности клиента:
 <details>	
   <br />
@@ -114,6 +119,27 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env, TestCont
 </details>
 
 При необходимости реализации можно переопределить унаследовавшись.
+И например изменить адреса конечных точек, которые в апи реализованы как `api/EntytyTypeName', т.е. для сущности студенов - `api/Student`
+Переопределение точки производится в конструкторе с передачей в качестве serviceAddress:
+```C#
+
+public class TestStudentApiClient : WebRepository<Student>, IRepository<Student>
+{
+	public TestStudentApiClient(IConfiguration configuration, ILogger<WebRepository<Student>> logger)
+		: base(configuration, logger/*,"api/ControllerName"*/) //раскомментировать для замены точки
+	{
+	}
+
+	public TestStudentApiClient(IConfiguration configuration, ILogger<WebRepository<Student>> logger, string serviceAddress) 
+		: base(configuration, logger, serviceAddress)
+	{
+	}
+}
+	
+```
+регистрация сервиса: `servide.AddScoped<IRepository<Student>,TestStudentApiClient>();`
+	
+[полный пример](https://github.com/Infarh/MathCore.EF7/blob/dev/Tests/UI/ConsoleClientTest/Program.cs) доступен в тестовом консольном проекте (`адресс api читается из файла appsettings.json`).
 
 ### Controllers
 
