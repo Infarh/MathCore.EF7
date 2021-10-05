@@ -16,12 +16,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DocumentationFile>$(MSBuildProjectName).xml</DocumentationFile>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
 
 </Project>

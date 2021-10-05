@@ -14,7 +14,7 @@ namespace BlazorServerWebApp.Server.Controllers
 {
     public class StudentController : ApiController<Student>
     {
-        public StudentController(IRepository<Student, int> repository, ILogger<ApiController<Student, int>> logger) : base(repository, logger)
+        public StudentController(IRepository<Student> repository, ILogger<ApiController<Student>> logger) : base(repository, logger)
         {
             
         }
