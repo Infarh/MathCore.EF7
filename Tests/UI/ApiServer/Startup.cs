@@ -6,13 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Net.Http;
+using ApiServer.Models;
 using DAL;
 using DAL.Context;
 using DAL.Service;
 using DAL.SqlServer;
-using Domain;
 using MathCore.EF7.Interfaces.Repositories;
-using MathCore.EF7.Repositories.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -59,6 +58,7 @@ namespace ApiServer
                     break;
             }
             services.AddTestRepositories();
+            services.AddScoped(typeof(IPage<>), typeof(PageItems<>));
             //services.AddDbContext<TestContext>(o =>
             //{
             //    o.UseLazyLoadingProxies();

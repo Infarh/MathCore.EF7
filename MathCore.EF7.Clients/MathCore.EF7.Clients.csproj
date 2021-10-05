@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>0.0.0.4</Version>
+    <Version>0.0.0.5</Version>
     <PackageReleaseNotes>исправление ошибки адреса клиента take[skip/count]</PackageReleaseNotes>
     <IsPackable>true</IsPackable>
   </PropertyGroup>

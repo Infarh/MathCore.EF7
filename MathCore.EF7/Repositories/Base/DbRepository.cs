@@ -33,17 +33,17 @@ namespace MathCore.EF7.Repositories.Base
         /// <summary> DbSet сущности </summary>
         protected DbSet<TEntity> Set { get; }
         /// <summary> все элементы DbSet с возможность настройки (фильтрация выборка и прочее) </summary>
-        protected virtual IQueryable<TEntity> Items => NoTracked? Set.AsNoTracking(): Set;
+        protected virtual IQueryable<TEntity> Items => NoTracked ? Set.AsNoTracking() : Set;
         /// <summary> Упорядоченные сущности </summary>
         protected IQueryable<TEntity> OrderedEntities =>
             Items switch
-        {
-            IOrderedQueryable<TEntity> ordereq_query => ordereq_query,
-            { } q => q.OrderBy(i => i.Id)
-        };
+            {
+                IOrderedQueryable<TEntity> ordereq_query => ordereq_query,
+                { } q => q.OrderBy(i => i.Id)
+            };
         /// <summary> Флаг необходимости сохранять изменения в базе данных после каждого запроса </summary>
         public bool AutoSaveChanges { get; set; } = true;
-        
+
         /// <summary> Отслеживать выдаваемые объекты в контексте БД </summary>
         public bool NoTracked { get; set; } = true;
 
@@ -75,7 +75,7 @@ namespace MathCore.EF7.Repositories.Base
 
             //ToDo доделать логику проверки по остальным полям сущности
 
-            return await Set.AnyAsync(EntityExtension.GetId<TEntity,TKey>(item.Id), Cancel).ConfigureAwait(false);
+            return await Set.AnyAsync(EntityExtension.GetId<TEntity, TKey>(item.Id), Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -115,7 +115,7 @@ namespace MathCore.EF7.Repositories.Base
         public virtual async Task<TEntity> GetById(TKey Id, CancellationToken Cancel = default) => Items switch
         {
             DbSet<TEntity> set => await set.FindAsync(new object[] { Id }, Cancel).ConfigureAwait(false),
-            { } items => await items.FirstOrDefaultAsync(EntityExtension.GetId<TEntity,TKey>(Id), Cancel).ConfigureAwait(false),
+            { } items => await items.FirstOrDefaultAsync(EntityExtension.GetId<TEntity, TKey>(Id), Cancel).ConfigureAwait(false),
         };
 
         /// <inheritdoc />
@@ -159,6 +159,11 @@ namespace MathCore.EF7.Repositories.Base
             if (item is null) throw new ArgumentNullException(nameof(item));
             _Logger.LogInformation("Обновление id: {0} - {1}...", item.Id, item);
 
+            if (!await Exist(item, Cancel))
+            {
+                _Logger.LogInformation("Запись с id: {0} - {1} Не найдена...", item.Id, item);
+                return null;
+            }
 
             _db.Update(item);
             if (AutoSaveChanges)
@@ -207,9 +212,14 @@ namespace MathCore.EF7.Repositories.Base
         public virtual async Task<TEntity> Delete(TEntity item, CancellationToken Cancel = default)
         {
             if (item is null) throw new ArgumentNullException(nameof(item));
+            if (!await Exist(item, Cancel))
+            {
+                _Logger.LogInformation("Запись с id: {0} - {1} Не найдена...", item.Id, item);
+                return null;
+            }
             _Logger.LogInformation("Удаление id: {0} - {1}...", item.Id, item);
-
-            _db.Remove(item);
+            _db.Entry(item).State = EntityState.Deleted;
+            //_db.Remove(item);
             if (AutoSaveChanges)
             {
                 var count = await SaveChanges(Cancel).ConfigureAwait(false);
