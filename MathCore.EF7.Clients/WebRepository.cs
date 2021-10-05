@@ -256,12 +256,12 @@ namespace MathCore.EF7.Clients
     public class WebRepository<TEntity> : WebRepository<TEntity, int>, IRepository<TEntity> where TEntity : IEntity<int>
     {
         /// <inheritdoc />
-        public WebRepository(IConfiguration configuration, ILogger<WebRepository<TEntity, int>> logger) : base(configuration, logger)
+        public WebRepository(IConfiguration configuration, ILogger<WebRepository<TEntity>> logger) : base(configuration, logger)
         {
         }
 
         /// <inheritdoc />
-        public WebRepository(IConfiguration configuration, ILogger<WebRepository<TEntity, int>> logger, string serviceAddress) : base(configuration, logger, serviceAddress)
+        public WebRepository(IConfiguration configuration, ILogger<WebRepository<TEntity>> logger, string serviceAddress) : base(configuration, logger, serviceAddress)
         {
         }
     }

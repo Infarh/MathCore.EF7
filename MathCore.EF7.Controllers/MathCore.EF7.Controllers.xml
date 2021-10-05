@@ -7,7 +7,7 @@
         <member name="T:MathCore.EF7.Controllers.ApiController`1">
             <inheritdoc/>
         </member>
-        <member name="M:MathCore.EF7.Controllers.ApiController`1.#ctor(MathCore.EF7.Interfaces.Repositories.IRepository{`0,System.Int32},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Controllers.ApiController{`0,System.Int32}})">
+        <member name="M:MathCore.EF7.Controllers.ApiController`1.#ctor(MathCore.EF7.Interfaces.Repositories.IRepository{`0},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Controllers.ApiController{`0}})">
             <inheritdoc/>
         </member>
         <member name="T:MathCore.EF7.Controllers.ApiController`2">
