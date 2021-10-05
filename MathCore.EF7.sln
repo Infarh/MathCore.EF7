@@ -50,6 +50,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blazor", "Blazor", "{EBD86D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebAssembly", "WebAssembly", "{851730D1-187E-4CC1-B1FD-07E6B549DC4F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleClientTest", "Tests\UI\ConsoleClientTest\ConsoleClientTest.csproj", "{24960878-47FC-4118-9C92-7ED243CC3D3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,6 +114,10 @@ Global
 		{D4B58CA5-C6B3-4506-AE22-9CA7441C3E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4B58CA5-C6B3-4506-AE22-9CA7441C3E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4B58CA5-C6B3-4506-AE22-9CA7441C3E52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24960878-47FC-4118-9C92-7ED243CC3D3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24960878-47FC-4118-9C92-7ED243CC3D3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24960878-47FC-4118-9C92-7ED243CC3D3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24960878-47FC-4118-9C92-7ED243CC3D3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,6 +137,7 @@ Global
 		{D4B58CA5-C6B3-4506-AE22-9CA7441C3E52} = {EBD86D40-9022-4F3A-AA01-ABCBFCFE35B4}
 		{EBD86D40-9022-4F3A-AA01-ABCBFCFE35B4} = {EB29F264-6D58-4D59-B167-AC7ADEB667C2}
 		{851730D1-187E-4CC1-B1FD-07E6B549DC4F} = {EBD86D40-9022-4F3A-AA01-ABCBFCFE35B4}
+		{24960878-47FC-4118-9C92-7ED243CC3D3A} = {EB29F264-6D58-4D59-B167-AC7ADEB667C2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {342E6095-F793-4A52-B143-F7AB994127E1}
