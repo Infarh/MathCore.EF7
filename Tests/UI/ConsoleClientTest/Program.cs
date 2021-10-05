@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace ConsoleClientTest
 {
@@ -27,7 +28,8 @@ namespace ConsoleClientTest
         private static void ConfigureServices(HostBuilderContext host, IServiceCollection services)
         {
             services.AddScoped(typeof(IRepository<>), typeof(WebRepository<>))
-               .AddScoped(typeof(IRepository<,>), typeof(WebRepository<,>));
+               .AddScoped(typeof(IRepository<,>), typeof(WebRepository<,>))
+               .AddScoped<IRepository<Student>,TestStudentApiClient>();
         }
 
         public static async Task Main(string[] args)
@@ -56,6 +58,17 @@ namespace ConsoleClientTest
             await host.StopAsync();
 
             Console.WriteLine("Completed.");
+        }
+    }
+
+    public class TestStudentApiClient : WebRepository<Student>, IRepository<Student>
+    {
+        public TestStudentApiClient(IConfiguration configuration, ILogger<WebRepository<Student>> logger) : base(configuration, logger/*,"api/Students"*/) //раскомментировать для замены точки
+        {
+        }
+
+        public TestStudentApiClient(IConfiguration configuration, ILogger<WebRepository<Student>> logger, string serviceAddress) : base(configuration, logger, serviceAddress)
+        {
         }
     }
 }
