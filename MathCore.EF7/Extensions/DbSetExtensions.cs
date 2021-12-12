@@ -74,6 +74,7 @@ namespace MathCore.EF7.Extensions
         }
 
         #region public static void TruncateTable<T>(this DbSet<T> Set)
+
         /// <summary> Усечение таблицы </summary>
         /// <typeparam name="T">тип сущности</typeparam>
         /// <param name="Set">DbSet</param>
@@ -100,9 +101,8 @@ namespace MathCore.EF7.Extensions
         }
 
         #endregion
-        /// <summary>
-        /// Удалить по фильтру
-        /// </summary>
+
+        /// <summary>Удалить по фильтру</summary>
         /// <typeparam name="T">тип сущности</typeparam>
         /// <param name="Set">Set базы данных</param>
         /// <param name="filter">фильтр</param>
@@ -111,15 +111,13 @@ namespace MathCore.EF7.Extensions
             var db = Set.GetContext().ThrowIfHasChanges().Database;
 
             var sql = Set.Where(filter).ToString();
-            var from_sql = sql.Substring(sql.IndexOf("FROM", StringComparison.Ordinal));
+            var from_sql = sql![sql.IndexOf("FROM", StringComparison.Ordinal)..];
             var delete_sql = $"DELETE [Extent1] {from_sql}";
 
             db.ExecuteSqlRaw(delete_sql);
         }
 
-        /// <summary>
-        /// Удалить по фильтру
-        /// </summary>
+        /// <summary>Удалить по фильтру</summary>
         /// <typeparam name="T">тип сущности</typeparam>
         /// <param name="Set">Set базы данных</param>
         /// <param name="filter">фильтр</param>
@@ -129,7 +127,7 @@ namespace MathCore.EF7.Extensions
             var db = Set.GetContext().ThrowIfHasChanges().Database;
 
             var sql = Set.Where(filter).ToString();
-            var from_sql = sql.Substring(sql.IndexOf("FROM", StringComparison.Ordinal));
+            var from_sql = sql![sql.IndexOf("FROM", StringComparison.Ordinal)..];
             var delete_sql = $"DELETE [Extent1] {from_sql}";
 
             await db.ExecuteSqlRawAsync(delete_sql, Cancel).ConfigureAwait(false);

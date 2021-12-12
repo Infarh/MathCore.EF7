@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+
 using MathCore.EF7.Interfaces.Entities;
 using MathCore.EF7.Interfaces.Repositories;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -14,8 +17,24 @@ namespace MathCore.EF7.Repositories.Base
     /// <summary>Репозиторий сущностей, работающий с контекстом БД</summary>
     /// <typeparam name="T">Тип контролируемых сущностей</typeparam>
     /// <typeparam name="TDb">Тип контекста базы данных</typeparam>
-    public class DbRepository<TDb,T> : IRepository<T> where T : class, IEntity, new() where TDb:DbContext
+    public class DbRepository<TDb, T> : IRepository<T> where T : class, IEntity, new() where TDb : DbContext
     {
+        class Test<TEntity, TKey> where TEntity : class, IEntity<TKey>
+        {
+            private static Expression<Func<TEntity, bool>> GetId(TKey Id)
+            {
+                var entity = Expression.Parameter(typeof(TEntity), "entity");
+                var id_property = Expression.Property(entity, "Id");
+                var equals = Expression.Equal(id_property, Expression.Constant(Id));
+                var expression = Expression.Lambda<Func<TEntity, bool>>(equals, entity);
+                return expression;
+            }
+
+            private TDb _Context;
+
+            public TEntity GetById(TKey Id) => _Context.Set<TEntity>().SingleOrDefault(GetId(Id));
+        }
+
         private readonly TDb _db;
         /// <summary> Логгер </summary>
         protected readonly ILogger<DbRepository<TDb, T>> _Logger;
@@ -148,7 +167,7 @@ namespace MathCore.EF7.Repositories.Base
             {
                 _Logger.LogInformation("Элемент с id: {0} не найден", id);
                 return default;
-            } 
+            }
             ItemUpdated(item);
             if (AutoSaveChanges)
             {
