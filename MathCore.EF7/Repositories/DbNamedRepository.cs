@@ -9,22 +9,37 @@ using Microsoft.Extensions.Logging;
 
 namespace MathCore.EF7.Repositories
 {
-    /// <inheritdoc cref="DbRepository{TDb,T}" />
-    public class DbNamedRepository<TDb,T> : DbRepository<TDb,T>, INamedRepository<T> where T : class, INamedEntity, new() where TDb:DbContext
+    /// <inheritdoc cref="DbNamedRepository{TContext,TKey}" />
+    public class DbNamedRepository<TContext, TNamedEntity> : DbNamedRepository<TContext, TNamedEntity, int>, INamedRepository<TNamedEntity>
+        where TNamedEntity : class, INamedEntity, new()
+        where TContext : DbContext
     {
         /// <inheritdoc />
-        public DbNamedRepository(TDb db, ILogger<DbNamedRepository<TDb, T>> Logger) : base(db, Logger) { }
+        public DbNamedRepository(TContext db, ILogger<DbNamedRepository<TContext, TNamedEntity, int>> Logger) : base(db, Logger)
+        {
+        }
+    }
+
+    /// <inheritdoc cref="DbRepository{TContext, TNamedEntity,TKey}" />
+    public class DbNamedRepository<TContext, TNamedEntity, TKey>
+        : DbRepository<TContext, TNamedEntity, TKey>,
+          INamedRepository<TNamedEntity, TKey>
+        where TNamedEntity : class, INamedEntity<TKey>, new()
+        where TContext : DbContext
+    {
+        /// <inheritdoc />
+        public DbNamedRepository(TContext db, ILogger<DbNamedRepository<TContext, TNamedEntity, TKey>> Logger) : base(db, Logger) { }
 
         /// <inheritdoc />
         public async Task<bool> ExistName(string Name, CancellationToken Cancel = default) =>
             await Set.AnyAsync(item => item.Name == Name, Cancel).ConfigureAwait(false);
 
         /// <inheritdoc />
-        public async Task<T> GetByName(string Name, CancellationToken Cancel = default) =>
+        public async Task<TNamedEntity> GetByName(string Name, CancellationToken Cancel = default) =>
             await Items.FirstOrDefaultAsync(item => item.Name == Name, Cancel).ConfigureAwait(false);
 
         /// <inheritdoc />
-        public async Task<T> DeleteByName(string Name, CancellationToken Cancel = default)
+        public async Task<TNamedEntity> DeleteByName(string Name, CancellationToken Cancel = default)
         {
             var item = Set.Local.FirstOrDefault(i => i.Name == Name)
                 ?? await Set

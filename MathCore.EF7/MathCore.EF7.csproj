@@ -9,6 +9,7 @@
   <PropertyGroup>
     <Version>0.0.1</Version>
     <PackageReleaseNotes>Обновление платформы</PackageReleaseNotes>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -22,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MathCore.EF7.Enities\MathCore.EF7.Enities.csproj" />
     <ProjectReference Include="..\MathCore.EF7.Interfaces\MathCore.EF7.Interfaces.csproj" />
   </ItemGroup>
 

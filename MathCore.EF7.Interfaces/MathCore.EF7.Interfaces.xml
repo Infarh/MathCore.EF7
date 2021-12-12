@@ -92,7 +92,7 @@
         </member>
         <member name="T:MathCore.EF7.Interfaces.Repositories.IGPSRepository`2">
             <summary>Репозиторий сущностей с определенным географическим положением</summary>
-            <typeparam name="T">Тип сущности с определенным географическим положением</typeparam>
+            <typeparam name="TGpsEntity">Тип сущности с определенным географическим положением</typeparam>
             <typeparam name="TKey">Тип первичного ключа сущности</typeparam>
         </member>
         <member name="M:MathCore.EF7.Interfaces.Repositories.IGPSRepository`2.ExistInLocation(System.Double,System.Double,System.Double,System.Threading.CancellationToken)">
@@ -171,7 +171,7 @@
         </member>
         <member name="T:MathCore.EF7.Interfaces.Repositories.IGPSRepository`1">
             <summary>Репозиторий сущностей с определенным географическим положением</summary>
-            <typeparam name="T">Тип сущности с определенным географическим положением</typeparam>
+            <typeparam name="TGpsEntity">Тип сущности с определенным географическим положением</typeparam>
         </member>
         <member name="T:MathCore.EF7.Interfaces.Repositories.INamedRepository`2">
             <summary>Репозиторий именованных сущностей</summary>
@@ -203,9 +203,6 @@
         <member name="T:MathCore.EF7.Interfaces.Repositories.IPage`1">
             <summary>Страница элементов</summary>
             <typeparam name="T">Тип элемента на странице</typeparam>
-        </member>
-        <member name="P:MathCore.EF7.Interfaces.Repositories.IPage`1.Items">
-            <summary>Элементы страницы</summary>
         </member>
         <member name="P:MathCore.EF7.Interfaces.Repositories.IPage`1.TotalCount">
             <summary>Полное количество элементов на всех страницах</summary>
@@ -250,6 +247,7 @@
         <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.GetCount(System.Threading.CancellationToken)">
             <summary>Получить число хранимых сущностей</summary>
             <param name="Cancel">Признак отмены асинхронной операции</param>
+            <returns>число сущностей в репозитории</returns>
         </member>
         <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.GetAll(System.Threading.CancellationToken)">
             <summary>Извлечь все сущности из репозитория</summary>
@@ -270,7 +268,7 @@
             <param name="Cancel">Признак отмены асинхронной операции</param>
             <returns>Страница с сущностями из репозитория</returns>
         </member>
-        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.GetById(System.Int32,System.Threading.CancellationToken)">
+        <member name="M:MathCore.EF7.Interfaces.Repositories.IRepository`2.GetById(`1,System.Threading.CancellationToken)">
             <summary>Получить сущность по указанному идентификатору</summary>
             <param name="Id">Идентификатор извлекаемой сущности</param>
             <param name="Cancel">Признак отмены асинхронной операции</param>

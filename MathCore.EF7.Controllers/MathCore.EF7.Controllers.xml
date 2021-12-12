@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MathCore.EF7.Controllers</name>
+    </assembly>
+    <members>
+        <member name="T:MathCore.EF7.Controllers.ApiController`1">
+            <inheritdoc/>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`1.#ctor(MathCore.EF7.Interfaces.Repositories.IRepository{`0},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Controllers.ApiController{`0}})">
+            <inheritdoc/>
+        </member>
+        <member name="T:MathCore.EF7.Controllers.ApiController`2">
+            <summary> реализация контроллера для api </summary>
+            <typeparam name="T">Тип сущности</typeparam>
+            <typeparam name="TKey">тип ключа сущности</typeparam>
+        </member>
+        <member name="F:MathCore.EF7.Controllers.ApiController`2._Repository">
+            <summary> клиент репозитория </summary>
+        </member>
+        <member name="F:MathCore.EF7.Controllers.ApiController`2._Logger">
+            <summary> логгер </summary>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.#ctor(MathCore.EF7.Interfaces.Repositories.IRepository{`0,`1},Microsoft.Extensions.Logging.ILogger{MathCore.EF7.Controllers.ApiController{`0,`1}})">
+            <inheritdoc/>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.IsEmpty">
+            <summary>Проверка репозитория на пустоту</summary>
+            <returns>Истина, если в репозитории нет ни одной сущности</returns>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.ExistId(`1)">
+            <summary>Существует ли сущность с указанным идентификатором</summary>
+            <param name="Id">Проверяемый идентификатор сущности</param>
+            <returns>Истина, если сущность с указанным идентификатором существует в репозитории</returns>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.Exist(`0)">
+            <summary>Существует ли в репозитории указанная сущность</summary>
+            <param name="item">Проверяемая сущность</param>
+            <returns>Истина, если указанная сущность существует в репозитории</returns>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.GetCount">
+            <summary>Получить число хранимых сущностей</summary>
+            <returns>число сущностей в репозитории</returns>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.GetAll">
+            <summary>Извлечь все сущности из репозитория</summary>
+            <returns>Перечисление всех сущностей репозитория</returns>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.Get(System.Int32,System.Int32)">
+            <summary>Получить набор сущностей из репозитория в указанном количестве, предварительно пропустив некоторое количество</summary>
+            <param name="Skip">Число предварительно пропускаемых сущностей</param>
+            <param name="Count">Число извлекаемых из репозитория сущностей</param>
+            <returns>Перечисление полученных из репозитория сущностей</returns>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.GetPage(System.Int32,System.Int32)">
+            <summary>Получить страницу с сущностями из репозитория</summary>
+            <param name="PageNumber">Номер страницы начиная с нуля</param>
+            <param name="PageSize">Размер страницы</param>
+            <returns>Страница с сущностями из репозитория</returns>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.GetById(`1)">
+            <summary>Получить сущность по указанному идентификатору</summary>
+            <param name="Id">Идентификатор извлекаемой сущности</param>
+            <returns>Сущность с указанным идентификатором в случае ее наличия и null, если сущность отсутствует</returns>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.Add(`0)">
+            <summary>Добавление сущности в репозиторий</summary>
+            <param name="item">Добавляемая в репозиторий сущность</param>
+            <returns>Добавленная в репозиторий сущность</returns>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.AddRange(System.Collections.Generic.IEnumerable{`0})">
+            <summary>Добавление перечисленных сущностей в репозиторий</summary>
+            <param name="items">Перечисление добавляемых в репозиторий сущностей</param>
+            <returns>Задача, завершающаяся при завершении операции добавления сущностей</returns>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.Update(`0)">
+            <summary>Обновление сущности в репозитории</summary>
+            <param name="item">Сущность, хранящая в себе информацию, которую надо обновить в репозитории</param>
+            <returns>Сущность из репозитория с обновленными данными</returns>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.UpdateRange(System.Collections.Generic.IEnumerable{`0})">
+            <summary>Обновление перечисленных сущностей</summary>
+            <param name="items">Перечисление сущностей, информацию из которых надо обновить в репозитории</param>
+            <returns>Задача, завершаемая при завершении операции обновления сущностей</returns>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.Delete(`0)">
+            <summary>Удаление сущности из репозитория</summary>
+            <param name="item">Удаляемая из репозитория сущность</param>
+            <returns>Удаленная из репозитория сущность</returns>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.DeleteRange(System.Collections.Generic.IEnumerable{`0})">
+            <summary>Удаление перечисления сущностей из репозитория</summary>
+            <param name="items">Перечисление удаляемых сущностей</param>
+            <returns>Задача, завершаемая при завершении операции удаления сущностей</returns>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.DeleteById(`1)">
+            <summary>Удаление сущности по заданному идентификатору</summary>
+            <param name="id">Идентификатор сущности, которую надо удалить</param>
+            <returns>Удаленная из репозитория сущность</returns>
+        </member>
+        <member name="M:MathCore.EF7.Controllers.ApiController`2.SaveChanges">
+            <summary> Сохранить изменения </summary>
+            <returns>число изменений</returns>
+        </member>
+    </members>
+</doc>

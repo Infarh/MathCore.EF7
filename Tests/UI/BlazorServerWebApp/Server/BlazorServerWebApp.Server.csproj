@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <NoWarn>1701;1702;1591</NoWarn>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\MathCore.EF7.Clients\MathCore.EF7.Clients.csproj" />
+    <ProjectReference Include="..\..\..\..\MathCore.EF7.Controllers\MathCore.EF7.Controllers.csproj" />
+    <ProjectReference Include="..\..\..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Client\BlazorServerWebApp.Client.csproj" />
+  </ItemGroup>
+
+
+</Project>

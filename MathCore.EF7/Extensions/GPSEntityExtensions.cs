@@ -10,18 +10,19 @@ namespace MathCore.EF7.Extensions
     public static class GPSEntityExtensions
     {
         /// <summary>Упорядочить по удалению от указанной точки и выбрать лишь те элементы, что попадают в указанный радиус</summary>
-        /// <typeparam name="T">Тип элементов</typeparam>
+        /// <typeparam name="TGpsEntity">Тип элементов</typeparam>
+        /// <typeparam name="TKey">Тип ключа сущности</typeparam>
         /// <param name="query">Исходный запрос</param>
         /// <param name="Latitude">Широта опорной точки</param>
         /// <param name="Longitude">Долгота опорной точки</param>
         /// <param name="Range">Ограничивающий радиус в метрах</param>
         /// <returns>Запрос элементов вокруг указанной точки в заданном радиусе</returns>
-        public static IQueryable<T> OrderByDistanceInRange<T>(
-            this IQueryable<T> query,
+        public static IQueryable<TGpsEntity> OrderByDistanceInRange<TGpsEntity, TKey>(
+            this IQueryable<TGpsEntity> query,
             double Latitude,
             double Longitude,
             double Range)
-        where T : IGPSEntity
+        where TGpsEntity : IGPSEntity<TKey>
         {
             const double earth_radius = 6_378_137d;
             const double to_rad = Math.PI / 180;
@@ -46,66 +47,72 @@ namespace MathCore.EF7.Extensions
 
         /// <summary>Отсортировать по увеличению дальности от указанной точки</summary>
         /// <typeparam name="T">Тип элемента, имеющего географические координаты</typeparam>
+        /// <typeparam name="Tkey">Тип ключа сущности</typeparam>
         /// <param name="query">Запрос</param>
         /// <param name="Latitude">Широта указанной точки</param>
         /// <param name="Longitude">Долгота указанной точки</param>
         /// <returns>Запрос, содержащий последовательность элементов, упорядоченную по удалению от указанной точки</returns>
-        public static IQueryable<T> OrderByDistance<T>(this IQueryable<T> query, double Latitude, double Longitude)
-            where T : IGPSEntity =>
+        public static IQueryable<T> OrderByDistance<T, Tkey>(this IQueryable<T> query, double Latitude, double Longitude)
+            where T : IGPSEntity<Tkey> =>
             query.OrderBy(item => (item.Latitude - Latitude) * (item.Latitude - Latitude) + (item.Longitude - Longitude) * (item.Longitude - Longitude));
 
         /// <summary>Получить ближайший объект к указанной точке</summary>
         /// <typeparam name="T">Тип элемента, имеющего географические координаты</typeparam>
+        /// <typeparam name="Tkey">Тип ключа сущности</typeparam>
         /// <param name="query">Запрос</param>
         /// <param name="Latitude">Широта указанной точки</param>
         /// <param name="Longitude">Долгота указанной точки</param>
         /// <returns>Первый ближайший элемент к указанной точке</returns>
-        public static T Closest<T>(this IQueryable<T> query, double Latitude, double Longitude)
-            where T : IGPSEntity => query
-               .OrderByDistance(Latitude, Longitude)
+        public static T Closest<T, Tkey>(this IQueryable<T> query, double Latitude, double Longitude)
+            where T : IGPSEntity<Tkey> => query
+               .OrderByDistance<T, Tkey>(Latitude, Longitude)
                .First();
 
         /// <summary>Получить ближайший объект к указанной точке</summary>
         /// <typeparam name="T">Тип элемента, имеющего географические координаты</typeparam>
+        /// <typeparam name="Tkey">Тип ключа сущности</typeparam>
         /// <param name="query">Запрос</param>
         /// <param name="Latitude">Широта указанной точки</param>
         /// <param name="Longitude">Долгота указанной точки</param>
         /// <returns>Первый ближайший элемент к указанной точке</returns>
-        public static T? ClosestOrDefault<T>(this IQueryable<T> query, double Latitude, double Longitude)
-            where T : IGPSEntity => query
-           .OrderByDistance(Latitude, Longitude)
+        public static T? ClosestOrDefault<T, Tkey>(this IQueryable<T> query, double Latitude, double Longitude)
+            where T : IGPSEntity<Tkey> => query
+           .OrderByDistance<T, Tkey>(Latitude, Longitude)
            .FirstOrDefault();
 
         /// <summary>Отсортировать по увеличению дальности от указанной точки</summary>
         /// <typeparam name="T">Тип элемента, имеющего географические координаты</typeparam>
+        /// <typeparam name="Tkey">Тип ключа сущности</typeparam>
         /// <param name="items">Последовательность элементов</param>
         /// <param name="Latitude">Широта указанной точки</param>
         /// <param name="Longitude">Долгота указанной точки</param>
         /// <returns>Последовательность элементов, содержащий последовательность элементов, упорядоченную по удалению от указанной точки</returns>
-        public static IEnumerable<T> OrderByDistance<T>(this IEnumerable<T> items, double Latitude, double Longitude)
-            where T : IGPSEntity =>
+        public static IEnumerable<T> OrderByDistance<T, Tkey>(this IEnumerable<T> items, double Latitude, double Longitude)
+            where T : IGPSEntity<Tkey> =>
             items.OrderBy(item => (item.Latitude - Latitude) * (item.Latitude - Latitude) + (item.Longitude - Longitude) * (item.Longitude - Longitude));
 
         /// <summary>Получить ближайший объект к указанной точке</summary>
         /// <typeparam name="T">Тип элемента, имеющего географические координаты</typeparam>
+        /// <typeparam name="Tkey">Тип ключа сущности</typeparam>
         /// <param name="items">Последовательность элементов</param>
         /// <param name="Latitude">Широта указанной точки</param>
         /// <param name="Longitude">Долгота указанной точки</param>
         /// <returns>Первый ближайший элемент к указанной точке</returns>
-        public static T Closest<T>(this IEnumerable<T> items, double Latitude, double Longitude)
-            where T : IGPSEntity => items
-               .OrderByDistance(Latitude, Longitude)
+        public static T Closest<T,Tkey>(this IEnumerable<T> items, double Latitude, double Longitude)
+            where T : IGPSEntity<Tkey> => items
+               .OrderByDistance<T, Tkey>(Latitude, Longitude)
                .First();
 
         /// <summary>Получить ближайший объект к указанной точке</summary>
         /// <typeparam name="T">Тип элемента, имеющего географические координаты</typeparam>
+        /// <typeparam name="Tkey">Тип ключа сущности</typeparam>
         /// <param name="items">Последовательность элементов</param>
         /// <param name="Latitude">Широта указанной точки</param>
         /// <param name="Longitude">Долгота указанной точки</param>
         /// <returns>Первый ближайший элемент к указанной точке</returns>
-        public static T? ClosestOrDefault<T>(this IEnumerable<T> items, double Latitude, double Longitude)
-            where T : IGPSEntity => items
-           .OrderByDistance(Latitude, Longitude)
+        public static T? ClosestOrDefault<T, Tkey>(this IEnumerable<T> items, double Latitude, double Longitude)
+            where T : IGPSEntity<Tkey> => items
+           .OrderByDistance<T, Tkey>(Latitude, Longitude)
            .FirstOrDefault();
     }
 }

@@ -1,0 +1,55 @@
+﻿@page "/fetchdata"
+@using Domain
+@using MathCore.EF7.Interfaces.Repositories
+@inject HttpClient Http
+@inject IRepository<Student> StudService
+
+<h1>Students</h1>
+
+<p>This component demonstrates fetching data from the server </p>
+<p class="alert-danger">@Row</p>
+@if (students == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stud in students)
+            {
+                <tr>
+                    <td>@stud.Id</td>
+                    <td>@stud.Name</td>
+                    <td>@stud.Age</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<Student> students;
+    string Row;
+
+    protected override async Task OnInitializedAsync()
+    {
+        @*students = await Http.GetFromJsonAsync<Student[]>("sample-data/weather.json");*@
+    try
+    {
+        students = await StudService.GetAll();
+        Row = null;
+    }
+    catch (Exception e)
+    {
+        Row = e.Message;
+    }
+}
+}

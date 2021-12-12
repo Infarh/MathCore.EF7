@@ -12,12 +12,12 @@ using Microsoft.Extensions.Logging;
 namespace MathCore.EF7.Contexts
 {
     /// <summary> Базовая реализация фабрики инициализации БД </summary>
-    /// <typeparam name="TDb">тип контекста базы данных</typeparam>
-    public class DBFactoryInitializer<TDb> : IDbInitializer, IDisposable where TDb :DbContext
+    /// <typeparam name="TContext">тип контекста базы данных</typeparam>
+    public class DBFactoryInitializer<TContext> : IDbInitializer, IDisposable where TContext :DbContext
     {
-        private readonly TDb _db;
+        private readonly TContext _db;
         /// <summary> Логгер </summary>
-        protected readonly ILogger<DBInitializer<TDb>> _Logger;
+        protected readonly ILogger<DBInitializer<TContext>> _Logger;
 
         /// <inheritdoc/>
         public bool Recreate { get; set; }
@@ -25,8 +25,8 @@ namespace MathCore.EF7.Contexts
         /// <param name="db">контекст базы данных</param>
         /// <param name="Logger">логгер</param>
         public DBFactoryInitializer(
-            IDbContextFactory<TDb> db, 
-            ILogger<DBInitializer<TDb>> Logger)
+            IDbContextFactory<TContext> db, 
+            ILogger<DBInitializer<TContext>> Logger)
         {
             if (db is null) throw new ArgumentNullException(nameof(db));
             _db = db.CreateDbContext();

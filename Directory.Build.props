@@ -15,11 +15,9 @@
     <!-- <EmbedAllSources>true</EmbedAllSources>-->
   </PropertyGroup>
 
-  <!--Генерация документации-->
+  <!--поумолчанию не упаковывается в нугет, переопределить в нужном проекте-->
   <PropertyGroup>
-    <Configurations>Debug;Release</Configurations>
-    <Platforms>AnyCPU</Platforms>
-    <DocumentationFile>$(MSBuildProjectName).xml</DocumentationFile>
-  </PropertyGroup >
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
 
 </Project>

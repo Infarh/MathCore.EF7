@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using MathCore.EF7.Interfaces.Entities;
 
-namespace MathCore.EF7.Entities
+namespace MathCore.EF7.Enities.Base
 {
     /// <summary>Именованная сущность</summary>
     /// <typeparam name="TKey">Тип первичного ключа</typeparam>
@@ -28,7 +28,7 @@ namespace MathCore.EF7.Entities
         protected NamedEntity(TKey Id, string Name) : base(Id) => this.Name = Name;
     }
 
-    /// <inheritdoc cref="NamedEntity{T}" />
+    /// <inheritdoc cref="NamedEntity{TKey}" />
     public abstract class NamedEntity : NamedEntity<int>, INamedEntity
     {
         /// <summary>Инициализация новой именованной сущности</summary>

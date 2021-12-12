@@ -1,38 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using MathCore.EF7.Interfaces.Entities;
 using MathCore.EF7.Interfaces.Repositories;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace MathCore.EF7.Clients
 {
 
     /// <summary> Клиент к репозиторию </summary>
-    /// <typeparam name="T">тип сущности</typeparam>
-    /// <typeparam name="Tkey">тип идентификатора</typeparam>
-    public class WebRepository<T, Tkey> : IRepository<T, Tkey> where T : IEntity<Tkey>
+    /// <typeparam name="TEntity">тип сущности</typeparam>
+    /// <typeparam name="TKey">тип идентификатора</typeparam>
+    public class WebRepository<TEntity, TKey> : BaseClient, IRepository<TEntity, TKey> where TEntity : IEntity<TKey>
     {
-        /// <summary> Клиент </summary>
-        protected readonly HttpClient _Client;
         /// <summary> логгер </summary>
-        protected readonly ILogger<WebRepository<T, Tkey>> _Logger;
+        protected readonly ILogger<WebRepository<TEntity, TKey>> _Logger;
 
-        /// <summary> Конструктор </summary>
-        /// <param name="client">клиент</param>
+        /// <summary> Конструктор - адрес клиента api/TEntity</summary>
+        /// <param name="configuration">Конфигурация</param>
         /// <param name="logger">логгер</param>
-        public WebRepository(HttpClient client, ILogger<WebRepository<T, Tkey>> logger)
+        public WebRepository(IConfiguration configuration, ILogger<WebRepository<TEntity, TKey>> logger) : base(configuration, $"api/{typeof(TEntity).Name}")
         {
-            _Client = client;
             _Logger = logger;
         }
 
-        private const string BaseLogRow = "Запрос к репозиторию";
+        /// <summary> Конструктор </summary>
+        /// <param name="configuration">Конфигурация</param>
+        /// <param name="logger">логгер</param>
+        /// <param name="serviceAddress">адрес сервиса</param>
+        public WebRepository(IConfiguration configuration, ILogger<WebRepository<TEntity, TKey>> logger, string serviceAddress) : base(configuration, serviceAddress)
+        {
+            _Logger = logger;
+        }
+
+
+        private static readonly string BaseLogRow = $"Запрос к репозиторию { typeof(TEntity).Name}";
 
         private static string ToValueRow<Tvalue>(params Tvalue[] values) =>
             values is not null && values.Length > 0 ? string.Join(", ", values.Select(v => $"{nameof(v)}={v}")) : string.Empty;
@@ -40,226 +46,213 @@ namespace MathCore.EF7.Clients
         #region Implementation of IRepository<T,in Tkey>
 
         /// <inheritdoc />
-        public async Task<bool> IsEmpty(CancellationToken Cancel = default)
+        public virtual async Task<bool> IsEmpty(CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(IsEmpty)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(IsEmpty)}");
 
-            var response = await _Client.GetAsync($"IsEmpty", Cancel).ConfigureAwait(false);
+            var response = await GetAsync<bool>($"{ServiceAddress}/isempty", Cancel).ConfigureAwait(false);
+            //var response = await _Client.GetAsync($"{ServiceAddress}/isempty", Cancel).ConfigureAwait(false);
+            return response/*.StatusCode != HttpStatusCode.NotFound && response.IsSuccessStatusCode*/;
+        }
+
+        /// <inheritdoc />
+        public virtual async Task<bool> ExistId(TKey Id, CancellationToken Cancel = default)
+        {
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(ExistId)} - {ToValueRow(Id)}");
+
+            var response = await GetAsync<bool>($"{ServiceAddress}/exist/id/{Id}", Cancel).ConfigureAwait(false);
+            //var response = await _Client.GetAsync($"{ServiceAddress}/exist/id/{Id}", Cancel).ConfigureAwait(false);
+            return response/*.StatusCode != HttpStatusCode.NotFound && response.IsSuccessStatusCode*/;
+        }
+
+        /// <inheritdoc />
+        public virtual async Task<bool> Exist(TEntity item, CancellationToken Cancel = default)
+        {
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(Exist)} - {ToValueRow(item.Id)}");
+
+            var response = await PostAsync($"{ServiceAddress}/exist", item, Cancel).ConfigureAwait(false);
+            //var response = await _Client.PostAsJsonAsync($"{ServiceAddress}/exist", item, Cancel).ConfigureAwait(false);
             return response.StatusCode != HttpStatusCode.NotFound && response.IsSuccessStatusCode;
         }
 
         /// <inheritdoc />
-        public async Task<bool> ExistId(Tkey Id, CancellationToken Cancel = default)
+        public virtual async Task<int> GetCount(CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(ExistId)} - {ToValueRow(Id)}");
-
-            var response = await _Client.GetAsync($"exist/id/{Id}", Cancel).ConfigureAwait(false);
-            return response.StatusCode != HttpStatusCode.NotFound && response.IsSuccessStatusCode;
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(GetCount)}");
+            return await GetAsync<int>($"{ServiceAddress}/count", Cancel).ConfigureAwait(false);
+            //return await _Client.GetFromJsonAsync<int>($"{ServiceAddress}/count", Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<bool> Exist(T item, CancellationToken Cancel = default)
+        public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(Exist)} - {ToValueRow(item.Id)}");
-
-            var response = await _Client.PostAsJsonAsync($"exist", item, Cancel).ConfigureAwait(false);
-            return response.StatusCode != HttpStatusCode.NotFound && response.IsSuccessStatusCode;
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(GetAll)}");
+            return await GetAsync<IEnumerable<TEntity>>($"{ServiceAddress}", Cancel).ConfigureAwait(false);
+            //return await _Client.GetFromJsonAsync<IEnumerable<TEntity>>($"{ServiceAddress}", Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<int> GetCount(CancellationToken Cancel = default)
+        public virtual async Task<IEnumerable<TEntity>> Get(int Skip, int Count, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(GetCount)}");
-            return await _Client.GetFromJsonAsync<int>("count", Cancel).ConfigureAwait(false);
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(Get)} - {ToValueRow(Skip, Count)}");
+
+            return await GetAsync<IEnumerable<TEntity>>($"{ServiceAddress}/items[{Skip}/{Count}]", Cancel).ConfigureAwait(false);
+            //return await _Client.GetFromJsonAsync<IEnumerable<TEntity>>($"{ServiceAddress}/items[{Skip}:{Count}]", Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<T>> GetAll(CancellationToken Cancel = default)
+        public virtual async Task<IPage<TEntity>> GetPage(int PageNumber, int PageSize, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(GetAll)}");
-            return await _Client.GetFromJsonAsync<IEnumerable<T>>("", Cancel).ConfigureAwait(false);
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(GetPage)} - {ToValueRow(PageNumber, PageSize)}");
+
+            var response = await GetAsync<PageItems>($"{ServiceAddress}/page[{PageNumber}/{PageSize}]", Cancel).ConfigureAwait(false);
+            //var response = await _Client.GetAsync($"{ServiceAddress}/page[{PageNumber}/{PageSize}]", Cancel).ConfigureAwait(false);
+
+            if (response is null)
+                return new PageItems(Enumerable.Empty<TEntity>(), PageNumber, PageSize, 0); 
+
+            return response;
+        }
+
+        private record PageItems(IEnumerable<TEntity> Items, int TotalCount, int PageNumber, int PageSize) : IPage<TEntity>;
+
+        /// <inheritdoc />
+        public virtual async Task<TEntity> GetById(TKey Id, CancellationToken Cancel = default)
+        {
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(GetById)} - {ToValueRow(Id)}");
+
+            return await GetAsync<TEntity>($"{ServiceAddress}/{Id}", Cancel).ConfigureAwait(false);
+            //return await _Client.GetFromJsonAsync<TEntity>($"{ServiceAddress}/{Id}", Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<T>> Get(int Skip, int Count, CancellationToken Cancel = default)
+        public virtual async Task<TEntity> Add(TEntity item, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(Get)} - {ToValueRow(Skip, Count)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(Add)}");
 
-            return await _Client.GetFromJsonAsync<IEnumerable<T>>($"items[{Skip}:{Count}]", Cancel).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<IPage<T>> GetPage(int PageNumber, int PageSize, CancellationToken Cancel = default)
-        {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(GetPage)} - {ToValueRow(PageNumber, PageSize)}");
-
-            var response = await _Client.GetAsync($"page[{PageNumber}/{PageSize}]", Cancel).ConfigureAwait(false);
-
-            if (response.StatusCode == HttpStatusCode.NotFound)
-                return new PageItems
-                {
-                    Items = Enumerable.Empty<T>(),
-                    PageNumber = PageNumber,
-                    PageSize = PageSize,
-                    TotalCount = 0
-                };
-
-            return await response
-               .EnsureSuccessStatusCode()
-               .Content
-               .ReadFromJsonAsync<PageItems>(cancellationToken: Cancel)
-               .ConfigureAwait(false);
-        }
-        private class PageItems : IPage<T>
-        {
-            #region Implementation of IPage<out T>
-
-            public IEnumerable<T> Items { get; init; }
-
-            public int TotalCount { get; init; }
-
-            public int PageNumber { get; init; }
-
-            public int PageSize { get; init; }
-
-            #endregion
-        }
-
-        /// <inheritdoc />
-        public async Task<T> GetById(int Id, CancellationToken Cancel = default)
-        {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(GetById)} - {ToValueRow(Id)}");
-
-            return await _Client.GetFromJsonAsync<T>($"{Id}", Cancel).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<T> Add(T item, CancellationToken Cancel = default)
-        {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(Add)}");
-
-            var response = await _Client.PostAsJsonAsync("", item, Cancel).ConfigureAwait(false);
+            var response = await PostAsync($"{ServiceAddress}", item, Cancel).ConfigureAwait(false);
+            //var response = await _Client.PostAsJsonAsync($"{ServiceAddress}", item, Cancel).ConfigureAwait(false);
             var result = await response
                .EnsureSuccessStatusCode()
                .Content
-               .ReadFromJsonAsync<T>(cancellationToken: Cancel)
+               .ReadFromJsonAsync<TEntity>(cancellationToken: Cancel)
                .ConfigureAwait(false);
             return result;
         }
 
         /// <inheritdoc />
-        public async Task AddRange(IEnumerable<T> items, CancellationToken Cancel = default)
+        public virtual async Task AddRange(IEnumerable<TEntity> items, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(AddRange)}");
-            await _Client.PostAsJsonAsync("range", items, Cancel).ConfigureAwait(false);
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(AddRange)}");
+            await PostAsync($"{ServiceAddress}/range", items, Cancel).ConfigureAwait(false);
+            //await _Client.PostAsJsonAsync($"{ServiceAddress}/range", items, Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<T> Update(T item, CancellationToken Cancel = default)
+        public virtual async Task<TEntity> Update(TEntity item, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(Update)} - {item.Id}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(Update)} - {item.Id}");
 
-            var response = await _Client.PutAsJsonAsync("", item, Cancel).ConfigureAwait(false);
+            var response = await PutAsync($"{ServiceAddress}", item, Cancel).ConfigureAwait(false);
+
+            //var response = await _Client.PutAsJsonAsync($"{ServiceAddress}", item, Cancel).ConfigureAwait(false);
+
             var result = await response
                .EnsureSuccessStatusCode()
                .Content
-               .ReadFromJsonAsync<T>(cancellationToken: Cancel)
+               .ReadFromJsonAsync<TEntity>(cancellationToken: Cancel)
                .ConfigureAwait(false);
             return result;
 
         }
 
         /// <inheritdoc />
-        public async Task<T> UpdateById(Tkey id, Action<T> ItemUpdated, CancellationToken Cancel = default)
+        public virtual async Task UpdateRange(IEnumerable<TEntity> items, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(UpdateById)} - {ToValueRow(id)}");
-            var response = await _Client.PutAsJsonAsync($"id/{id}", ItemUpdated, Cancel).ConfigureAwait(false);
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(UpdateRange)}");
 
-            var result = await response
-               .EnsureSuccessStatusCode()
-               .Content
-               .ReadFromJsonAsync<T>(cancellationToken: Cancel)
-               .ConfigureAwait(false);
-            return result;
+            await PutAsync($"{ServiceAddress}/range", items, Cancel).ConfigureAwait(false);
+            //await _Client.PutAsJsonAsync($"{ServiceAddress}/range", items, Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task UpdateRange(IEnumerable<T> items, CancellationToken Cancel = default)
+        public virtual async Task<TEntity> Delete(TEntity item, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(UpdateRange)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(Delete)} - {ToValueRow(item.Id)}");
 
-            await _Client.PutAsJsonAsync($"range", items, Cancel).ConfigureAwait(false);
-        }
+            var response = await DeleteAsync(item, Cancel).ConfigureAwait(false);
+            //var request = new HttpRequestMessage(HttpMethod.Delete, $"{ServiceAddress}")
+            //{
+            //    Content = JsonContent.Create(item)
+            //};
 
-        /// <inheritdoc />
-        public async Task<T> Delete(T item, CancellationToken Cancel = default)
-        {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(Delete)} - {ToValueRow(item.Id)}");
-
-            var request = new HttpRequestMessage(HttpMethod.Delete, "")
-            {
-                Content = JsonContent.Create(item)
-            };
-
-            var response = await _Client.SendAsync(request, Cancel).ConfigureAwait(false);
+            //var response = await _Client.SendAsync(request, Cancel).ConfigureAwait(false);
             if (response.StatusCode == HttpStatusCode.NotFound)
                 return default;
 
             var result = await response
                .EnsureSuccessStatusCode()
                .Content
-               .ReadFromJsonAsync<T>(cancellationToken: Cancel)
+               .ReadFromJsonAsync<TEntity>(cancellationToken: Cancel)
                .ConfigureAwait(false);
             return result;
         }
 
         /// <inheritdoc />
-        public async Task DeleteRange(IEnumerable<T> items, CancellationToken Cancel = default)
+        public virtual async Task DeleteRange(IEnumerable<TEntity> items, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(DeleteRange)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(DeleteRange)}");
 
-            var request = new HttpRequestMessage(HttpMethod.Delete, "range")
-            {
-                Content = JsonContent.Create(items)
-            };
+            await DeleteAsync(items, Cancel).ConfigureAwait(false);
 
-            await _Client.SendAsync(request, Cancel).ConfigureAwait(false);
+            //var request = new HttpRequestMessage(HttpMethod.Delete, $"{ServiceAddress}/range")
+            //{
+            //    Content = JsonContent.Create(items)
+            //};
+
+            //await _Client.SendAsync(request, Cancel).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<T> DeleteById(Tkey id, CancellationToken Cancel = default)
+        public virtual async Task<TEntity> DeleteById(TKey id, CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(DeleteById)} - {ToValueRow(id)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(DeleteById)} - {ToValueRow(id)}");
 
-            var response = await _Client.DeleteAsync($"{id}", Cancel).ConfigureAwait(false);
+            var response = await DeleteAsync($"{ServiceAddress}/{id}", Cancel).ConfigureAwait(false);
+            //var response = await _Client.DeleteAsync($"{ServiceAddress}/{id}", Cancel).ConfigureAwait(false);
             if (response.StatusCode == HttpStatusCode.NotFound)
                 return default;
 
             var result = await response
                .EnsureSuccessStatusCode()
                .Content
-               .ReadFromJsonAsync<T>(cancellationToken: Cancel)
+               .ReadFromJsonAsync<TEntity>(cancellationToken: Cancel)
                .ConfigureAwait(false);
             return result;
-
         }
 
         /// <inheritdoc />
-        public async Task<int> SaveChanges(CancellationToken Cancel = default)
+        public virtual async Task<int> SaveChanges(CancellationToken Cancel = default)
         {
-            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(T)} {nameof(SaveChanges)}");
+            _Logger.Log(LogLevel.Debug, $"{BaseLogRow} {nameof(SaveChanges)}");
 
-            return await _Client.GetFromJsonAsync<int>("save", Cancel).ConfigureAwait(false);
+            return await GetAsync<int>($"{ServiceAddress}/save", Cancel).ConfigureAwait(false);
+            //return await _Client.GetFromJsonAsync<int>($"{ServiceAddress}/save", Cancel).ConfigureAwait(false);
         }
 
         #endregion
     }
 
-    /// <inheritdoc />
-    public class WebRepository<T> : WebRepository<T, int> where T : IEntity<int>
+    /// <inheritdoc cref="WebRepository{TEntity, TKey}" />
+    public class WebRepository<TEntity> : WebRepository<TEntity, int>, IRepository<TEntity> where TEntity : IEntity<int>
     {
         /// <inheritdoc />
-        public WebRepository(HttpClient client, ILogger<WebRepository<T, int>> logger) : base(client, logger)
+        public WebRepository(IConfiguration configuration, ILogger<WebRepository<TEntity>> logger) : base(configuration, logger)
+        {
+        }
+
+        /// <inheritdoc />
+        public WebRepository(IConfiguration configuration, ILogger<WebRepository<TEntity>> logger, string serviceAddress) : base(configuration, logger, serviceAddress)
         {
         }
     }

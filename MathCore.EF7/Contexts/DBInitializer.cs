@@ -8,19 +8,19 @@ using Microsoft.Extensions.Logging;
 namespace MathCore.EF7.Contexts
 {
     /// <inheritdoc/>
-    public class DBInitializer<TDb> : IDbInitializer where TDb:DbContext
+    public class DBInitializer<TContext> : IDbInitializer where TContext:DbContext
     {
         /// <summary> контекст базы данных </summary>
-        protected readonly TDb _db;
+        protected readonly TContext _db;
         /// <summary> Логгер </summary>
-        protected readonly ILogger<DBInitializer<TDb>> _Logger;
+        protected readonly ILogger<DBInitializer<TContext>> _Logger;
 
         /// <inheritdoc/>
         public bool Recreate { get; set; }
         /// <summary> Инициализирует работу с базой данных </summary>
         /// <param name="db">контекст базы данных</param>
         /// <param name="Logger">логгер</param>
-        public DBInitializer(TDb db, ILogger<DBInitializer<TDb>> Logger)
+        public DBInitializer(TContext db, ILogger<DBInitializer<TContext>> Logger)
         {
             _db = db;
             _Logger = Logger;

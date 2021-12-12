@@ -20,12 +20,12 @@ namespace MathCore.EF7.Interfaces.Repositories
         int PageSize { get; }
 
         /// <summary>Полное число страниц в выдаче</summary>
-        int TotalPagesCount => (int) Math.Ceiling((double) TotalCount / PageSize);
+        public int TotalPagesCount => PageSize <= 0 ? TotalCount : (int)Math.Ceiling((double)TotalCount / PageSize);
 
         /// <summary>Существует ли предыдущая страница</summary>
-        bool HasPrevPage => PageNumber >= 0;
+        public bool HasPrevPage => PageNumber > 0;
 
         /// <summary>Существует ли следующая страница</summary>
-        bool HasNextPage => PageNumber < TotalPagesCount;
+        public bool HasNextPage => PageNumber < TotalPagesCount - 1;//отсчёт от 0 страницы
     }
 }

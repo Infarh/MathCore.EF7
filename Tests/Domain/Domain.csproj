@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <NoWarn>1701;1702;1591</NoWarn>
+    <IsPackable>false</IsPackable>
+</PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\MathCore.EF7.Enities\MathCore.EF7.Enities.csproj" />
+  </ItemGroup>
+
+</Project>

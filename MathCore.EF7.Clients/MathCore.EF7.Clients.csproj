@@ -2,9 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>MathCore.EF7.Clients</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
+  <PropertyGroup>
+    <Version>0.0.1</Version>
+    <PackageReleaseNotes>Обновление платформы</PackageReleaseNotes>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Description>Реализация клиентов MathCore.EF7</Description>
+    <PackageTags>Clients;API;EF;EF7;Entity Framework;Entity Framework Core;Entity Framework 7;Extensions</PackageTags>
+  </PropertyGroup>
+
+    <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
     <!--<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />-->
