@@ -15,14 +15,14 @@ using Microsoft.Extensions.Logging;
 
 namespace MathCore.EF7.Repositories.Base
 {
-    /// <inheritdoc cref="DbRepository{TContext, TEntity, TKey}"/>
-    public class DbRepository<TContext, TEntity> : DbRepository<TContext, TEntity, int>, IRepository<TEntity> where TEntity : class, IEntity, new() where TContext : DbContext
-    {
-        /// <inheritdoc />
-        protected DbRepository(TContext db, ILogger<DbRepository<TContext, TEntity, int>> Logger) : base(db, Logger)
-        {
-        }
-    }
+    ///// <inheritdoc cref="DbRepository{TContext, TEntity, TKey}"/>
+    //public class DbRepository<TContext, TEntity> : DbRepository<TContext, TEntity, int>, IRepository<TEntity> where TEntity : class, IEntity, new() where TContext : DbContext
+    //{
+    //    /// <inheritdoc />
+    //    protected DbRepository(TContext db, ILogger<DbRepository<TContext, TEntity, int>> Logger) : base(db, Logger)
+    //    {
+    //    }
+    //}
 
     /// <summary>Репозиторий сущностей, работающий с контекстом БД</summary>
     /// <typeparam name="T">Тип контролируемых сущностей</typeparam>
