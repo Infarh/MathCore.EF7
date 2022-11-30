@@ -1,6 +1,10 @@
 name: Testing
 
-on: [push, pull_request]
+on: [push]
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
 
 jobs:
   test:
@@ -8,16 +12,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-    - name: Building
-      run: |
-        dotnet build MathCore.EF7/MathCore.EF7.csproj --nologo          
-        dotnet build Tests/MathCore.EF7.Tests/MathCore.EF7.Tests.csproj --nologo
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+          
+      - name: Cache NuGet  
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
 
-    - name: Run Tests
-      run: dotnet test Tests/MathCore.EF7.Tests/MathCore.EF7.Tests.csproj --nologo
+      - name: Building
+        run: |
+          dotnet build MathCore.EF7/MathCore.EF7.csproj          
+          dotnet build Tests/MathCore.EF7.Tests/MathCore.EF7.Tests.csproj
+
+      - name: Run Tests
+        run: dotnet test Tests/MathCore.EF7.Tests/MathCore.EF7.Tests.csproj
